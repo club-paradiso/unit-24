@@ -1,0 +1,44 @@
+{
+  "agencies_by_research_status": {
+    "documents_acquired": 5
+  },
+  "agencies_by_state": {
+    "ZZ": 5
+  },
+  "agencies_by_type": {
+    "highway_patrol": 1,
+    "municipal_police": 2,
+    "other": 1,
+    "sheriff": 1
+  },
+  "agencies_with_code_data": 3,
+  "agencies_with_phonetic_data": 2,
+  "agencies_with_procedural_data": 1,
+  "agency_eligibility": {
+    "CONFLICT_REQUIRES_REVIEW": 3,
+    "INSUFFICIENT_EVIDENCE": 2
+  },
+  "blocked_agency_count": 0,
+  "blocked_egress_leads": 0,
+  "conflict_count": 3,
+  "corroborated_fact_count": 0,
+  "current_official_documents": 0,
+  "documents_acquired": 7,
+  "documents_discovered": 0,
+  "historical_documents": 0,
+  "leads_by_acquisition_status": {},
+  "leads_by_class": {},
+  "leads_total": 0,
+  "no_public_source_count": 0,
+  "official_domains_discovered": 0,
+  "radio_policy_candidates_discovered": 0,
+  "rejected_fact_count": 0,
+  "sources_by_quality": {
+    "UNVERIFIED": 7
+  },
+  "total_agencies": 5,
+  "training_eligible_agency_count": 0,
+  "unresolved_conflict_count": 3,
+  "unverified_candidate_count": 89,
+  "verified_fact_count": 0
+}

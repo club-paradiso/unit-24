@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-M09",
+  "name": "Seattle Police Department",
+  "state": "WA",
+  "bucket": "municipal_large",
+  "url": "https://www.seattle.gov/police-manual",
+  "retrieved_at": "2026-09-20T06:59:36+00:00",
+  "status": "http_error",
+  "note": "HTTP 404",
+  "sources": [],
+  "capture_usable": false
+}

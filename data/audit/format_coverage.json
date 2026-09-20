@@ -1,0 +1,15 @@
+{
+  "native_text_pdf": {"encountered": true, "examples": ["CAN-S05", "CAN-S14", "CAN-M03", "CAN-M05"]},
+  "image_only_pdf": {"encountered": false, "handling": "explicit OCRRequired gate; synthetic image PDF and mock backend only"},
+  "html_page": {"encountered": true, "examples": ["CAN-S22", "CAN-X02"]},
+  "html_table": {"encountered": true, "example": "CAN-S37 catalog map-widget table", "radio_protocol_table_validated": false},
+  "pdf_table": {"encountered": true, "example": "CAN-S05 aural brevity card", "extraction_quality": "unacceptable merged/truncated columns"},
+  "multi_column_pdf": {"encountered": true, "example": "CAN-S05"},
+  "revision_history": {"encountered": true, "example": "CAN-M05"},
+  "undated_official_page": {"encountered": true, "examples": ["CAN-H02", "CAN-X02"], "protocol_currentness_confirmed": false},
+  "older_official_document": {"encountered": true, "example": "CAN-S14 effective 2015", "obsolete_status_confirmed": false},
+  "active_policy_portal": {"encountered": false, "note": "Chicago directive API and current-as-of footer inspected; no active index evidence bound to protocol"},
+  "official_non_gov_domain": {"encountered": true, "example": "CAN-M05 phillypolice.com"},
+  "other_government_host": {"encountered": true, "example": "CAN-S47 WSP-hosted FBI NCIC manual", "target_protocol_applicability": false},
+  "real_temporal_old_new_pair": {"validated": false}
+}

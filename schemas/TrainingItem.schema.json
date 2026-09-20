@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "EligibilityState": {
+      "enum": [
+        "PLAYABLE_VERIFIED",
+        "PLAYABLE_WITH_LIMITATIONS",
+        "RESEARCH_ONLY",
+        "HISTORICAL_ONLY",
+        "CONFLICT_REQUIRES_REVIEW",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "title": "EligibilityState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Shape of a future learner-facing exercise. It cannot exist without fact + evidence refs.",
+  "properties": {
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "eligibility": {
+      "$ref": "#/$defs/EligibilityState"
+    },
+    "exercise_kind": {
+      "title": "Exercise Kind",
+      "type": "string"
+    },
+    "expected_answer": {
+      "title": "Expected Answer",
+      "type": "string"
+    },
+    "fact_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Fact Ids",
+      "type": "array"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    },
+    "prompt": {
+      "title": "Prompt",
+      "type": "string"
+    },
+    "source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "item_id",
+    "agency_id",
+    "exercise_kind",
+    "prompt",
+    "expected_answer",
+    "fact_ids",
+    "source_ids",
+    "eligibility"
+  ],
+  "title": "TrainingItem",
+  "type": "object"
+}

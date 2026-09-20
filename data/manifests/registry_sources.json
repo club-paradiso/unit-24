@@ -1,0 +1,89 @@
+{
+  "_note": "Registry datasets evaluated for the nationwide agency universe. Verified fields cite what was checked in the build session (2026-09-20); fields marked verification='not verified in session' come from published metadata that could not be fetched because the hosts were egress-blocked. Nothing here is a current count of agencies; every count carries its reference date.",
+  "datasets": [
+    {
+      "key": "CSLLEA_2018",
+      "dataset_name": "Census of State and Local Law Enforcement Agencies (CSLLEA), 2018",
+      "issuing_authority": "U.S. Department of Justice, Bureau of Justice Statistics (BJS); data collected by RTI International",
+      "release_date": "Statistical tables published 2022-10 (BJS, 'Census of State and Local Law Enforcement Agencies, 2018 – Statistical Tables'); ICPSR study 38771",
+      "reference_date": "2018-06 (agencies operating in June 2018)",
+      "coverage": "17,541 state and local agencies with sworn personnel as of June 2018 (local police, sheriffs' offices, primary state agencies, special jurisdiction, constables/marshals, tribal where included). Verified via web search summary of the BJS publication on 2026-09-20.",
+      "known_omissions": "Excludes federal agencies; agencies without full-time sworn officers; agencies created after June 2018; closed/merged agencies since 2018. Unit of record is the agency as defined by BJS, which can differ from UCR reporting entities.",
+      "identifier_availability": "BJS agency id; ORI crosswalk available through LEAIC/LEAR linkage. Exact variable names could not be verified in session.",
+      "licensing_reuse": "U.S. government work; ICPSR distribution terms apply to the data file (public-use file expected; ICPSR terms of use must be accepted at download).",
+      "how_incorporated": "Adapter 'delimited' with a column-map sidecar (data/raw/csllea_2018/*.map.json). Load as registry code CSLLEA_2018 once the file is downloaded from https://www.icpsr.umich.edu/web/NACJD/studies/38771. Blocked in build session (icpsr.umich.edu and bjs.ojp.gov egress-denied).",
+      "verification": "Title, publisher, ICPSR id, publication month and the 17,541 count were confirmed via WebSearch result summaries; the data file itself was not fetched.",
+      "urls": ["https://bjs.ojp.gov/library/publications/census-state-and-local-law-enforcement-agencies-2018-statistical-tables", "https://www.icpsr.umich.edu/web/NACJD/studies/38771"]
+    },
+    {
+      "key": "LEAR_2016",
+      "dataset_name": "Law Enforcement Agency Roster (LEAR), 2016",
+      "issuing_authority": "Bureau of Justice Statistics; ICPSR study 36697",
+      "release_date": "Reflects agencies current as of December 2016; ICPSR release 2017",
+      "reference_date": "2016-12",
+      "coverage": "15,810 general-purpose agencies: 12,695 local and county police departments, 3,066 sheriffs' offices, 49 primary state police departments (per ICPSR abstract as summarised by WebSearch on 2026-09-20). Excludes special-jurisdiction agencies by design.",
+      "known_omissions": "No special-jurisdiction, campus, transit, tribal, constable, or marshal agencies. Superseded in currency by CSLLEA 2018.",
+      "identifier_availability": "ORI; agency name; state; FIPS; staffing merged from other collections.",
+      "licensing_reuse": "U.S. government work; ICPSR terms of use.",
+      "how_incorporated": "Adapter 'delimited' with a column map; registry code LEAR_2016. Useful mainly as a second identity source for general-purpose agencies. Blocked in build session.",
+      "verification": "Counts and scope from WebSearch result summary of the ICPSR abstract; file not fetched.",
+      "urls": ["https://www.icpsr.umich.edu/web/NACJD/studies/36697"]
+    },
+    {
+      "key": "LEAIC_2012",
+      "dataset_name": "Law Enforcement Agency Identifiers Crosswalk (LEAIC), United States, 2012",
+      "issuing_authority": "BJS and National Archive of Criminal Justice Data (NACJD); ICPSR study 35158 (distributed 2018)",
+      "release_date": "2018 (ICPSR distribution of the 2012 crosswalk)",
+      "reference_date": "2012",
+      "coverage": "One record per law enforcement agency, reporting entity, and NCIC access identifier; links ORI to FIPS state/county/place and Governments Integrated Directory codes.",
+      "known_omissions": "2012 vintage; does not reflect agencies created or renamed since. Not a roster of active agencies.",
+      "identifier_availability": "ORI, FIPS codes, GID codes — the key crosswalk for joining UCR/NIBRS, CSLLEA and Census geography.",
+      "licensing_reuse": "U.S. government work; ICPSR terms of use.",
+      "how_incorporated": "Not a registry of its own; to be used by the resolver as an identity crosswalk (ORI <-> BJS agency id <-> FIPS) when available. Blocked in build session.",
+      "verification": "Scope confirmed from WebSearch result summary; file not fetched.",
+      "urls": ["https://www.icpsr.umich.edu/web/NACJD/studies/35158"]
+    },
+    {
+      "key": "FBI_CDE_AGENCIES_API",
+      "dataset_name": "FBI Crime Data Explorer — agencies endpoint",
+      "issuing_authority": "Federal Bureau of Investigation, CJIS Division (Crime Data Explorer)",
+      "release_date": "Continuously updated (participating agencies)",
+      "reference_date": "live",
+      "coverage": "Agencies participating in UCR/NIBRS, keyed by ORI, with agency type, county, state; historically 'over 18,000' reporting agencies including federal, tribal, campus.",
+      "known_omissions": "Only agencies that report to UCR; includes non-agency reporting entities (task forces, sub-units). Participation is voluntary.",
+      "identifier_availability": "ORI; agency_type_name; state_abbr; county; lat/lng.",
+      "licensing_reuse": "U.S. government work; API requires an api.data.gov key (free).",
+      "how_incorporated": "Planned adapter 'fbi_cde_api' (same record shape as fbi_cde_frontend). Endpoint family https://api.usa.gov/crime/fbi/cde/agency/byStateAbbr/{ST}?API_KEY=... . Blocked in build session (api.usa.gov and cde.ucr.cjis.gov egress-denied).",
+      "verification": "Endpoint family and key requirement confirmed via WebSearch summaries of FBI/18F documentation; not called.",
+      "urls": ["https://cde.ucr.cjis.gov/", "https://api.data.gov/signup/"]
+    },
+    {
+      "key": "FBI_CDE_FRONTEND_2018",
+      "dataset_name": "FBI CDE frontend agency roster snapshot (agencies-by-state.json.gz)",
+      "issuing_authority": "FBI Crime Data Explorer project, GitHub organisation fbi-cde (originally 18F)",
+      "release_date": "Git commit ddbd3077b8f546491c2f2f6b36e7e82f21a0bcbe, 2018-06-28",
+      "reference_date": "2018-06-28",
+      "coverage": "23,243 UCR reporting entities across 55 state/territory codes (City 13,885; County 3,131; Other State Agency 1,849; State Police 1,698; University or College 997; Other 913; Unknown 537; Tribal 224; Federal 9). Counted from the file in session.",
+      "known_omissions": "As for the API, frozen at mid-2018. State police appear as per-county reporting units. Not a census of agencies.",
+      "identifier_availability": "ORI, agency_name, agency_type_name, primary_county, ICPSR lat/lng.",
+      "licensing_reuse": "U.S. government work (17 U.S.C. §105). Retained in-repo (481 KB) with SHA-256 in data/raw/fbi_cde_frontend/MANIFEST.json.",
+      "how_incorporated": "Adapter 'fbi_cde_frontend' — the only nationwide roster reachable in the build session; used as the 2018-dated identity seed. It is labelled by date everywhere and must never be reported as a current count.",
+      "verification": "Fetched by git clone in session; hash recorded; counts computed from the file.",
+      "urls": ["https://github.com/fbi-cde/crime-data-frontend/blob/master/public/data/agencies-by-state.json.gz"]
+    },
+    {
+      "key": "STATE_POST_DIRECTORIES",
+      "dataset_name": "State POST / peace-officer certification agency directories (50 states)",
+      "issuing_authority": "Each state's POST/standards commission (e.g. California POST, Texas TCOLE, Florida CJSTC)",
+      "release_date": "varies; many are live databases",
+      "reference_date": "live",
+      "coverage": "Certified agencies per state, often the most current source for newly created/disbanded agencies and for special-jurisdiction agencies missing from federal rosters.",
+      "known_omissions": "No common schema; some states expose only search UIs, no bulk download; tribal agencies inconsistently covered.",
+      "identifier_availability": "State-specific agency ids; sometimes ORI.",
+      "licensing_reuse": "Public records; reuse terms vary by state; scraping must honour robots.txt and terms.",
+      "how_incorporated": "Per-state 'delimited' adapters or manual exports as they are obtained; each becomes its own registry code (e.g. TX_TCOLE_2026_09). Not started; see docs/nationwide-expansion-plan.md.",
+      "verification": "Not verified in session.",
+      "urls": []
+    }
+  ]
+}

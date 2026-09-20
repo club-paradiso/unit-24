@@ -1,0 +1,184 @@
+[
+  {
+    "id": "F01",
+    "severity": "BLOCKER",
+    "title": "Miami assigned South Miami website",
+    "status": "fixed",
+    "evidence": "Government host plus 60% core-token overlap and first search rank; website fallback retained bad association."
+  },
+  {
+    "id": "F02",
+    "severity": "BLOCKER",
+    "title": "Document age asserted operative currentness",
+    "status": "fixed",
+    "evidence": "Ten-year window removed; explicit reviewed evidence and recheck deadline required."
+  },
+  {
+    "id": "F03",
+    "severity": "HIGH",
+    "title": "Distinct source IDs treated as independent authority",
+    "status": "fixed",
+    "evidence": "URL/hash/issuer/disjoint known lineage now required; corroboration never grants playback."
+  },
+  {
+    "id": "F04",
+    "severity": "BLOCKER",
+    "title": "Parent and dispatcher relationships implied applicability",
+    "status": "fixed",
+    "evidence": "Explicit target/type/key/date evidence required; document issuer is distinct from host identity."
+  },
+  {
+    "id": "F05",
+    "severity": "BLOCKER",
+    "title": "Deterministic extraction automatically verified",
+    "status": "fixed",
+    "evidence": "No parser allowlisted. Human review binds exact fact/source/hash/value and temporal currentness."
+  },
+  {
+    "id": "F06",
+    "severity": "HIGH",
+    "title": "Conflict preference inferred from date or source type",
+    "status": "gated",
+    "evidence": "No automatic resolution until structured resolution evidence exists; all disagreements remain unresolved."
+  },
+  {
+    "id": "F07",
+    "severity": "HIGH",
+    "title": "Narrative contradicted normalized website data",
+    "status": "fixed",
+    "evidence": "Generated identity and source metrics checked in invariant command."
+  },
+  {
+    "id": "F08",
+    "severity": "HIGH",
+    "title": "HTML leaf paragraphs skipped",
+    "status": "fixed",
+    "evidence": "Selector includes self; descendant test now excludes self."
+  },
+  {
+    "id": "F09",
+    "severity": "HIGH",
+    "title": "Blob deduplication suppressed source-specific extraction",
+    "status": "fixed",
+    "evidence": "Extraction progress keyed per source, shared bytes retained once."
+  },
+  {
+    "id": "F10",
+    "severity": "HIGH",
+    "title": "Malformed PDF could abort extraction batch",
+    "status": "fixed",
+    "evidence": "Per-document failure isolated and recorded."
+  },
+  {
+    "id": "F11",
+    "severity": "MEDIUM",
+    "title": "HTTP 200 error pages counted as fetched documents",
+    "status": "partly_fixed",
+    "evidence": "Known error/challenge markers rejected; prior invalid captures explicitly marked. General content suitability remains manual."
+  },
+  {
+    "id": "F12",
+    "severity": "BLOCKER",
+    "title": "Multi-column and narrative parsing precision unacceptable",
+    "status": "open",
+    "evidence": "116 candidate audit: 24 complete facts supported; merged code columns, prose phonetics, wrong alphabet labels, date-as-code, keyword procedures."
+  },
+  {
+    "id": "F13",
+    "severity": "HIGH",
+    "title": "No real scanned PDF/OCR demonstration",
+    "status": "gated",
+    "evidence": "Image/low-text PDF detection and OCR interface tested synthetically; actual OCR engine and real scanned validation absent."
+  },
+  {
+    "id": "F14",
+    "severity": "BLOCKER",
+    "title": "Real-source validation coverage incomplete",
+    "status": "open",
+    "evidence": "20 attempted, not 20 validated. Four documents audited; four required fact strata missing."
+  },
+  {
+    "id": "F15",
+    "severity": "HIGH",
+    "title": "Real old/new operative-policy pair not validated",
+    "status": "open",
+    "evidence": "Synthetic tests only. Old online documents and replacement mentions do not prove operative status."
+  },
+  {
+    "id": "F16",
+    "severity": "HIGH",
+    "title": "2018 registry is not a current nationwide roster",
+    "status": "open",
+    "evidence": "Snapshot preserved; collision guard and coexistence tests added. Current government observations are proposals, not bulk replacements."
+  },
+  {
+    "id": "F17",
+    "severity": "BLOCKER",
+    "title": "Truthy hash passed acquisition-proof gate",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Playback now requires DocumentRecord plus matching acquired bytes for source and evidence pointers."
+  },
+  {
+    "id": "F18",
+    "severity": "BLOCKER",
+    "title": "Missing or stale conflicts allowed contradictory playback",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Eligibility rebuilds conflicts; independent disagreement invariant blocks playback."
+  },
+  {
+    "id": "F19",
+    "severity": "HIGH",
+    "title": "Verified snapshot bypassed review and eligibility",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Every VERIFIED fact now requires accepted review and playable eligibility; both are checked."
+  },
+  {
+    "id": "F20",
+    "severity": "HIGH",
+    "title": "Human review enum lacked reviewer provenance",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Structured human reviewer/date/hash/value binding required; model review does not qualify."
+  },
+  {
+    "id": "F21",
+    "severity": "HIGH",
+    "title": "Hosted third-party manual could inherit host agency identity",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Issuing-authority proof is separate; same-target playback requires issuer proof or explicit applicability."
+  },
+  {
+    "id": "F22",
+    "severity": "HIGH",
+    "title": "Uncertain fact could become playable",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Fact temporal status must be CURRENT; source currentness alone is insufficient."
+  },
+  {
+    "id": "F23",
+    "severity": "MEDIUM",
+    "title": "Old currentness observation never expired",
+    "status": "fixed",
+    "evidence": "Sol reproduced. Explicit recheck_by on observations; expiry falls to presumed, never playable."
+  },
+  {
+    "id": "F24",
+    "severity": "HIGH",
+    "title": "Fresh CI database could yield vacuous invariant pass",
+    "status": "fixed",
+    "evidence": "Committed normalized snapshots and audit reports checked too."
+  },
+  {
+    "id": "F25",
+    "severity": "MEDIUM",
+    "title": "Changed registry row silently ignored",
+    "status": "fixed",
+    "evidence": "Same snapshot/external ID with changed payload raises; dated snapshot namespaces coexist."
+  },
+  {
+    "id": "F26",
+    "severity": "HIGH",
+    "title": "Export omitted external applicability/identity evidence",
+    "status": "fixed",
+    "evidence": "Transitive evidence source closure, issuer agencies and document manifests exported; bytes remain local."
+  }
+]

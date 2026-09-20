@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-S09",
+  "name": "Florida Highway Patrol",
+  "state": "FL",
+  "bucket": "state_principal",
+  "url": "https://www.flhsmv.gov/pdf/fhp/policies/1401.pdf",
+  "retrieved_at": "2026-09-20T06:59:13+00:00",
+  "status": "http_error",
+  "note": "HTTP 403 observed in initial direct probe; not retried",
+  "sources": [],
+  "capture_usable": false
+}

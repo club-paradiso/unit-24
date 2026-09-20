@@ -1,0 +1,300 @@
+{
+  "$defs": {
+    "AcquisitionStatus": {
+      "enum": [
+        "pending",
+        "fetched",
+        "blocked_egress",
+        "robots_disallowed",
+        "http_error",
+        "network_error",
+        "skipped_not_candidate",
+        "unsupported_content"
+      ],
+      "title": "AcquisitionStatus",
+      "type": "string"
+    },
+    "IdentityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "official_directory",
+            "agency_page",
+            "government_link"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "canonical_name": {
+          "title": "Canonical Name",
+          "type": "string"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "host": {
+          "title": "Host",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "target_agency_id": {
+          "title": "Target Agency Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_agency_id",
+        "canonical_name",
+        "state",
+        "host",
+        "basis"
+      ],
+      "title": "IdentityEvidence",
+      "type": "object"
+    },
+    "LeadClass": {
+      "enum": [
+        "official_homepage_candidate",
+        "official_radio_policy_candidate",
+        "official_document_candidate",
+        "standards_body_document",
+        "secondary_lead",
+        "enthusiast_lead",
+        "unrelated"
+      ],
+      "title": "LeadClass",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Something discovered (a URL) that MAY be evidence. Never authoritative by itself.",
+  "properties": {
+    "acquisition_note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acquisition Note"
+    },
+    "acquisition_status": {
+      "$ref": "#/$defs/AcquisitionStatus",
+      "default": "pending"
+    },
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "classification_basis": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Classification Basis"
+    },
+    "discovered_via": {
+      "title": "Discovered Via",
+      "type": "string"
+    },
+    "host": {
+      "title": "Host",
+      "type": "string"
+    },
+    "host_is_government": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Is Government"
+    },
+    "host_is_official": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Is Official"
+    },
+    "host_matches_target_entity": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Matches Target Entity"
+    },
+    "identity_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentityEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "lead_class": {
+      "$ref": "#/$defs/LeadClass",
+      "default": "unrelated"
+    },
+    "lead_id": {
+      "title": "Lead Id",
+      "type": "string"
+    },
+    "query": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Query"
+    },
+    "rank": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rank"
+    },
+    "retrieved_at": {
+      "format": "date-time",
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "snippet": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snippet"
+    },
+    "source_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Id"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Title"
+    },
+    "url": {
+      "title": "Url",
+      "type": "string"
+    },
+    "worker_note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Worker Note"
+    }
+  },
+  "required": [
+    "lead_id",
+    "agency_id",
+    "url",
+    "host",
+    "discovered_via",
+    "retrieved_at"
+  ],
+  "title": "DocumentLead",
+  "type": "object"
+}

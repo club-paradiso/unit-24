@@ -1,0 +1,103 @@
+{
+  "note": "All agencies, hosts, and documents here are fictional. State ZZ is reserved for fixtures.",
+  "agencies": [
+    {
+      "fixture_id": "FX-001",
+      "name": "Exampleville Police Department",
+      "agency_type": "municipal_police",
+      "dispatch_fixture_id": "FX-005"
+    },
+    {
+      "fixture_id": "FX-002",
+      "name": "Example County Sheriff's Office",
+      "agency_type": "sheriff",
+      "dispatch_fixture_id": "FX-005"
+    },
+    {
+      "fixture_id": "FX-003",
+      "name": "Example State Patrol",
+      "agency_type": "highway_patrol"
+    },
+    {
+      "fixture_id": "FX-004",
+      "name": "Neighbor Township Police Department",
+      "agency_type": "municipal_police",
+      "dispatch_fixture_id": "FX-005"
+    },
+    {
+      "fixture_id": "FX-005",
+      "name": "Example County Regional Dispatch Center",
+      "agency_type": "other"
+    }
+  ],
+  "documents": [
+    {
+      "agency_fixture_id": "FX-001",
+      "file": "fx001_exampleville_policy_4_10_2024.html",
+      "content_type": "text/html",
+      "url": "https://police.exampleville.zz.gov/policies/4-10-radio-communications",
+      "title": "Policy 4.10 Radio Communications",
+      "source_type": "agency_policy_manual",
+      "issuing_authority": "Exampleville Police Department",
+      "effective_date": "2024-03-01"
+    },
+    {
+      "agency_fixture_id": "FX-001",
+      "file": "fx001_exampleville_general_order_2009.pdf",
+      "content_type": "application/pdf",
+      "url": "https://police.exampleville.zz.gov/archive/go-2009-05.pdf",
+      "title": "General Order 2009-05 Radio Procedures",
+      "source_type": "agency_policy_manual",
+      "issuing_authority": "Exampleville Police Department",
+      "effective_date": "2009-05-01"
+    },
+    {
+      "agency_fixture_id": "FX-001",
+      "file": "fx001_scanner_site_codes.html",
+      "content_type": "text/html",
+      "url": "https://scanner-fans.example.net/exampleville-codes",
+      "title": "Exampleville PD scanner codes (fan page)",
+      "source_type": "enthusiast_or_crowdsourced",
+      "official_host": false
+    },
+    {
+      "agency_fixture_id": "FX-002",
+      "file": "fx002_example_county_so_policy_undated.pdf",
+      "content_type": "application/pdf",
+      "url": "https://sheriff.examplecounty.zz.gov/policy-300.pdf",
+      "title": "Policy 300 Communications",
+      "source_type": "agency_policy_manual",
+      "issuing_authority": "Example County Sheriff's Office"
+    },
+    {
+      "agency_fixture_id": "FX-002",
+      "file": "fx002_regional_dispatch_sop_2023.pdf",
+      "content_type": "application/pdf",
+      "url": "https://dispatch.examplecounty.zz.gov/sop-12.pdf",
+      "title": "SOP 12 Radio Codes for Served Agencies",
+      "source_type": "dispatch_center_document",
+      "issuing_authority": "Example County Regional Dispatch Center",
+      "effective_date": "2023-01-15"
+    },
+    {
+      "agency_fixture_id": "FX-003",
+      "file": "fx003_example_state_patrol_manual_a_2021.pdf",
+      "content_type": "application/pdf",
+      "url": "https://patrol.zz.gov/manuals/comms-vol-a.pdf",
+      "title": "Communications Manual Volume A",
+      "source_type": "agency_policy_manual",
+      "issuing_authority": "Example State Patrol",
+      "effective_date": "2021-06-01"
+    },
+    {
+      "agency_fixture_id": "FX-003",
+      "file": "fx003_example_state_patrol_manual_b_2021.pdf",
+      "content_type": "application/pdf",
+      "url": "https://patrol.zz.gov/training/radio-signals-bulletin.pdf",
+      "title": "District Training Bulletin Radio Signals",
+      "source_type": "agency_policy_manual",
+      "issuing_authority": "Example State Patrol",
+      "effective_date": "2021-06-01"
+    }
+  ]
+}

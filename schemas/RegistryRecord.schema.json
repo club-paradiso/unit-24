@@ -1,0 +1,91 @@
+{
+  "additionalProperties": false,
+  "description": "A raw row from an external registry, stored verbatim (payload) for audit.",
+  "properties": {
+    "agency_type_hint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agency Type Hint"
+    },
+    "county": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "County"
+    },
+    "external_id": {
+      "title": "External Id",
+      "type": "string"
+    },
+    "ingested_at": {
+      "format": "date-time",
+      "title": "Ingested At",
+      "type": "string"
+    },
+    "name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Name"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "registry": {
+      "title": "Registry",
+      "type": "string"
+    },
+    "registry_snapshot_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Registry Snapshot Date"
+    },
+    "state": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "State"
+    }
+  },
+  "required": [
+    "registry",
+    "external_id",
+    "name",
+    "state"
+  ],
+  "title": "RegistryRecord",
+  "type": "object"
+}

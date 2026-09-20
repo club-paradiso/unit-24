@@ -1,0 +1,358 @@
+{
+  "$defs": {
+    "ActiveStatus": {
+      "enum": [
+        "active",
+        "inactive",
+        "unknown"
+      ],
+      "title": "ActiveStatus",
+      "type": "string"
+    },
+    "AgencyType": {
+      "enum": [
+        "municipal_police",
+        "county_police",
+        "metropolitan_police",
+        "sheriff",
+        "primary_state_police",
+        "highway_patrol",
+        "state_investigative",
+        "university_police",
+        "transit_police",
+        "airport_police",
+        "port_authority_police",
+        "tribal_police",
+        "park_conservation_police",
+        "capitol_police",
+        "school_district_police",
+        "hospital_police",
+        "housing_police",
+        "constable",
+        "marshal",
+        "consolidated_public_safety",
+        "special_jurisdiction_police",
+        "task_force_or_reporting_unit",
+        "federal",
+        "other",
+        "unknown"
+      ],
+      "title": "AgencyType",
+      "type": "string"
+    },
+    "IdentityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "official_directory",
+            "agency_page",
+            "government_link"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "canonical_name": {
+          "title": "Canonical Name",
+          "type": "string"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "host": {
+          "title": "Host",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "target_agency_id": {
+          "title": "Target Agency Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_agency_id",
+        "canonical_name",
+        "state",
+        "host",
+        "basis"
+      ],
+      "title": "IdentityEvidence",
+      "type": "object"
+    },
+    "ResearchStatus": {
+      "enum": [
+        "registry_only",
+        "seed_unconfirmed",
+        "discovery_started",
+        "domain_discovered",
+        "documents_discovered",
+        "documents_acquired",
+        "facts_extracted",
+        "no_public_source",
+        "blocked",
+        "unknown"
+      ],
+      "title": "ResearchStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "agency_type": {
+      "$ref": "#/$defs/AgencyType",
+      "default": "unknown"
+    },
+    "alternate_names": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Alternate Names",
+      "type": "array"
+    },
+    "canonical_name": {
+      "title": "Canonical Name",
+      "type": "string"
+    },
+    "country": {
+      "default": "US",
+      "title": "Country",
+      "type": "string"
+    },
+    "county": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "County"
+    },
+    "dispatch_provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dispatch Provider"
+    },
+    "first_seen": {
+      "format": "date-time",
+      "title": "First Seen",
+      "type": "string"
+    },
+    "identity_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentityEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "is_fixture": {
+      "default": false,
+      "title": "Is Fixture",
+      "type": "boolean"
+    },
+    "jurisdiction_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Jurisdiction Description"
+    },
+    "last_verified": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Verified"
+    },
+    "municipality": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Municipality"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "official_contact_page": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Official Contact Page"
+    },
+    "official_website": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Official Website"
+    },
+    "parent_agency": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Agency"
+    },
+    "research_status": {
+      "$ref": "#/$defs/ResearchStatus",
+      "default": "unknown"
+    },
+    "source_registry_ids": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Source Registry Ids",
+      "type": "object"
+    },
+    "state": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "State"
+    },
+    "status": {
+      "$ref": "#/$defs/ActiveStatus",
+      "default": "unknown"
+    },
+    "valid_from": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid From"
+    },
+    "valid_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Valid To"
+    }
+  },
+  "required": [
+    "agency_id",
+    "canonical_name"
+  ],
+  "title": "Agency",
+  "type": "object"
+}

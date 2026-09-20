@@ -1,0 +1,723 @@
+{
+  "$defs": {
+    "Currentness": {
+      "enum": [
+        "OFFICIAL_CURRENT_CONFIRMED",
+        "OFFICIAL_CURRENT_PRESUMED",
+        "OFFICIAL_UNDATED",
+        "OFFICIAL_HISTORICAL",
+        "OFFICIAL_SUPERSEDED",
+        "CURRENTNESS_UNKNOWN"
+      ],
+      "title": "Currentness",
+      "type": "string"
+    },
+    "CurrentnessEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "active_policy_portal",
+            "current_policy_index",
+            "explicit_effective_policy",
+            "revision_metadata",
+            "archive",
+            "supersession"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "checked_on": {
+          "format": "date",
+          "title": "Checked On",
+          "type": "string"
+        },
+        "effective_from": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective From"
+        },
+        "effective_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective To"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "recheck_by": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recheck By"
+        },
+        "target_source_id": {
+          "title": "Target Source Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_source_id",
+        "basis",
+        "checked_on"
+      ],
+      "title": "CurrentnessEvidence",
+      "type": "object"
+    },
+    "FactType": {
+      "enum": [
+        "code_meaning",
+        "phonetic_letter",
+        "phonetic_system",
+        "callsign_convention",
+        "procedure_rule",
+        "ordered_structure",
+        "interop_rule",
+        "protocol_mode"
+      ],
+      "title": "FactType",
+      "type": "string"
+    },
+    "IdentityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "official_directory",
+            "agency_page",
+            "government_link"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "canonical_name": {
+          "title": "Canonical Name",
+          "type": "string"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "host": {
+          "title": "Host",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "target_agency_id": {
+          "title": "Target Agency Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_agency_id",
+        "canonical_name",
+        "state",
+        "host",
+        "basis"
+      ],
+      "title": "IdentityEvidence",
+      "type": "object"
+    },
+    "IssuingAuthorityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "issuing_authority_id": {
+          "title": "Issuing Authority Id",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "target_source_id": {
+          "title": "Target Source Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_source_id",
+        "issuing_authority_id"
+      ],
+      "title": "IssuingAuthorityEvidence",
+      "type": "object"
+    },
+    "ProtocolApplicabilityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective To"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "fact_keys": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fact Keys",
+          "type": "array"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "protocol_source_id": {
+          "title": "Protocol Source Id",
+          "type": "string"
+        },
+        "scope": {
+          "items": {
+            "$ref": "#/$defs/FactType"
+          },
+          "minItems": 1,
+          "title": "Scope",
+          "type": "array"
+        },
+        "source_agency_or_dispatcher": {
+          "title": "Source Agency Or Dispatcher",
+          "type": "string"
+        },
+        "target_agency": {
+          "title": "Target Agency",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "source_agency_or_dispatcher",
+        "target_agency",
+        "protocol_source_id",
+        "scope",
+        "fact_keys",
+        "effective_from"
+      ],
+      "title": "ProtocolApplicabilityEvidence",
+      "type": "object"
+    },
+    "SourceQuality": {
+      "enum": [
+        "OFFICIAL_CURRENT",
+        "OFFICIAL_HISTORICAL",
+        "OFFICIAL_PARTIAL",
+        "SECONDARY_CORROBORATED",
+        "CONFLICTING",
+        "UNVERIFIED",
+        "NO_PUBLIC_SOURCE"
+      ],
+      "title": "SourceQuality",
+      "type": "string"
+    },
+    "SourceType": {
+      "enum": [
+        "agency_policy_manual",
+        "dispatch_center_document",
+        "government_document",
+        "training_accreditation",
+        "other_government_record",
+        "standards_body",
+        "registry_dataset",
+        "search_engine_result",
+        "secondary_publication",
+        "enthusiast_or_crowdsourced",
+        "social_media",
+        "fixture",
+        "unknown"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    },
+    "TemporalStatus": {
+      "enum": [
+        "current",
+        "historical",
+        "uncertain"
+      ],
+      "title": "TemporalStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agency_or_jurisdiction": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Agency Or Jurisdiction"
+    },
+    "applicability": {
+      "items": {
+        "$ref": "#/$defs/ProtocolApplicabilityEvidence"
+      },
+      "title": "Applicability",
+      "type": "array"
+    },
+    "canonical_url": {
+      "title": "Canonical Url",
+      "type": "string"
+    },
+    "content_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Type"
+    },
+    "currentness": {
+      "$ref": "#/$defs/Currentness",
+      "default": "CURRENTNESS_UNKNOWN"
+    },
+    "currentness_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CurrentnessEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "document_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Document Hash"
+    },
+    "effective_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective Date"
+    },
+    "evidence_lineage": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Lineage",
+      "type": "array"
+    },
+    "extra": {
+      "additionalProperties": true,
+      "title": "Extra",
+      "type": "object"
+    },
+    "host_is_government": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Is Government"
+    },
+    "host_matches_target_entity": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Matches Target Entity"
+    },
+    "identity_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentityEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "is_fixture": {
+      "default": false,
+      "title": "Is Fixture",
+      "type": "boolean"
+    },
+    "issuing_authority": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Issuing Authority"
+    },
+    "issuing_authority_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IssuingAuthorityEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "issuing_authority_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Issuing Authority Id"
+    },
+    "local_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Local Path"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "original_file_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Original File Url"
+    },
+    "page_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Page Count"
+    },
+    "publication_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date"
+    },
+    "retrieved_at": {
+      "format": "date-time",
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_quality": {
+      "$ref": "#/$defs/SourceQuality",
+      "default": "UNVERIFIED"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "superseded_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Superseded By"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes"
+    },
+    "temporal_status": {
+      "$ref": "#/$defs/TemporalStatus",
+      "default": "uncertain"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Title"
+    }
+  },
+  "required": [
+    "source_id",
+    "source_type",
+    "title",
+    "issuing_authority",
+    "agency_or_jurisdiction",
+    "canonical_url"
+  ],
+  "title": "Source",
+  "type": "object"
+}

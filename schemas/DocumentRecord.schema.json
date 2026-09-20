@@ -1,0 +1,83 @@
+{
+  "additionalProperties": false,
+  "description": "The acquired bytes + extracted text for a source. Content-addressed by hash.",
+  "properties": {
+    "acquired_at": {
+      "format": "date-time",
+      "title": "Acquired At",
+      "type": "string"
+    },
+    "byte_length": {
+      "title": "Byte Length",
+      "type": "integer"
+    },
+    "content_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Content Type"
+    },
+    "document_hash": {
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "extraction_tool": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extraction Tool"
+    },
+    "local_path": {
+      "title": "Local Path",
+      "type": "string"
+    },
+    "page_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Page Count"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "text_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Text Path"
+    }
+  },
+  "required": [
+    "document_hash",
+    "source_id",
+    "local_path",
+    "content_type",
+    "byte_length"
+  ],
+  "title": "DocumentRecord",
+  "type": "object"
+}

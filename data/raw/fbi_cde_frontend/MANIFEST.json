@@ -1,0 +1,18 @@
+{
+  "dataset": "FBI Crime Data Explorer frontend agency roster snapshot",
+  "issuing_authority": "Federal Bureau of Investigation, Crime Data Explorer project (GitHub organization fbi-cde; originally developed with 18F)",
+  "origin_repository": "https://github.com/fbi-cde/crime-data-frontend",
+  "origin_path": "public/data/agencies-by-state.json.gz",
+  "origin_commit": "ddbd3077f8b546491c2f2f6b36e7e82f21a0bcbe",
+  "origin_commit_date": "2018-06-28T09:36:23-04:00",
+  "retrieved_at": "2026-09-20",
+  "retrieval_method": "git clone --depth 1 (GitHub reachable from session; FBI API host api.usa.gov was egress-blocked)",
+  "sha256": "a87901a6c69b5a3fc7b12467ccf1dac56f63e98d27c2bb8b8a15434a5cb1de6b",
+  "record_count": 23243,
+  "record_unit": "UCR reporting entity keyed by ORI (Originating Agency Identifier); NOT a one-to-one agency census. State police and multi-county agencies appear once per county reporting unit.",
+  "known_omissions": "Agencies that never had a UCR ORI; agencies created after mid-2018; renamed/merged agencies after 2018. Includes non-law-enforcement reporting entities (task forces, 'Other', federal).",
+  "identifier_availability": "ORI (9 char), agency_type_name, primary_county, ICPSR lat/lng where available",
+  "licensing": "U.S. federal government work (17 U.S.C. 105); repository license file governs code. Data reused as public-domain government data with attribution.",
+  "how_incorporated": "Registry adapter 'fbi_cde_frontend' loads every record as a RegistryRecord with registry='FBI_CDE_FRONTEND_2018'. Canonical agencies are created one-per-record with research_status=REGISTRY_ONLY unless a curated seed explicitly links ORIs.",
+  "currency_warning": "Snapshot dated 2018-06-28. Must never be presented as a current count. Superseding source: FBI CDE agencies API (api.usa.gov/crime/fbi/cde/agency/byStateAbbr/{ST}) with api.data.gov key, and BJS CSLLEA 2018 / LEAR when accessible."
+}

@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "LinkStatus": {
+      "enum": [
+        "confirmed",
+        "proposed",
+        "ambiguous",
+        "rejected"
+      ],
+      "title": "LinkStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Proposed or confirmed relation between a canonical agency and a registry record.\n\nAmbiguous matches are stored, never merged. link_kind distinguishes \"this record IS the\nagency\" from \"this record is a reporting sub-unit of the agency\" (e.g. per-county ORIs).",
+  "properties": {
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "basis": {
+      "title": "Basis",
+      "type": "string"
+    },
+    "competing_agency_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Competing Agency Ids",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "external_id": {
+      "title": "External Id",
+      "type": "string"
+    },
+    "link_id": {
+      "title": "Link Id",
+      "type": "string"
+    },
+    "link_kind": {
+      "title": "Link Kind",
+      "type": "string"
+    },
+    "registry": {
+      "title": "Registry",
+      "type": "string"
+    },
+    "score": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Score"
+    },
+    "status": {
+      "$ref": "#/$defs/LinkStatus"
+    }
+  },
+  "required": [
+    "link_id",
+    "agency_id",
+    "registry",
+    "external_id",
+    "link_kind",
+    "status",
+    "basis"
+  ],
+  "title": "AgencyLink",
+  "type": "object"
+}

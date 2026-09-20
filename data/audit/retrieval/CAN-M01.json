@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-M01",
+  "name": "New York City Police Department",
+  "state": "NY",
+  "bucket": "municipal_large",
+  "url": "https://www.nyc.gov/site/nypd/about/about-nypd/patrol-guide.page",
+  "retrieved_at": "2026-09-20T06:59:23+00:00",
+  "status": "http_error",
+  "note": "HTTP 404",
+  "sources": [],
+  "capture_usable": false
+}

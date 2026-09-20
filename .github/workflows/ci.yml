@@ -1,0 +1,19 @@
+name: Corpus checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - run: uv sync
+      - run: uv run pytest
+      - run: uv run ruff check src tests scripts
+      - run: uv run radiocorpus check-invariants

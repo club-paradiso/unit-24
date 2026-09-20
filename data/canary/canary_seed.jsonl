@@ -1,0 +1,100 @@
+{"canary_id": "CAN-S01", "seed_name": "Alabama Law Enforcement Agency", "state": "AL", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": "Highway Patrol is a division of ALEA (consolidated 2015)"}
+{"canary_id": "CAN-S02", "seed_name": "Alaska State Troopers", "state": "AK", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S03", "seed_name": "Arizona Department of Public Safety", "state": "AZ", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S04", "seed_name": "Arkansas State Police", "state": "AR", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S05", "seed_name": "California Highway Patrol", "state": "CA", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S06", "seed_name": "Colorado State Patrol", "state": "CO", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S07", "seed_name": "Connecticut State Police", "state": "CT", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S08", "seed_name": "Delaware State Police", "state": "DE", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S09", "seed_name": "Florida Highway Patrol", "state": "FL", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of FLHSMV"}
+{"canary_id": "CAN-S10", "seed_name": "Georgia State Patrol", "state": "GA", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of Georgia DPS"}
+{"canary_id": "CAN-S11", "seed_name": "Hawaii Department of Law Enforcement", "state": "HI", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": "No state police; DLE (est. 2024) holds Sheriff Division. Existence/name to be confirmed by discovery."}
+{"canary_id": "CAN-S12", "seed_name": "Idaho State Police", "state": "ID", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S13", "seed_name": "Illinois State Police", "state": "IL", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S14", "seed_name": "Indiana State Police", "state": "IN", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S15", "seed_name": "Iowa State Patrol", "state": "IA", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of Iowa DPS"}
+{"canary_id": "CAN-S16", "seed_name": "Kansas Highway Patrol", "state": "KS", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S17", "seed_name": "Kentucky State Police", "state": "KY", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S18", "seed_name": "Louisiana State Police", "state": "LA", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S19", "seed_name": "Maine State Police", "state": "ME", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S20", "seed_name": "Maryland State Police", "state": "MD", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S21", "seed_name": "Massachusetts State Police", "state": "MA", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S22", "seed_name": "Michigan State Police", "state": "MI", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S23", "seed_name": "Minnesota State Patrol", "state": "MN", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of MN DPS"}
+{"canary_id": "CAN-S24", "seed_name": "Mississippi Highway Patrol", "state": "MS", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of MS DPS"}
+{"canary_id": "CAN-S25", "seed_name": "Missouri State Highway Patrol", "state": "MO", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S26", "seed_name": "Montana Highway Patrol", "state": "MT", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S27", "seed_name": "Nebraska State Patrol", "state": "NE", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S28", "seed_name": "Nevada State Police", "state": "NV", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": "Formerly Nevada Highway Patrol; name to be confirmed by discovery"}
+{"canary_id": "CAN-S29", "seed_name": "New Hampshire State Police", "state": "NH", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S30", "seed_name": "New Jersey State Police", "state": "NJ", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S31", "seed_name": "New Mexico State Police", "state": "NM", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S32", "seed_name": "New York State Police", "state": "NY", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S33", "seed_name": "North Carolina State Highway Patrol", "state": "NC", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S34", "seed_name": "North Dakota Highway Patrol", "state": "ND", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S35", "seed_name": "Ohio State Highway Patrol", "state": "OH", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S36", "seed_name": "Oklahoma Highway Patrol", "state": "OK", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of OK DPS"}
+{"canary_id": "CAN-S37", "seed_name": "Oregon State Police", "state": "OR", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S38", "seed_name": "Pennsylvania State Police", "state": "PA", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S39", "seed_name": "Rhode Island State Police", "state": "RI", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S40", "seed_name": "South Carolina Highway Patrol", "state": "SC", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": "Division of SC DPS"}
+{"canary_id": "CAN-S41", "seed_name": "South Dakota Highway Patrol", "state": "SD", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S42", "seed_name": "Tennessee Highway Patrol", "state": "TN", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S43", "seed_name": "Texas Department of Public Safety", "state": "TX", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": "Texas Highway Patrol is a division"}
+{"canary_id": "CAN-S44", "seed_name": "Utah Highway Patrol", "state": "UT", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S45", "seed_name": "Vermont State Police", "state": "VT", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S46", "seed_name": "Virginia State Police", "state": "VA", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S47", "seed_name": "Washington State Patrol", "state": "WA", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S48", "seed_name": "West Virginia State Police", "state": "WV", "agency_type": "primary_state_police", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S49", "seed_name": "Wisconsin State Patrol", "state": "WI", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-S50", "seed_name": "Wyoming Highway Patrol", "state": "WY", "agency_type": "highway_patrol", "selection_bucket": "state_principal", "notes": ""}
+{"canary_id": "CAN-M01", "seed_name": "New York City Police Department", "state": "NY", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M02", "seed_name": "Los Angeles Police Department", "state": "CA", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M03", "seed_name": "Chicago Police Department", "state": "IL", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M04", "seed_name": "Houston Police Department", "state": "TX", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M05", "seed_name": "Philadelphia Police Department", "state": "PA", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M06", "seed_name": "Phoenix Police Department", "state": "AZ", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M07", "seed_name": "Dallas Police Department", "state": "TX", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M08", "seed_name": "Miami Police Department", "state": "FL", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M09", "seed_name": "Seattle Police Department", "state": "WA", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M10", "seed_name": "Boston Police Department", "state": "MA", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M11", "seed_name": "Denver Police Department", "state": "CO", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M12", "seed_name": "Atlanta Police Department", "state": "GA", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M13", "seed_name": "Las Vegas Metropolitan Police Department", "state": "NV", "agency_type": "municipal_police", "selection_bucket": "municipal_large_consolidated", "notes": ""}
+{"canary_id": "CAN-M14", "seed_name": "Minneapolis Police Department", "state": "MN", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M15", "seed_name": "Detroit Police Department", "state": "MI", "agency_type": "municipal_police", "selection_bucket": "municipal_large", "notes": ""}
+{"canary_id": "CAN-M16", "seed_name": "Honolulu Police Department", "state": "HI", "agency_type": "municipal_police", "selection_bucket": "municipal_large_county_municipal", "notes": ""}
+{"canary_id": "CAN-M17", "seed_name": "Anchorage Police Department", "state": "AK", "agency_type": "municipal_police", "selection_bucket": "municipal_medium", "notes": ""}
+{"canary_id": "CAN-M18", "seed_name": "Moab Police Department", "state": "UT", "agency_type": "municipal_police", "selection_bucket": "municipal_small", "notes": ""}
+{"canary_id": "CAN-M19", "seed_name": "Bar Harbor Police Department", "state": "ME", "agency_type": "municipal_police", "selection_bucket": "municipal_small", "notes": ""}
+{"canary_id": "CAN-M20", "seed_name": "Ketchum Police Department", "state": "ID", "agency_type": "municipal_police", "selection_bucket": "municipal_small", "notes": ""}
+{"canary_id": "CAN-H01", "seed_name": "Los Angeles County Sheriff's Department", "state": "CA", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H02", "seed_name": "Harris County Sheriff's Office", "state": "TX", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H03", "seed_name": "Cook County Sheriff's Office", "state": "IL", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H04", "seed_name": "Maricopa County Sheriff's Office", "state": "AZ", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H05", "seed_name": "Broward Sheriff's Office", "state": "FL", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H06", "seed_name": "Orange County Sheriff's Department", "state": "CA", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H07", "seed_name": "King County Sheriff's Office", "state": "WA", "agency_type": "sheriff", "selection_bucket": "sheriff_large", "notes": ""}
+{"canary_id": "CAN-H08", "seed_name": "Fulton County Sheriff's Office", "state": "GA", "agency_type": "sheriff", "selection_bucket": "sheriff_medium", "notes": ""}
+{"canary_id": "CAN-H09", "seed_name": "Loving County Sheriff's Office", "state": "TX", "agency_type": "sheriff", "selection_bucket": "sheriff_tiny", "notes": ""}
+{"canary_id": "CAN-H10", "seed_name": "Hinsdale County Sheriff's Office", "state": "CO", "agency_type": "sheriff", "selection_bucket": "sheriff_tiny", "notes": ""}
+{"canary_id": "CAN-X01", "seed_name": "BART Police Department", "state": "CA", "agency_type": "transit_police", "selection_bucket": "special_jurisdiction", "notes": "Bay Area Rapid Transit"}
+{"canary_id": "CAN-X02", "seed_name": "MBTA Transit Police Department", "state": "MA", "agency_type": "transit_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X03", "seed_name": "MTA Police Department", "state": "NY", "agency_type": "transit_police", "selection_bucket": "special_jurisdiction", "notes": "Metropolitan Transportation Authority (NY)"}
+{"canary_id": "CAN-X04", "seed_name": "SEPTA Transit Police Department", "state": "PA", "agency_type": "transit_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X05", "seed_name": "Metro Transit Police Department", "state": "DC", "agency_type": "transit_police", "selection_bucket": "special_jurisdiction", "notes": "WMATA; multi-jurisdiction DC/MD/VA"}
+{"canary_id": "CAN-X06", "seed_name": "University of California, Berkeley Police Department", "state": "CA", "agency_type": "university_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X07", "seed_name": "University of Texas at Austin Police Department", "state": "TX", "agency_type": "university_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X08", "seed_name": "Ohio State University Police Division", "state": "OH", "agency_type": "university_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X09", "seed_name": "Michigan State University Police Department", "state": "MI", "agency_type": "university_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X10", "seed_name": "DFW Airport Department of Public Safety", "state": "TX", "agency_type": "airport_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X11", "seed_name": "Port Authority of New York and New Jersey Police Department", "state": "NY", "agency_type": "port_authority_police", "selection_bucket": "special_jurisdiction", "notes": "Bi-state NY/NJ"}
+{"canary_id": "CAN-X12", "seed_name": "Los Angeles Airport Police", "state": "CA", "agency_type": "airport_police", "selection_bucket": "special_jurisdiction", "notes": "Division of Los Angeles World Airports"}
+{"canary_id": "CAN-X13", "seed_name": "Florida Fish and Wildlife Conservation Commission Division of Law Enforcement", "state": "FL", "agency_type": "park_conservation_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X14", "seed_name": "Texas Parks and Wildlife Department Law Enforcement Division", "state": "TX", "agency_type": "park_conservation_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X15", "seed_name": "Navajo Nation Police Department", "state": "AZ", "agency_type": "tribal_police", "selection_bucket": "special_jurisdiction", "notes": "Multi-state AZ/NM/UT"}
+{"canary_id": "CAN-X16", "seed_name": "Oneida Nation Police Department", "state": "WI", "agency_type": "tribal_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X17", "seed_name": "Kalamazoo Department of Public Safety", "state": "MI", "agency_type": "consolidated_public_safety", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X18", "seed_name": "Sunnyvale Department of Public Safety", "state": "CA", "agency_type": "consolidated_public_safety", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X19", "seed_name": "Wisconsin State Capitol Police", "state": "WI", "agency_type": "capitol_police", "selection_bucket": "special_jurisdiction", "notes": ""}
+{"canary_id": "CAN-X20", "seed_name": "Los Angeles School Police Department", "state": "CA", "agency_type": "school_district_police", "selection_bucket": "special_jurisdiction", "notes": ""}

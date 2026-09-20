@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-M02",
+  "name": "Los Angeles Police Department",
+  "state": "CA",
+  "bucket": "municipal_large",
+  "url": "https://www.lapdonline.org/newsroom/change-in-dispatch-policy-for-the-lapd/",
+  "retrieved_at": "2026-09-20T06:59:31+00:00",
+  "status": "http_error",
+  "note": "HTTP 403 (not retried; no circumvention)",
+  "sources": [],
+  "capture_usable": false
+}

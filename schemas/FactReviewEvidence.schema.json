@@ -1,0 +1,59 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "enum": [
+        "accepted",
+        "rejected"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "document_hash": {
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "fact_id": {
+      "title": "Fact Id",
+      "type": "string"
+    },
+    "reviewed_on": {
+      "format": "date",
+      "title": "Reviewed On",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "minLength": 1,
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "reviewer_kind": {
+      "enum": [
+        "human",
+        "model"
+      ],
+      "title": "Reviewer Kind",
+      "type": "string"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "value_fingerprint": {
+      "title": "Value Fingerprint",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fact_id",
+    "source_id",
+    "document_hash",
+    "value_fingerprint",
+    "reviewer_id",
+    "reviewer_kind",
+    "reviewed_on",
+    "decision"
+  ],
+  "title": "FactReviewEvidence",
+  "type": "object"
+}
