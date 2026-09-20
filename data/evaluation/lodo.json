@@ -177,7 +177,7 @@
   "note": "Parsers contain no agency-specific or document-specific branches, enforced by tests/test_layout_extraction.py::test_no_agency_specific_parser_branches. Each fold therefore reports held-out behaviour of rules developed against the other documents.",
   "parser_versions": {
     "code_parser_version": "3",
-    "layout_version": "layout-1",
+    "layout_version": "layout-2",
     "phonetic_parser_version": "3",
     "procedure_parser_version": "3"
   }

@@ -1,0 +1,67 @@
+{
+  "_purpose": "Identity manifest for the four real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
+  "_status": "NOT PRESENT in the build environment. Every host below was refused by the organisation egress policy (HTTP 403 at CONNECT). No document was fetched, and none was substituted.",
+  "_directory": "data/raw/layout-validation/ (git-ignored except this manifest and README)",
+  "_identity_rule": "Before a document is used, its SHA-256 must equal expected_sha256 below. A file that does not match is a different document and must not be used, however similar its name.",
+  "_hash_provenance": "expected_sha256 values are the document hashes recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z). They were not recomputed here because the bytes are unavailable.",
+  "documents": [
+    {
+      "key": "CHP_AURAL_BREVITY",
+      "agency": "California Highway Patrol",
+      "agency_id": "CAN-S05",
+      "source_id": "src_29af34430672001d",
+      "filename": "chp_254_aural_brevity_card.pdf",
+      "canonical_url": "https://www.chp.ca.gov/globalassets/chp-254---aural-brevity-card---01-2021-v2.pdf",
+      "expected_sha256": "eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064",
+      "expected_byte_length": 60110,
+      "expected_page_count": 2,
+      "layout_character": "multi-column brevity card; adjacent columns and wrapped cells are the primary adversarial case",
+      "retrieval_status": "BLOCKED_EGRESS",
+      "retrieval_error": "gateway answered 403 to CONNECT for www.chp.ca.gov:443"
+    },
+    {
+      "key": "IN_ISP_COMMUNICATIONS",
+      "agency": "Indiana State Police",
+      "agency_id": "CAN-S14",
+      "source_id": "src_b1ec55369bd8b386",
+      "filename": "in_isp_communications_procedures.pdf",
+      "canonical_url": "https://www.in.gov/isp/files/Communications-Procedures.pdf",
+      "expected_sha256": "e6518853a9579c22bc22b069f526656b5003ec0ddfedf55277a03c214f4933be",
+      "expected_byte_length": 285801,
+      "expected_page_count": 9,
+      "recorded_effective_date": "2015-01-15",
+      "layout_character": "single-column narrative policy with enumerated section headings",
+      "retrieval_status": "BLOCKED_EGRESS",
+      "retrieval_error": "gateway answered 403 to CONNECT for www.in.gov:443"
+    },
+    {
+      "key": "CHI_CPD_DIRECTIVE",
+      "agency": "Chicago Police Department",
+      "agency_id": "CAN-M03",
+      "source_id": "src_b2f7f6d601d0512c",
+      "filename": "chi_cpd_directive_6607.pdf",
+      "canonical_url": "https://directives.chicagopolice.org/api/publicDirective/6607",
+      "expected_sha256": "4e7ce3040d05c8419eeda4302d4791bb127cc66deac0b02651634a5f2b4b831c",
+      "expected_byte_length": 104504,
+      "expected_page_count": 11,
+      "recorded_effective_date": "2020-08-15",
+      "layout_character": "single-column directive with nested lettered and numbered clauses",
+      "retrieval_status": "BLOCKED_EGRESS",
+      "retrieval_error": "gateway answered 403 to CONNECT for directives.chicagopolice.org:443"
+    },
+    {
+      "key": "PHL_PPD_DIRECTIVE_7_1",
+      "agency": "Philadelphia Police Department",
+      "agency_id": "CAN-M05",
+      "source_id": "src_c8b6dc4156470007",
+      "filename": "phl_ppd_directive_7_1.pdf",
+      "canonical_url": "https://www.phillypolice.com/wp-content/uploads/2024/05/D7.1-REV-5-23-24-REDACTED.pdf",
+      "expected_sha256": "ec082d969a80a7e7d44290483a856da722cc0a13a2cebba645935825b2e42f96",
+      "expected_byte_length": 251659,
+      "expected_page_count": 31,
+      "layout_character": "long directive with a revision-history table, margin change-bars and rules that continue across page breaks",
+      "retrieval_status": "BLOCKED_EGRESS",
+      "retrieval_error": "gateway answered 403 to CONNECT for www.phillypolice.com:443"
+    }
+  ]
+}

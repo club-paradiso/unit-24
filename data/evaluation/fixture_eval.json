@@ -10,7 +10,7 @@
   "ground_truth": "exhaustive_by_construction",
   "parser_versions": {
     "code_parser_version": "3",
-    "layout_version": "layout-1",
+    "layout_version": "layout-2",
     "phonetic_parser_version": "3",
     "procedure_parser_version": "3"
   },

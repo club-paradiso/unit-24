@@ -39,8 +39,8 @@ TrainingItem (future) --> fact_ids + source_ids (mandatory, non-empty)
 | 3 | official-domain discovery | `discovery/stage.py` | yes (classifier); search input recorded | stage_progress(agency) |
 | 4 | document discovery | same | yes | same |
 | 5 | acquisition | `acquisition/fetch.py` | yes | lead.acquisition_status |
-| 6 | text extraction | `extraction/text.py` | yes | stage_progress(source_id, parser version, hash) |
-| 7 | candidate fact extraction | `extraction/codes.py`, `phonetics.py`, `procedures.py`, `llm.py` | parsers yes; model optional and opt-in | same |
+| 6 | layout extraction | `layout/backends.py`, `layout/segment.py` | yes | layout cache keyed by document hash + layout source digest |
+| 7 | candidate fact extraction | `extraction/codes.py`, `phonetics.py`, `procedures.py`, `context.py`, `llm.py` | parsers yes; model optional and opt-in | stage_progress pinned to layout + all parser versions |
 | 8 | validation | `validation/rules.py` | yes | status events |
 | 9 | source cross-checking | `conflicts/detect.py` | yes | conflict_id stable |
 | 10 | conflict detection/resolution | same | yes | same |
