@@ -1,0 +1,581 @@
+{
+  "$defs": {
+    "CallsignConvention": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "element": {
+          "title": "Element",
+          "type": "string"
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Examples",
+          "type": "array"
+        },
+        "kind": {
+          "const": "callsign_convention",
+          "default": "callsign_convention",
+          "title": "Kind",
+          "type": "string"
+        },
+        "pattern": {
+          "title": "Pattern",
+          "type": "string"
+        }
+      },
+      "required": [
+        "element",
+        "pattern"
+      ],
+      "title": "CallsignConvention",
+      "type": "object"
+    },
+    "CodeMeaning": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "code_system": {
+          "title": "Code System",
+          "type": "string"
+        },
+        "kind": {
+          "const": "code_meaning",
+          "default": "code_meaning",
+          "title": "Kind",
+          "type": "string"
+        },
+        "meaning": {
+          "title": "Meaning",
+          "type": "string"
+        },
+        "usage_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Note"
+        }
+      },
+      "required": [
+        "code_system",
+        "code",
+        "meaning"
+      ],
+      "title": "CodeMeaning",
+      "type": "object"
+    },
+    "ExtractionMethod": {
+      "enum": [
+        "deterministic_parser",
+        "model",
+        "human",
+        "registry_import"
+      ],
+      "title": "ExtractionMethod",
+      "type": "string"
+    },
+    "FactType": {
+      "enum": [
+        "code_meaning",
+        "phonetic_letter",
+        "phonetic_system",
+        "callsign_convention",
+        "procedure_rule",
+        "ordered_structure",
+        "interop_rule",
+        "protocol_mode"
+      ],
+      "title": "FactType",
+      "type": "string"
+    },
+    "InteropRule": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "interop_rule",
+          "default": "interop_rule",
+          "title": "Kind",
+          "type": "string"
+        },
+        "rule_kind": {
+          "title": "Rule Kind",
+          "type": "string"
+        },
+        "rule_text": {
+          "title": "Rule Text",
+          "type": "string"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope"
+        }
+      },
+      "required": [
+        "rule_kind",
+        "rule_text"
+      ],
+      "title": "InteropRule",
+      "type": "object"
+    },
+    "OrderedStructure": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "ordered_structure",
+          "default": "ordered_structure",
+          "title": "Kind",
+          "type": "string"
+        },
+        "mnemonic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mnemonic"
+        },
+        "ordered_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Ordered Fields",
+          "type": "array"
+        },
+        "structure": {
+          "title": "Structure",
+          "type": "string"
+        }
+      },
+      "required": [
+        "structure",
+        "ordered_fields"
+      ],
+      "title": "OrderedStructure",
+      "type": "object"
+    },
+    "PhoneticLetter": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context"
+        },
+        "kind": {
+          "const": "phonetic_letter",
+          "default": "phonetic_letter",
+          "title": "Kind",
+          "type": "string"
+        },
+        "letter": {
+          "title": "Letter",
+          "type": "string"
+        },
+        "system": {
+          "title": "System",
+          "type": "string"
+        },
+        "word": {
+          "title": "Word",
+          "type": "string"
+        }
+      },
+      "required": [
+        "letter",
+        "word",
+        "system"
+      ],
+      "title": "PhoneticLetter",
+      "type": "object"
+    },
+    "PhoneticSystemAssertion": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "phonetic_system",
+          "default": "phonetic_system",
+          "title": "Kind",
+          "type": "string"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope"
+        },
+        "system": {
+          "title": "System",
+          "type": "string"
+        }
+      },
+      "required": [
+        "system"
+      ],
+      "title": "PhoneticSystemAssertion",
+      "type": "object"
+    },
+    "ProcedureRule": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "procedure_rule",
+          "default": "procedure_rule",
+          "title": "Kind",
+          "type": "string"
+        },
+        "prescribed_phrases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prescribed Phrases",
+          "type": "array"
+        },
+        "procedure": {
+          "title": "Procedure",
+          "type": "string"
+        },
+        "rule_text": {
+          "title": "Rule Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "procedure",
+        "rule_text"
+      ],
+      "title": "ProcedureRule",
+      "type": "object"
+    },
+    "ProtocolModeAssertion": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "protocol_mode",
+          "default": "protocol_mode",
+          "title": "Kind",
+          "type": "string"
+        },
+        "mode": {
+          "title": "Mode",
+          "type": "string"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope"
+        },
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "statement"
+      ],
+      "title": "ProtocolModeAssertion",
+      "type": "object"
+    },
+    "ReviewStatus": {
+      "enum": [
+        "unreviewed",
+        "auto_accepted",
+        "needs_review",
+        "human_accepted",
+        "human_rejected"
+      ],
+      "title": "ReviewStatus",
+      "type": "string"
+    },
+    "TemporalStatus": {
+      "enum": [
+        "current",
+        "historical",
+        "uncertain"
+      ],
+      "title": "TemporalStatus",
+      "type": "string"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "verified",
+        "corroborated",
+        "unverified",
+        "rejected"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "effective_from": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective From"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective To"
+    },
+    "excerpt": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Excerpt"
+    },
+    "extraction_method": {
+      "$ref": "#/$defs/ExtractionMethod"
+    },
+    "extraction_model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extraction Model"
+    },
+    "fact_id": {
+      "title": "Fact Id",
+      "type": "string"
+    },
+    "fact_type": {
+      "$ref": "#/$defs/FactType"
+    },
+    "key": {
+      "title": "Key",
+      "type": "string"
+    },
+    "locator": {
+      "title": "Locator",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "raw_value": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Value"
+    },
+    "review_status": {
+      "$ref": "#/$defs/ReviewStatus",
+      "default": "unreviewed"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Run Id"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "superseded_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Superseded By"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes"
+    },
+    "temporal_status": {
+      "$ref": "#/$defs/TemporalStatus",
+      "default": "uncertain"
+    },
+    "value": {
+      "discriminator": {
+        "mapping": {
+          "callsign_convention": "#/$defs/CallsignConvention",
+          "code_meaning": "#/$defs/CodeMeaning",
+          "interop_rule": "#/$defs/InteropRule",
+          "ordered_structure": "#/$defs/OrderedStructure",
+          "phonetic_letter": "#/$defs/PhoneticLetter",
+          "phonetic_system": "#/$defs/PhoneticSystemAssertion",
+          "procedure_rule": "#/$defs/ProcedureRule",
+          "protocol_mode": "#/$defs/ProtocolModeAssertion"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CodeMeaning"
+        },
+        {
+          "$ref": "#/$defs/PhoneticLetter"
+        },
+        {
+          "$ref": "#/$defs/PhoneticSystemAssertion"
+        },
+        {
+          "$ref": "#/$defs/CallsignConvention"
+        },
+        {
+          "$ref": "#/$defs/ProcedureRule"
+        },
+        {
+          "$ref": "#/$defs/OrderedStructure"
+        },
+        {
+          "$ref": "#/$defs/InteropRule"
+        },
+        {
+          "$ref": "#/$defs/ProtocolModeAssertion"
+        }
+      ],
+      "title": "Value"
+    },
+    "verification_status": {
+      "$ref": "#/$defs/VerificationStatus",
+      "default": "unverified"
+    }
+  },
+  "required": [
+    "fact_id",
+    "agency_id",
+    "fact_type",
+    "key",
+    "value",
+    "source_id",
+    "locator",
+    "confidence",
+    "extraction_method"
+  ],
+  "title": "ProtocolFact",
+  "type": "object"
+}

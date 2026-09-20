@@ -1,0 +1,69 @@
+{
+  "$defs": {
+    "EligibilityState": {
+      "enum": [
+        "PLAYABLE_VERIFIED",
+        "PLAYABLE_WITH_LIMITATIONS",
+        "RESEARCH_ONLY",
+        "HISTORICAL_ONLY",
+        "CONFLICT_REQUIRES_REVIEW",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "title": "EligibilityState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "conflict_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Conflict Ids",
+      "type": "array"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "title": "Decided At",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "state": {
+      "$ref": "#/$defs/EligibilityState"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "subject_kind": {
+      "title": "Subject Kind",
+      "type": "string"
+    },
+    "supporting_source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Supporting Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "subject_kind",
+    "subject_id",
+    "state",
+    "reasons",
+    "policy_version"
+  ],
+  "title": "EligibilityDecision",
+  "type": "object"
+}

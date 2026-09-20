@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "ConflictKind": {
+      "enum": [
+        "official_vs_official",
+        "current_vs_obsolete",
+        "agency_vs_dispatch",
+        "state_vs_municipal",
+        "secondary_vs_official",
+        "secondary_vs_secondary",
+        "undated_manual",
+        "other"
+      ],
+      "title": "ConflictKind",
+      "type": "string"
+    },
+    "ConflictResolution": {
+      "enum": [
+        "unresolved",
+        "resolved_temporal",
+        "resolved_jurisdictional",
+        "resolved_quality",
+        "resolved_human"
+      ],
+      "title": "ConflictResolution",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agency_id": {
+      "title": "Agency Id",
+      "type": "string"
+    },
+    "conflict_id": {
+      "title": "Conflict Id",
+      "type": "string"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "title": "Detected At",
+      "type": "string"
+    },
+    "fact_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Fact Ids",
+      "type": "array"
+    },
+    "fact_type": {
+      "title": "Fact Type",
+      "type": "string"
+    },
+    "key": {
+      "title": "Key",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/ConflictKind"
+    },
+    "preferred_fact_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Preferred Fact Id"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "resolution": {
+      "$ref": "#/$defs/ConflictResolution",
+      "default": "unresolved"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Run Id"
+    },
+    "source_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "conflict_id",
+    "agency_id",
+    "fact_type",
+    "key",
+    "fact_ids",
+    "source_ids",
+    "kind",
+    "rationale"
+  ],
+  "title": "Conflict",
+  "type": "object"
+}

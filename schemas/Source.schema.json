@@ -1,0 +1,259 @@
+{
+  "$defs": {
+    "SourceQuality": {
+      "enum": [
+        "OFFICIAL_CURRENT",
+        "OFFICIAL_HISTORICAL",
+        "OFFICIAL_PARTIAL",
+        "SECONDARY_CORROBORATED",
+        "CONFLICTING",
+        "UNVERIFIED",
+        "NO_PUBLIC_SOURCE"
+      ],
+      "title": "SourceQuality",
+      "type": "string"
+    },
+    "SourceType": {
+      "enum": [
+        "agency_policy_manual",
+        "dispatch_center_document",
+        "government_document",
+        "training_accreditation",
+        "other_government_record",
+        "standards_body",
+        "registry_dataset",
+        "search_engine_result",
+        "secondary_publication",
+        "enthusiast_or_crowdsourced",
+        "social_media",
+        "fixture",
+        "unknown"
+      ],
+      "title": "SourceType",
+      "type": "string"
+    },
+    "TemporalStatus": {
+      "enum": [
+        "current",
+        "historical",
+        "uncertain"
+      ],
+      "title": "TemporalStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agency_or_jurisdiction": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Agency Or Jurisdiction"
+    },
+    "canonical_url": {
+      "title": "Canonical Url",
+      "type": "string"
+    },
+    "content_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Type"
+    },
+    "document_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Document Hash"
+    },
+    "effective_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective Date"
+    },
+    "extra": {
+      "additionalProperties": true,
+      "title": "Extra",
+      "type": "object"
+    },
+    "is_fixture": {
+      "default": false,
+      "title": "Is Fixture",
+      "type": "boolean"
+    },
+    "issuing_authority": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Issuing Authority"
+    },
+    "local_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Local Path"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "original_file_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Original File Url"
+    },
+    "page_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Page Count"
+    },
+    "publication_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date"
+    },
+    "retrieved_at": {
+      "format": "date-time",
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_quality": {
+      "$ref": "#/$defs/SourceQuality",
+      "default": "UNVERIFIED"
+    },
+    "source_type": {
+      "$ref": "#/$defs/SourceType"
+    },
+    "superseded_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Superseded By"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes"
+    },
+    "temporal_status": {
+      "$ref": "#/$defs/TemporalStatus",
+      "default": "uncertain"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Title"
+    }
+  },
+  "required": [
+    "source_id",
+    "source_type",
+    "title",
+    "issuing_authority",
+    "agency_or_jurisdiction",
+    "canonical_url"
+  ],
+  "title": "Source",
+  "type": "object"
+}
