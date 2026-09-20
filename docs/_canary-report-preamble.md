@@ -6,27 +6,35 @@
 
 ## Headline results
 
-* **Agency discovered:** 69 agencies have search evidence; 36 of those also matched an FBI
-  ORI exactly (54 exact matches in total), and a further 1,183 FBI per-county reporting
-  units were linked to canary state agencies as *proposed sub-units*. 31 agencies were not
-  searched (session budget) and are `blocked`; 16 of these still have an exact FBI ORI
-  match from the registry stage, so they are known to exist but are unresearched.
-* **Official domain discovered:** 59 / 69 searched agencies. The other 10 stay UNKNOWN by
-  policy: their candidate hosts are agency-branded non-.gov domains (lapdonline.org,
-  lasd.org, lvmpd.com, wmata.com, lawa.org, septa.org, myfwc.com, denvergov.org,
-  police.utexas.edu) or a state portal whose result titles did not name the agency
-  (in.gov for Indiana State Police, mass.gov for Massachusetts State Police).
-* **Radio-policy source discovered (lead only):** 85 official-host leads whose title/URL
-  carries radio-protocol terms, across 34 agencies (40 agencies have at least one official document candidate of any kind). Strongest examples: Florida Highway
-  Patrol Policy 14.01 Communications (flhsmv.gov), Indiana State Police "Communications
-  Procedures" PDF (in.gov/isp), Idaho State Police Procedure 07.12 Patrol Radio Operations
-  (isp.idaho.gov), CHP "Aural Brevity Card" and HPM 50.1 (chp.ca.gov), Philadelphia PD
-  Directive 7.1 Police Radio (phillypolice.com), LASD Manual of Policy and Procedures radio
-  sections (pars.lasd.org), Orange County SD "Radio Codes" page (ocsheriff.gov), Georgia DPS
-  Policy 14.04 Communications, LA Airport Police Chapter XIII Communications (lawa.org).
+* **Agency discovered:** all 100 agencies have search evidence (two discovery rounds: the
+  first stopped at 69 when the session search budget ran out; the second covered the rest).
+  52 agencies also matched an FBI ORI exactly (54 confirmed record links), and a further
+  1,183 FBI per-county reporting units were linked to canary state agencies as *proposed
+  sub-units*.
+* **Official domain discovered:** 78 / 100. The other 22 stay UNKNOWN by policy: their
+  candidate hosts are agency-branded non-.gov domains (lasd.org, lvmpd.com, wmata.com,
+  lawa.org, septa.org, myfwc.com, denvergov.org, dallaspolice.net, anchoragepolice.com,
+  harriscountyso.org, honolulupd.org, mbta.com, mta.info, panynj.gov path, dfwairport.com,
+  kalamazoopublicsafety.org), campus .edu hosts (police.utexas.edu, ucpd.berkeley.edu,
+  dps.osu.edu, dpps.msu.edu), or a state portal whose result titles did not name the agency
+  (in.gov for Indiana State Police, mass.gov for Massachusetts State Police). Maricopa County
+  Sheriff's Office returned no agency-operated host at all.
+* **Radio-policy source discovered (lead only):** 136 official-host leads whose title/URL
+  carries radio-protocol terms, across 57 agencies (68 agencies have at least one official
+  document candidate of any kind). Strongest examples: Florida Highway Patrol Policy 14.01
+  Communications (flhsmv.gov), Indiana State Police "Communications Procedures" PDF
+  (in.gov/isp), Idaho State Police Procedure 07.12 Patrol Radio Operations (isp.idaho.gov),
+  CHP "Aural Brevity Card" and HPM 50.1 (chp.ca.gov), Phoenix PD "Radio Codes – Numerical
+  Order" PDF (phoenix.gov), Detroit PD "Radio Codes" list and Directive 301.1 Radio
+  Procedures (detroitmi.gov), Wisconsin State Patrol P&P 5-8 Mobile Radio Communications
+  (wsp.wi.gov), Houston PD General Order 400-10 Unit and Radio Numbering (houstontx.gov),
+  Honolulu PD Telecommunications policy (honolulupd.org), Philadelphia PD Directive 7.1
+  Police Radio (phillypolice.com), LASD Manual of Policy and Procedures radio sections
+  (pars.lasd.org), Orange County SD "Radio Codes" page (ocsheriff.gov), Georgia DPS Policy
+  14.04 Communications, LA Airport Police Chapter XIII Communications (lawa.org).
 * **Current official protocol source:** 0. Every acquisition attempt against a government or
-  agency host was denied by the build environment's egress policy (137 leads
-  `blocked_egress`, 2 `http_error` 403 on directives.chicagopolice.org). No document was
+  agency host was denied by the build environment's egress policy (232 leads
+  `blocked_egress`). No document was
   fetched, so no real-agency fact, conflict, phonetic alphabet or procedure exists in the
   corpus. Those columns read "UNKNOWN (no document acquired)" for all 100 agencies, which is
   the correct value.
@@ -36,14 +44,16 @@
 
 | failure mode | count | handling |
 |---|---|---|
-| search budget exhausted before agency searched | 31 agencies | `research_status=blocked`, explicit not-performed markers; re-run list in nationwide-expansion-plan.md |
-| egress-denied document fetch | 137 leads | `acquisition_status=blocked_egress` with proxy reason; resumable |
-| HTTP 403 from reachable host | 2 leads | recorded, not retried |
+| search budget exhausted before agency searched (round 1) | 31 agencies | `research_status=blocked`, explicit not-performed markers; resolved by round 2, markers superseded |
+| egress-denied document fetch | 232 leads | `acquisition_status=blocked_egress` with proxy reason; resumable |
+| plain-http lead upgraded to https before fetch | 2 leads (directives.chicagopolice.org) | still egress-denied |
 | official host but agency not named in title (state portals) | 2 agencies | website stays UNKNOWN |
-| agency-branded non-.gov host | 8 agencies | website stays UNKNOWN; host judged "plausible, unproven" |
-| search tool returned neighbouring agencies instead of target (Miami PD) | 1 agency | website UNKNOWN; leads kept as unrelated/secondary |
+| agency-branded non-.gov or .edu host | 19 agencies | website stays UNKNOWN; host judged "plausible, unproven" |
+| no agency-operated host in any result (Maricopa County SO, Miami PD) | 2 agencies | website UNKNOWN; site: search skipped for MCSO with explicit marker |
+| site: search ignored by search backend (Wikipedia/Scribd leakage) | most C searches | off-host results classified as unrelated/secondary; nothing inferred |
+| search result belongs to a different agency with a similar name (Harford vs Harris County, Fulton County Police vs Sheriff, Maryland Transit vs MTA) | several leads | host judgement is per agency name + state; leads stay leads |
 | fuzzy registry matches that are different entities (Indiana State Excise Police, Miami Beach PD, Berkeley PD) | 19 proposals nationwide, 0 auto-merged | stored as `proposed`, tested |
-| enthusiast/crowdsourced radio-code leads | 256 leads | `enthusiast_lead`, never fetched, never evidence |
+| enthusiast/crowdsourced radio-code leads | 386 leads | `enthusiast_lead`, never fetched, never evidence |
 
 ## Fixture corpus (synthetic, state ZZ) — proves the fact path end to end
 

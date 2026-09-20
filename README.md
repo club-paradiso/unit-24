@@ -20,8 +20,8 @@ and a reproducible research pipeline. There is no learner-facing application her
 | Protocol schema | 8 fact types, evidence objects, conflicts, eligibility; JSON Schema in `schemas/` |
 | Pipeline | 12 stages, resumable and idempotent, SQLite-backed, `radiocorpus run-canary` reproduces everything |
 | Tests | 61 passing (`uv run pytest`), 8 corpus invariants enforced |
-| Canary discovery | 69 / 100 agencies searched (session search budget capped the rest), 59 official domains, 85 official radio-policy leads |
-| Canary acquisition | **0 documents acquired**: every government/agency host was blocked by the build environment's egress policy (137 leads recorded as `blocked_egress`) |
+| Canary discovery | 100 / 100 agencies searched (two rounds; the first hit the session search budget), 78 official domains, 136 official radio-policy leads across 57 agencies |
+| Canary acquisition | **0 documents acquired**: every government/agency host was blocked by the build environment's egress policy (232 leads recorded as `blocked_egress`) |
 | Extraction / conflicts / eligibility | Exercised end-to-end on a synthetic fixture corpus (7 documents, 89 facts, 3 conflicts) |
 
 See `docs/canary-report.md` for the per-agency table and `docs/nationwide-expansion-plan.md`

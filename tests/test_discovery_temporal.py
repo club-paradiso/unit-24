@@ -48,26 +48,55 @@ def test_lead_classes():
 
 def test_recorded_provider_separates_not_performed():
     prov = RecordedSearchProvider(CANARY / "discovery_leads.jsonl")
-    assert prov.not_performed()  # budget-blocked searches exist in the canary record
+    assert prov.not_performed()  # one skipped search (no official host identified) remains in the record
     assert all(n.reason for n in prov.not_performed())
     hits = prov.hits_for_subject("CAN-S01")
     assert hits and all(h.url.startswith("http") for h in hits)
 
 
 def test_discovery_marks_blocked_not_no_public_source(tmp_path):
+    """A not-performed search yields BLOCKED, never NO_PUBLIC_SOURCE; a judgment-only agency is also BLOCKED."""
+    import json
+
+    s = Store()
+    ingest_registry(s, "curated", CANARY / "canary_seed.jsonl")
+    Resolver(s).seed_curated("CURATED_CANARY")
+    leads = tmp_path / "leads.jsonl"
+    rows = [
+        {"record_type": "search_not_performed", "canary_id": "CAN-S01", "seed_name": "Alabama Law Enforcement Agency",
+         "query": "q", "search_index": "A", "reason": "budget", "retrieved_at": "2026-09-20T05:00:00Z"},
+        {"record_type": "worker_judgment", "canary_id": "CAN-S02", "official_domain_candidate": None, "basis": "",
+         "agency_existence_signal": "none", "notes": "NOT PROCESSED"},
+        {"record_type": "search_result", "canary_id": "CAN-S05", "seed_name": "California Highway Patrol",
+         "query": '"California Highway Patrol" CA official website', "search_index": "A", "rank": 1,
+         "title": "California Highway Patrol | Home", "url": "https://www.chp.ca.gov/", "snippet": "", "retrieved_at": "2026-09-20T05:00:00Z"},
+    ]
+    leads.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    run = discover_from_recorded(s, leads)
+    by = {a.source_registry_ids["CURATED_CANARY"][0]: a for a in s.agencies()}
+    assert by["CAN-S01"].research_status == ResearchStatus.BLOCKED and "not performed" in (by["CAN-S01"].notes or "")
+    assert by["CAN-S02"].research_status == ResearchStatus.BLOCKED
+    assert by["CAN-S05"].research_status == ResearchStatus.DOMAIN_DISCOVERED and by["CAN-S05"].official_website == "https://www.chp.ca.gov/"
+    assert "website basis:" in (by["CAN-S05"].notes or "")
+    assert by["CAN-S03"].research_status == ResearchStatus.SEED_UNCONFIRMED  # no record at all: nothing claimed
+    assert ResearchStatus.NO_PUBLIC_SOURCE not in {a.research_status for a in s.agencies()}
+    assert run.stats["blocked_no_search"] == 2
+    run2 = discover_from_recorded(s, leads)
+    assert run2.stats.get("skipped_resumed") == 100
+
+
+def test_full_canary_discovery_record(tmp_path):
+    """The committed canary record: every agency searched, websites only with a basis."""
     s = Store()
     ingest_registry(s, "curated", CANARY / "canary_seed.jsonl")
     Resolver(s).seed_curated("CURATED_CANARY")
     run = discover_from_recorded(s, CANARY / "discovery_leads.jsonl")
-    statuses = {a.research_status for a in s.agencies()}
-    assert ResearchStatus.NO_PUBLIC_SOURCE not in statuses
-    assert ResearchStatus.BLOCKED in statuses and run.stats["blocked_no_search"] > 0
+    assert run.stats.get("blocked_no_search", 0) == 0 and run.stats["agencies"] == 100
     for a in s.agencies():
         if a.official_website:
             assert "website basis:" in (a.notes or "")
             assert a.research_status in {ResearchStatus.DOMAIN_DISCOVERED, ResearchStatus.DOCUMENTS_DISCOVERED}
-    run2 = discover_from_recorded(s, CANARY / "discovery_leads.jsonl")
-    assert run2.stats.get("skipped_resumed") == 100
+        assert a.research_status != ResearchStatus.NO_PUBLIC_SOURCE
 
 
 def test_date_parsing_and_undated_stays_none():

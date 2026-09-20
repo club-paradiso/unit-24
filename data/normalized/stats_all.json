@@ -1,9 +1,8 @@
 {
   "agencies_by_research_status": {
-    "blocked": 31,
-    "discovery_started": 6,
-    "documents_discovered": 40,
-    "domain_discovered": 23,
+    "discovery_started": 12,
+    "documents_discovered": 68,
+    "domain_discovered": 20,
     "registry_only": 22006
   },
   "agencies_by_state": {
@@ -89,33 +88,32 @@
   "agency_eligibility": {
     "INSUFFICIENT_EVIDENCE": 22106
   },
-  "blocked_agency_count": 31,
-  "blocked_egress_leads": 137,
+  "blocked_agency_count": 0,
+  "blocked_egress_leads": 232,
   "conflict_count": 0,
   "corroborated_fact_count": 0,
   "current_official_documents": 0,
   "documents_acquired": 0,
-  "documents_discovered": 139,
+  "documents_discovered": 232,
   "historical_documents": 0,
   "leads_by_acquisition_status": {
-    "blocked_egress": 137,
-    "http_error": 2,
-    "pending": 1287,
-    "skipped_not_candidate": 360
+    "blocked_egress": 232,
+    "pending": 1965,
+    "skipped_not_candidate": 549
   },
   "leads_by_class": {
-    "enthusiast_lead": 256,
-    "official_document_candidate": 53,
-    "official_homepage_candidate": 518,
-    "official_radio_policy_candidate": 85,
-    "secondary_lead": 513,
+    "enthusiast_lead": 386,
+    "official_document_candidate": 95,
+    "official_homepage_candidate": 787,
+    "official_radio_policy_candidate": 136,
+    "secondary_lead": 792,
     "standards_body_document": 1,
-    "unrelated": 360
+    "unrelated": 549
   },
-  "leads_total": 1786,
+  "leads_total": 2746,
   "no_public_source_count": 0,
-  "official_domains_discovered": 59,
-  "radio_policy_candidates_discovered": 85,
+  "official_domains_discovered": 78,
+  "radio_policy_candidates_discovered": 136,
   "rejected_fact_count": 0,
   "sources_by_quality": {},
   "total_agencies": 22106,

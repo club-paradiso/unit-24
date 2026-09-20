@@ -6,7 +6,7 @@
 |---|---|---|
 | entity resolution behaves reliably | 54 exact confirmations, 1,183 sub-unit proposals, 10 fuzzy proposals, 0 ambiguous on 23,243 rows; trap cases (Berkeley PD vs UC Berkeley PD, Miami Beach vs Miami, Excise Police vs State Police, same-name different state) covered by tests; re-run changes nothing | **pass** |
 | provenance survives end-to-end | every fact carries source_id + locator + excerpt; `explain` returns hash, URL, locator, excerpt, reasons; invariants 1, 7, 8 hold | **pass** (on fixtures; real documents not yet acquired) |
-| UNKNOWN stays UNKNOWN | 41 canary agencies keep `official_website=None`; blocked ≠ no_public_source; neighbour-township fixture has no facts; invariant 6 holds | **pass** |
+| UNKNOWN stays UNKNOWN | 22 canary agencies keep `official_website=None` after search; blocked ≠ no_public_source; neighbour-township fixture has no facts; invariant 6 holds | **pass** |
 | conflicts preserved | 3 fixture conflicts stored with all participants; 1 unresolved; nothing deleted; invariant 5 holds | **pass** |
 | current vs historical distinguishable | source quality/temporal status, superseded_by links, HISTORICAL_ONLY eligibility; invariant 3 holds | **pass** |
 | extraction errors measurable | validation stats (`passed/rejected/problem:*`), per-fact confidence, per-document `stage_progress` notes | **pass** (measured on fixtures only) |
@@ -14,35 +14,29 @@
 | tests pass | 61/61, ruff clean | **pass** |
 
 **Decision:** the schema and pipeline are ready for nationwide *registry ingestion and
-discovery*. **However**, two operations were impossible in the build session and must run
-in an environment with network access before any real fact enters the corpus:
-
-1. document acquisition (all government/agency hosts egress-blocked);
-2. search for the remaining 31 canary agencies (search budget exhausted).
+discovery*. **However**, one operation was impossible in the build session and must run in
+an environment with network access before any real fact enters the corpus: document
+acquisition (all government/agency hosts egress-blocked).
 
 Nationwide registry ingestion has effectively already happened (23,243 FBI reporting units
-resolved). Nationwide *discovery* should start only after (1) has been exercised on the 139
-canary leads, so that the extraction parsers are validated on real documents before scaling.
+resolved). Nationwide *discovery* should start only after acquisition has been exercised on
+the 232 canary leads, so that the extraction parsers are validated on real documents before
+scaling.
 
 ## Blocked operations and their reproduction commands
 
 ```bash
-# 1. Acquire the 139 official candidate leads already discovered (resumes only blocked/pending)
+# 1. Acquire the 232 official candidate leads already discovered (resumes only blocked/pending)
 uv run radiocorpus acquire
 uv run radiocorpus extract && uv run radiocorpus classify-sources && uv run radiocorpus validate \
   && uv run radiocorpus crosscheck && uv run radiocorpus assign && uv run radiocorpus export \
   && uv run radiocorpus check-invariants && uv run radiocorpus canary-report
 
-# 2. Re-run discovery for the 31 unsearched canary agencies (any search tool; append verbatim
-#    records to data/canary/discovery_leads.jsonl following scratchpad protocol in
-#    docs/research-methodology.md §3), then:
+# 2. (Optional) one skipped site: search remains: Maricopa County Sheriff's Office (CAN-H04) had no
+#    agency-operated host in results; if www.maricopa.gov is accepted as its host, run search C
+#    and append verbatim records to data/canary/discovery_leads.jsonl, then:
 uv run radiocorpus discover --force
 ```
-
-Agencies needing search (canary ids): S33/S41/S49 (search C only), S34/S42/S50 (C only),
-S46 (B, C), NY/SC (C only), plus all searches for M01, M04, M06, M07, M09, M12, M14, M15,
-M16, M17, M20, H02, H03, H04, H05, H08, H10, X01, X02, X03, X06, X08, X09, X10, X11, X14,
-X16, X17, X18, X19, S48.
 
 ```bash
 # 3. Load BJS registries once downloaded (ICPSR login required; accept terms manually)
@@ -56,15 +50,15 @@ uv run radiocorpus resolve --registry CSLLEA_2018
 
 ## Phased plan
 
-**Phase A — validate parsers on real documents (1–2 days with network).** Acquire the 139
+**Phase A — validate parsers on real documents (1–2 days with network).** Acquire the 232
 canary leads. Expect PDFs with scanned pages (add OCR via `pypdf` + tesseract only if text
 extraction yields < 200 chars/page), HTML policy portals (PowerDMS public portals are on the
 non-official host list; agency-hosted mirrors are preferred), and non-radio documents that
 matched on words like "communications" (expected precision of the title classifier is low;
 the extraction stage simply yields zero facts for them).
 
-**Phase B — finish the canary.** Search the remaining 31 agencies, acquire, extract. Produce
-the first real per-agency coverage numbers. Add human review of every `proposed` registry
+**Phase B — finish the canary.** Extract from the acquired documents and produce the first
+real per-agency coverage numbers. Add human review of every `proposed` registry
 link for canary agencies and of every fact marked `needs_review`.
 
 **Phase C — nationwide discovery (≈20k agencies).** Search provider: a JSON search API

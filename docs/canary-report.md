@@ -6,27 +6,35 @@
 
 ## Headline results
 
-* **Agency discovered:** 69 agencies have search evidence; 36 of those also matched an FBI
-  ORI exactly (54 exact matches in total), and a further 1,183 FBI per-county reporting
-  units were linked to canary state agencies as *proposed sub-units*. 31 agencies were not
-  searched (session budget) and are `blocked`; 16 of these still have an exact FBI ORI
-  match from the registry stage, so they are known to exist but are unresearched.
-* **Official domain discovered:** 59 / 69 searched agencies. The other 10 stay UNKNOWN by
-  policy: their candidate hosts are agency-branded non-.gov domains (lapdonline.org,
-  lasd.org, lvmpd.com, wmata.com, lawa.org, septa.org, myfwc.com, denvergov.org,
-  police.utexas.edu) or a state portal whose result titles did not name the agency
-  (in.gov for Indiana State Police, mass.gov for Massachusetts State Police).
-* **Radio-policy source discovered (lead only):** 85 official-host leads whose title/URL
-  carries radio-protocol terms, across 34 agencies (40 agencies have at least one official document candidate of any kind). Strongest examples: Florida Highway
-  Patrol Policy 14.01 Communications (flhsmv.gov), Indiana State Police "Communications
-  Procedures" PDF (in.gov/isp), Idaho State Police Procedure 07.12 Patrol Radio Operations
-  (isp.idaho.gov), CHP "Aural Brevity Card" and HPM 50.1 (chp.ca.gov), Philadelphia PD
-  Directive 7.1 Police Radio (phillypolice.com), LASD Manual of Policy and Procedures radio
-  sections (pars.lasd.org), Orange County SD "Radio Codes" page (ocsheriff.gov), Georgia DPS
-  Policy 14.04 Communications, LA Airport Police Chapter XIII Communications (lawa.org).
+* **Agency discovered:** all 100 agencies have search evidence (two discovery rounds: the
+  first stopped at 69 when the session search budget ran out; the second covered the rest).
+  52 agencies also matched an FBI ORI exactly (54 confirmed record links), and a further
+  1,183 FBI per-county reporting units were linked to canary state agencies as *proposed
+  sub-units*.
+* **Official domain discovered:** 78 / 100. The other 22 stay UNKNOWN by policy: their
+  candidate hosts are agency-branded non-.gov domains (lasd.org, lvmpd.com, wmata.com,
+  lawa.org, septa.org, myfwc.com, denvergov.org, dallaspolice.net, anchoragepolice.com,
+  harriscountyso.org, honolulupd.org, mbta.com, mta.info, panynj.gov path, dfwairport.com,
+  kalamazoopublicsafety.org), campus .edu hosts (police.utexas.edu, ucpd.berkeley.edu,
+  dps.osu.edu, dpps.msu.edu), or a state portal whose result titles did not name the agency
+  (in.gov for Indiana State Police, mass.gov for Massachusetts State Police). Maricopa County
+  Sheriff's Office returned no agency-operated host at all.
+* **Radio-policy source discovered (lead only):** 136 official-host leads whose title/URL
+  carries radio-protocol terms, across 57 agencies (68 agencies have at least one official
+  document candidate of any kind). Strongest examples: Florida Highway Patrol Policy 14.01
+  Communications (flhsmv.gov), Indiana State Police "Communications Procedures" PDF
+  (in.gov/isp), Idaho State Police Procedure 07.12 Patrol Radio Operations (isp.idaho.gov),
+  CHP "Aural Brevity Card" and HPM 50.1 (chp.ca.gov), Phoenix PD "Radio Codes – Numerical
+  Order" PDF (phoenix.gov), Detroit PD "Radio Codes" list and Directive 301.1 Radio
+  Procedures (detroitmi.gov), Wisconsin State Patrol P&P 5-8 Mobile Radio Communications
+  (wsp.wi.gov), Houston PD General Order 400-10 Unit and Radio Numbering (houstontx.gov),
+  Honolulu PD Telecommunications policy (honolulupd.org), Philadelphia PD Directive 7.1
+  Police Radio (phillypolice.com), LASD Manual of Policy and Procedures radio sections
+  (pars.lasd.org), Orange County SD "Radio Codes" page (ocsheriff.gov), Georgia DPS Policy
+  14.04 Communications, LA Airport Police Chapter XIII Communications (lawa.org).
 * **Current official protocol source:** 0. Every acquisition attempt against a government or
-  agency host was denied by the build environment's egress policy (137 leads
-  `blocked_egress`, 2 `http_error` 403 on directives.chicagopolice.org). No document was
+  agency host was denied by the build environment's egress policy (232 leads
+  `blocked_egress`). No document was
   fetched, so no real-agency fact, conflict, phonetic alphabet or procedure exists in the
   corpus. Those columns read "UNKNOWN (no document acquired)" for all 100 agencies, which is
   the correct value.
@@ -36,14 +44,16 @@
 
 | failure mode | count | handling |
 |---|---|---|
-| search budget exhausted before agency searched | 31 agencies | `research_status=blocked`, explicit not-performed markers; re-run list in nationwide-expansion-plan.md |
-| egress-denied document fetch | 137 leads | `acquisition_status=blocked_egress` with proxy reason; resumable |
-| HTTP 403 from reachable host | 2 leads | recorded, not retried |
+| search budget exhausted before agency searched (round 1) | 31 agencies | `research_status=blocked`, explicit not-performed markers; resolved by round 2, markers superseded |
+| egress-denied document fetch | 232 leads | `acquisition_status=blocked_egress` with proxy reason; resumable |
+| plain-http lead upgraded to https before fetch | 2 leads (directives.chicagopolice.org) | still egress-denied |
 | official host but agency not named in title (state portals) | 2 agencies | website stays UNKNOWN |
-| agency-branded non-.gov host | 8 agencies | website stays UNKNOWN; host judged "plausible, unproven" |
-| search tool returned neighbouring agencies instead of target (Miami PD) | 1 agency | website UNKNOWN; leads kept as unrelated/secondary |
+| agency-branded non-.gov or .edu host | 19 agencies | website stays UNKNOWN; host judged "plausible, unproven" |
+| no agency-operated host in any result (Maricopa County SO, Miami PD) | 2 agencies | website UNKNOWN; site: search skipped for MCSO with explicit marker |
+| site: search ignored by search backend (Wikipedia/Scribd leakage) | most C searches | off-host results classified as unrelated/secondary; nothing inferred |
+| search result belongs to a different agency with a similar name (Harford vs Harris County, Fulton County Police vs Sheriff, Maryland Transit vs MTA) | several leads | host judgement is per agency name + state; leads stay leads |
 | fuzzy registry matches that are different entities (Indiana State Excise Police, Miami Beach PD, Berkeley PD) | 19 proposals nationwide, 0 auto-merged | stored as `proposed`, tested |
-| enthusiast/crowdsourced radio-code leads | 256 leads | `enthusiast_lead`, never fetched, never evidence |
+| enthusiast/crowdsourced radio-code leads | 386 leads | `enthusiast_lead`, never fetched, never evidence |
 
 ## Fixture corpus (synthetic, state ZZ) — proves the fact path end to end
 
@@ -67,10 +77,10 @@ Generated by `radiocorpus canary-report` from the SQLite corpus. Every cell refl
 | metric | value |
 |---|---|
 | total_agencies | 100 |
-| official_domains_discovered | 59 |
-| radio_policy_candidates_discovered | 85 |
-| documents_discovered | 139 |
-| leads_total | 1786 |
+| official_domains_discovered | 78 |
+| radio_policy_candidates_discovered | 136 |
+| documents_discovered | 232 |
+| leads_total | 2746 |
 | documents_acquired | 0 |
 | current_official_documents | 0 |
 | historical_documents | 0 |
@@ -82,68 +92,65 @@ Generated by `radiocorpus canary-report` from the SQLite corpus. Every cell refl
 | verified_fact_count | 0 |
 | unverified_candidate_count | 0 |
 | no_public_source_count | 0 |
-| blocked_agency_count | 31 |
+| blocked_agency_count | 0 |
 | training_eligible_agency_count | 0 |
-| blocked_egress_leads | 137 |
+| blocked_egress_leads | 232 |
 
 Agency-discovery outcome counts:
 
-- NOT SEARCHED (budget): 15
-- REGISTRY ONLY (FBI ORI): 16
-- YES (search): 33
-- YES (search+FBI ORI): 36
+- YES (search): 48
+- YES (search+FBI ORI): 52
 
 Lead classes:
 
-- enthusiast_lead: 256
-- official_document_candidate: 53
-- official_homepage_candidate: 518
-- official_radio_policy_candidate: 85
-- secondary_lead: 513
+- enthusiast_lead: 386
+- official_document_candidate: 95
+- official_homepage_candidate: 787
+- official_radio_policy_candidate: 136
+- secondary_lead: 792
 - standards_body_document: 1
-- unrelated: 360
+- unrelated: 549
 
 Acquisition status of leads:
 
-- blocked_egress: 137
-- http_error: 2
-- pending: 1287
-- skipped_not_candidate: 360
+- blocked_egress: 232
+- pending: 1965
+- skipped_not_candidate: 549
 
 ## Per-agency results
 
 | id | agency | st | discovered | official domain | radio-policy source | current official source | codes | phonetic | procedures | conflicts | historical | eligibility |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | CAN-H01 | Los Angeles County Sheriff's Department | CA | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H02 | Harris County Sheriff's Office | TX | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H03 | Cook County Sheriff's Office | IL | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H04 | Maricopa County Sheriff's Office | AZ | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H05 | Broward Sheriff's Office | FL | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H02 | Harris County Sheriff's Office | TX | YES (search+FBI ORI) | UNKNOWN | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H03 | Cook County Sheriff's Office | IL | YES (search+FBI ORI) | https://cookcountysheriffil.gov/ | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H04 | Maricopa County Sheriff's Office | AZ | YES (search+FBI ORI) | https://www.fountainhillsaz.gov/270/Maricopa-County-Sheriffs-Office | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H05 | Broward Sheriff's Office | FL | YES (search) | https://www.daniabeachfl.gov/broward-sheriffs-office | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-H06 | Orange County Sheriff's Department | CA | YES (search) | https://www.ocsheriff.gov/about-ocsheriff | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-H07 | King County Sheriff's Office | WA | YES (search+FBI ORI) | https://kingcounty.gov/uk-ua/dept/sheriff/about-king-county/about-sheriff-office/about-kcso | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H08 | Fulton County Sheriff's Office | GA | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H08 | Fulton County Sheriff's Office | GA | YES (search+FBI ORI) | https://fultoncountyga.gov/inside-fulton-county/fulton-county-departments/sheriff/law-enforcement | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-H09 | Loving County Sheriff's Office | TX | YES (search+FBI ORI) | https://sandbox1.cira.state.tx.us/page/loving.Sheriff | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-H10 | Hinsdale County Sheriff's Office | CO | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M01 | New York City Police Department | NY | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-H10 | Hinsdale County Sheriff's Office | CO | YES (search+FBI ORI) | https://hinsdalecounty.colorado.gov/sheriff-6 | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M01 | New York City Police Department | NY | YES (search+FBI ORI) | http://nyc.gov/nypd | LEAD x6 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M02 | Los Angeles Police Department | CA | YES (search+FBI ORI) | https://lacity.gov/directory/police-department | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M03 | Chicago Police Department | IL | YES (search+FBI ORI) | https://www.chicago.gov/city/en/depts/cpd.html | LEAD x4 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M04 | Houston Police Department | TX | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M04 | Houston Police Department | TX | YES (search+FBI ORI) | https://www.houstontx.gov/police/contact/substations.htm | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M05 | Philadelphia Police Department | PA | YES (search+FBI ORI) | https://www.phila.gov/departments/philadelphia-police-department/ | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M06 | Phoenix Police Department | AZ | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M07 | Dallas Police Department | TX | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M06 | Phoenix Police Department | AZ | YES (search+FBI ORI) | https://www.phoenix.gov/administration/departments/police.html | LEAD x5 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M07 | Dallas Police Department | TX | YES (search+FBI ORI) | UNKNOWN | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M08 | Miami Police Department | FL | YES (search+FBI ORI) | https://www.southmiamifl.gov/184/Police-Department | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M09 | Seattle Police Department | WA | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M09 | Seattle Police Department | WA | YES (search+FBI ORI) | https://www.seattle.gov/police | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M10 | Boston Police Department | MA | YES (search+FBI ORI) | https://content.boston.gov/departments/police | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M11 | Denver Police Department | CO | YES (search+FBI ORI) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M12 | Atlanta Police Department | GA | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M12 | Atlanta Police Department | GA | YES (search+FBI ORI) | https://www.atlantaga.gov/government/departments/police | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M13 | Las Vegas Metropolitan Police Department | NV | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M14 | Minneapolis Police Department | MN | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M15 | Detroit Police Department | MI | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M16 | Honolulu Police Department | HI | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M17 | Anchorage Police Department | AK | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M14 | Minneapolis Police Department | MN | YES (search+FBI ORI) | https://www.minneapolismn.gov/government/departments/police/ | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M15 | Detroit Police Department | MI | YES (search+FBI ORI) | https://detroitmi.gov/departments/police-department | LEAD x5 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M16 | Honolulu Police Department | HI | YES (search+FBI ORI) | UNKNOWN | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M17 | Anchorage Police Department | AK | YES (search+FBI ORI) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M18 | Moab Police Department | UT | YES (search+FBI ORI) | https://www.moabcity.gov/164/Police-Department | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-M19 | Bar Harbor Police Department | ME | YES (search+FBI ORI) | https://www.barharbormaine.gov/178/Police-Department | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-M20 | Ketchum Police Department | ID | REGISTRY ONLY (FBI ORI) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-M20 | Ketchum Police Department | ID | YES (search+FBI ORI) | https://ketchumidaho.gov/242/Police | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S01 | Alabama Law Enforcement Agency | AL | YES (search) | https://www.alea.gov/node/97 | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S02 | Alaska State Troopers | AK | YES (search+FBI ORI) | https://dps.alaska.gov/ast/ | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S03 | Arizona Department of Public Safety | AZ | YES (search+FBI ORI) | https://www.nwcg.gov/publications/pms512/southwest/arizona-department-of-public-safety | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
@@ -177,56 +184,78 @@ Acquisition status of leads:
 | CAN-S31 | New Mexico State Police | NM | YES (search+FBI ORI) | https://www.nm.gov/departments-and-agencies/state-police/ | LEAD x4 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S32 | New York State Police | NY | YES (search) | https://troopers.ny.gov/ | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S33 | North Carolina State Highway Patrol | NC | YES (search) | https://www.ncdps.gov/divisionoffice/state-highway-patrol | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S34 | North Dakota Highway Patrol | ND | YES (search+FBI ORI) | https://www.nd.gov/ndhp/contact/north_dakota_highway_patrol_surv | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S34 | North Dakota Highway Patrol | ND | YES (search+FBI ORI) | https://www.nd.gov/ndhp/contact/north_dakota_highway_patrol_surv | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S35 | Ohio State Highway Patrol | OH | YES (search+FBI ORI) | https://statepatrol.ohio.gov/media/all-news | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S36 | Oklahoma Highway Patrol | OK | YES (search+FBI ORI) | https://oklahoma.gov/dps/programs-services/ohp.html | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S37 | Oregon State Police | OR | YES (search) | https://www.oregon.gov/osp/about/pages/aboutusosp.aspx | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S38 | Pennsylvania State Police | PA | YES (search) | https://www.pa.gov/agencies/psp | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S39 | Rhode Island State Police | RI | YES (search) | https://www.ri.gov/press/?agency_id=40 | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S40 | South Carolina Highway Patrol | SC | YES (search+FBI ORI) | https://scdps.sc.gov/schp | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S41 | South Dakota Highway Patrol | SD | YES (search+FBI ORI) | https://dps.sd.gov/contact/online-form/highway-patrol | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S42 | Tennessee Highway Patrol | TN | YES (search) | https://www.tn.gov/safety/tennessee-highway-patrol/join-tennessee-highway-patrol.html | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S43 | Texas Department of Public Safety | TX | YES (search) | https://www.tarrantcountytx.gov/en/commissioner-4/partners/dps.html | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S41 | South Dakota Highway Patrol | SD | YES (search+FBI ORI) | https://dps.sd.gov/contact/online-form/highway-patrol | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S42 | Tennessee Highway Patrol | TN | YES (search) | https://www.tn.gov/safety/tennessee-highway-patrol/join-tennessee-highway-patrol.html | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S43 | Texas Department of Public Safety | TX | YES (search) | https://www.tarrantcountytx.gov/en/commissioner-4/partners/dps.html | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S44 | Utah Highway Patrol | UT | YES (search+FBI ORI) | https://uhp.utah.gov/uhp-offices/ | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S45 | Vermont State Police | VT | YES (search+FBI ORI) | https://vsp.vermont.gov/public | LEAD x5 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S46 | Virginia State Police | VA | YES (search) | https://www.virginia.gov/agencies/department-of-state-police/ | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S46 | Virginia State Police | VA | YES (search) | https://www.virginia.gov/agencies/department-of-state-police/ | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-S47 | Washington State Patrol | WA | YES (search+FBI ORI) | https://wsp.wa.gov/ | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S48 | West Virginia State Police | WV | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S49 | Wisconsin State Patrol | WI | YES (search+FBI ORI) | https://wsp.wi.gov/Pages/home.aspx | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-S50 | Wyoming Highway Patrol | WY | YES (search+FBI ORI) | https://whp.wyo.gov/ | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X01 | BART Police Department | CA | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X02 | MBTA Transit Police Department | MA | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X03 | MTA Police Department | NY | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S48 | West Virginia State Police | WV | YES (search) | https://www.wv.gov/agencies/state-police-west-virginia | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S49 | Wisconsin State Patrol | WI | YES (search+FBI ORI) | https://wsp.wi.gov/Pages/home.aspx | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-S50 | Wyoming Highway Patrol | WY | YES (search+FBI ORI) | https://whp.wyo.gov/ | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X01 | BART Police Department | CA | YES (search) | https://www.bart.gov/about/police | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X02 | MBTA Transit Police Department | MA | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X03 | MTA Police Department | NY | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X04 | SEPTA Transit Police Department | PA | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X05 | Metro Transit Police Department | DC | YES (search) | UNKNOWN | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X06 | University of California, Berkeley Police Department | CA | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X06 | University of California, Berkeley Police Department | CA | YES (search) | UNKNOWN | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X07 | University of Texas at Austin Police Department | TX | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X08 | Ohio State University Police Division | OH | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X09 | Michigan State University Police Department | MI | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X10 | DFW Airport Department of Public Safety | TX | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X11 | Port Authority of New York and New Jersey Police Department | NY | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X08 | Ohio State University Police Division | OH | YES (search) | UNKNOWN | LEAD x3 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X09 | Michigan State University Police Department | MI | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X10 | DFW Airport Department of Public Safety | TX | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X11 | Port Authority of New York and New Jersey Police Department | NY | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X12 | Los Angeles Airport Police | CA | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X13 | Florida Fish and Wildlife Conservation Commission Division of Law Enforcement | FL | YES (search) | UNKNOWN | LEAD x2 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X14 | Texas Parks and Wildlife Department Law Enforcement Division | TX | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X14 | Texas Parks and Wildlife Department Law Enforcement Division | TX | YES (search) | https://tpwd.texas.gov/about/administration-divisions/law-enforcement | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X15 | Navajo Nation Police Department | AZ | YES (search) | https://npd.navajo-nsn.gov/ | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X16 | Oneida Nation Police Department | WI | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X17 | Kalamazoo Department of Public Safety | MI | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X18 | Sunnyvale Department of Public Safety | CA | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
-| CAN-X19 | Wisconsin State Capitol Police | WI | NOT SEARCHED (budget) | NOT SEARCHED | NOT SEARCHED | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X16 | Oneida Nation Police Department | WI | YES (search) | https://oneida-nsn.gov/divisions/policedepartment/ | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X17 | Kalamazoo Department of Public Safety | MI | YES (search) | UNKNOWN | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X18 | Sunnyvale Department of Public Safety | CA | YES (search) | https://www.sunnyvale.ca.gov/your-government/departments/public-safety | LEAD x1 (not acquired: egress blocked) | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
+| CAN-X19 | Wisconsin State Capitol Police | WI | YES (search) | https://legis.wisconsin.gov/lab/media/yzib22to/24-4summary_636974.pdf | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 | CAN-X20 | Los Angeles School Police Department | CA | YES (search) | https://locator.lacounty.gov/lac/Location/3055542/los-angeles-unified-school-district---school-police-department | NONE FOUND IN SEARCH | UNKNOWN (no document acquired) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | NOT DISCOVERED (no acquired document) | none (no extracted facts to compare) | UNKNOWN | INSUFFICIENT_EVIDENCE |
 
 ## Official radio-policy leads found (titles/URLs as returned by search; unfetched, unverified)
 
+- CAN-H02 Harris County Sheriff's Office: 04/09 1-5100 COMMUNICATIONS PROCEDURES PURPOSE • <https://hcso-wp.harfordsheriff.org/wp-content/uploads/2020/08/Man-5100-communications.pdf>
+- CAN-H02 Harris County Sheriff's Office: Bureau's Introductions—Harris County Texas Sheriff's Office <https://harriscountyso.org/AboutUs/BureauForm?role=Emergency_Dispatch_Center>
+- CAN-H03 Cook County Sheriff's Office: Sheriff’s Office Announces Electronic Monitoring Program Transition from Radio Frequency to GPS Bracelets | Cook County Sheriff's Office <https://cookcountysheriffil.gov/sheriffs-office-announces-electronic-monitoring-program-transition-from-radio-frequency-to-gps-bracelets/>
 - CAN-H06 Orange County Sheriff's Department: Orange County Sheriff-Coroner Department Orange County SD Policy Manual <https://ocsheriff.gov/sites/ocsd/files/2024-11/Department%20Manual%20(Lexipol)%202024-10-31.pdf>
 - CAN-H06 Orange County Sheriff's Department: Orange County Sheriff-Coroner Department Orange County SD Policy Manual <https://www.ocsheriff.gov/sites/ocsd/files/2020-10/Department%20Manual%20%2020201006.pdf>
 - CAN-H06 Orange County Sheriff's Department: Radio Codes <https://ws.ocsheriff.gov/Blotter/RadioCodes.aspx>
 - CAN-H07 King County Sheriff's Office: Group detail - KCIT/RS - Radio Communication Services <https://directory.kingcounty.gov/GroupDetail.asp?GroupID=10300>
 - CAN-H07 King County Sheriff's Office: Radio Services - King County, Washington <https://kingcounty.gov/en/dept/kcit/data-information-services/radio-services>
 - CAN-H09 Loving County Sheriff's Office: 10 Codes and Signals | VSO <https://www.volusiasheriff.gov/resources/10-codes-and-signals.stml>
+- CAN-M01 New York City Police Department: F - Index of Directives, Memoranda, Policy & Procedure <https://www.nyc.gov/site/buildings/codes/f-index.page>
+- CAN-M01 New York City Police Department: T - Index of Directives, Memoranda, Policy & Procedure <https://www.nyc.gov/site/buildings/codes/t-index.page>
+- CAN-M01 New York City Police Department: C - Index of Directives, Memoranda, Policy & Procedure <https://www.nyc.gov/site/buildings/codes/c-index.page>
 - CAN-M02 Los Angeles Police Department: Change In Dispatch Policy For the LAPD - LAPD Online <https://www.lapdonline.org/newsroom/change-in-dispatch-policy-for-the-lapd/>
 - CAN-M03 Chicago Police Department: SUPERVISOR'S MANAGEMENT LOG CHICAGO POLICE DEPARTMENT VEHICLE NO. UNIT / BEAT <http://directives.chicagopolice.org/forms/CPD-11.455.pdf>
 - CAN-M03 Chicago Police Department: Communication Procedures and Timelines Policy Draft – Chicago Police Department <https://www.chicagopolice.org/policy-review/communication-procedures-and-timelines-policy-draft/>
 - CAN-M03 Chicago Police Department: Chicago Police Department General Order G03-03-01 <http://directives.chicagopolice.org/api/publicDirective/6607>
+- CAN-M04 Houston Police Department: General Orders <https://www.houstontx.gov/police/general_orders/index200623.htm>
+- CAN-M04 Houston Police Department: @@[n)@[F@)~ (Q)[F@@[F Houston Police Department 0 <https://www.houstontx.gov/police/general_orders/400/400-10%20Unit%20and%20Radio%20Numbering.pdf>
+- CAN-M06 Phoenix Police Department: Police Department – Radio Codes – Numerical Order <https://www.phoenix.gov/content/dam/phoenix/policesite/mediaassets/Radio%20Codes%20Numerical%20Alphabetical.pdf>
+- CAN-M06 Phoenix Police Department: PHOENIX REGIONAL STANDARD OPERATING PROCEDURES COMMUNICATIONS M.P. 205.01 <https://www.phoenix.gov/content/dam/phoenix/firesite/documents/074775.pdf>
+- CAN-M06 Phoenix Police Department: Police Department – Radio Codes – Numerical Order <https://www.phoenix.gov/content/dam/phoenix/policesite/mediaassets/Radio%20Codes%20Numerical%20Alphabetical.pdf>
+- CAN-M07 Dallas Police Department: Dallas Police Department Interim Chief of Police Michael T. Igo General Orders <https://dallaspolice.net/resources/Shared%20Documents/General-Orders.pdf>
+- CAN-M07 Dallas Police Department: 2.2 Use of Police Radio Metropolitan Police Academy 2.2 Use of Police Radios <https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/2.2%20Use%20of%20Police%20Radios.pdf>
+- CAN-M07 Dallas Police Department: General Order 906.00 - Dallas Police Department Use of Deadly Force Policy <https://www.dallaspolice.net/reports/Shared%20Documents/General-Order-906.pdf>
+- CAN-M09 Seattle Police Department: Seattle Police to enhance encryption to radios in early 2026 to improve safety and protect the public’s sensitive information - SPD Blotter <https://spdblotter.seattle.gov/2025/06/17/seattle-police-to-enhance-encryption-to-radios-in-early-2026-to-improve-safety-and-protect-the-publics-sensitive-information/>
+- CAN-M09 Seattle Police Department: CAM 5123 Client Assistance Memo Seattle Fire Department Seattle Permits <https://www.seattle.gov/documents/Departments/Fire/Business/CAM5123-EmerRespondRadioSys.pdf>
+- CAN-M12 Atlanta Police Department: E-911 Communications Division | Atlanta Police Department <https://www.atlantapd.org/about-apd/divisions/chief-administrative-office/e-911-communications-division>
+- CAN-M14 Minneapolis Police Department: Electronic Communication Policy Acknowledgement Form - City of Minneapolis <https://www.minneapolismn.gov/government/charter-and-code-of-ordinances/city-policies/electronic-communications-policy/form/>
+- CAN-M15 Detroit Police Department: 2.2 Use of Police Radio Metropolitan Police Academy 2.2 Use of Police Radios <https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/2.2%20Use%20of%20Police%20Radios.pdf>
+- CAN-M15 Detroit Police Department: Citizen Radio Patrol Boundaries | Detroit's Open Data Portal <https://data.detroitmi.gov/datasets/citizen-radio-patrol-boundaries>
+- CAN-M15 Detroit Police Department: RADIO PROCEDURES <https://detroitmi.gov/sites/detroitmi.localhost/files/events/2025-04/301.1%20RADIO%20PROCEDURES%20FOR%20BOPC%20VOTE%204-29-25.pdf>
+- CAN-M16 Honolulu Police Department: UAB Radio Communications Policy <https://www.dpo.uab.edu/police/images/about/UAB-Radio-Communications-Policy.pdf>
 - CAN-S01 Alabama Law Enforcement Agency: ALABAMA Tactical Interoperable Communications Field Operations Guide (ALA-FOG) <https://afrwc.alabama.gov/wp-content/uploads/2018/11/FOG-ALA.pdf>
 - CAN-S02 Alaska State Troopers: CERTIFICATION POLICY MANUAL <https://dps.alaska.gov/wp-content/uploads/2026/04/Certification-Policy-Manual.pdf>
 - CAN-S03 Arizona Department of Public Safety: Statewide Interoperability Executive Committee Standard <https://www.azdps.gov/sites/default/files/2023-06/PPG_Arizona_Interop_Channels_Plan_03_10_2022_VMED28_Fix.pdf>
@@ -273,16 +302,38 @@ Acquisition status of leads:
 - CAN-S31 New Mexico State Police: OPR: 01 (R-9) DPS POLICY MANUAL Page 1 of 11 DEPARTMENT OF PUBLIC SAFETY <https://www.dps.nm.gov/wp-content/uploads/2022/07/OPR_01_Use_of_Force_10-8-2021.pdf>
 - CAN-S31 New Mexico State Police: OPR: 37 (R-3) DPS POLICY MANUAL Page 1 of 7 DEPARTMENT OF PUBLIC SAFETY <https://www.dps.nm.gov/wp-content/uploads/2022/07/OPR.37_Release_of_Public_Information.pdf>
 - CAN-S31 New Mexico State Police: ADM: 11 (R-2) DPS POLICY MANUAL Page 1 of 2 DEPARTMENT OF PUBLIC SAFETY <https://www.dps.nm.gov/wp-content/uploads/2022/07/ADM.11_Use_of_Social_Networking-Blog_Websites.pdf>
+- CAN-S34 North Dakota Highway Patrol: 2.2 Use of Police Radio Metropolitan Police Academy 2.2 Use of Police Radios <https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/2.2%20Use%20of%20Police%20Radios.pdf>
 - CAN-S37 Oregon State Police: The land mobile radio (LMR) background summary | State Library of Oregon Digital Collections <https://digitalcollections.library.oregon.gov/nodes/view/208212>
+- CAN-S41 South Dakota Highway Patrol: Policy Manual <https://dps.sd.gov/safety-enforcement/highway-patrol/policy-manual>
+- CAN-S42 Tennessee Highway Patrol: SYSTEM USER GUIDE This guide is intended for partner agency radio <https://www.tn.gov/content/dam/tn/safety/documents/tacn/TACN_system_user_guide.pdf>
+- CAN-S43 Texas Department of Public Safety: 2024 Legislative Interoperability Report <https://www.dps.texas.gov/sites/default/files/documents/iod/interop/docs/interoprpt.pdf>
+- CAN-S43 Texas Department of Public Safety: Texas Statewide Interoperability Channel Plan <https://www.dps.texas.gov/sites/default/files/documents/iod/interop/docs/tsicpmou.pdf>
+- CAN-S43 Texas Department of Public Safety: TEXAS STATEWIDE COMMUNICATION INTEROPERABILITY PLAN <https://www.dps.texas.gov/sites/default/files/documents/iod/interop/docs/texasscip.pdf>
 - CAN-S44 Utah Highway Patrol: Radio Communications | DPS - Utah Highway Patrol <https://highwaypatrol.utah.gov/uhp-history/1940-1949/radio-communications/>
 - CAN-S44 Utah Highway Patrol: CB Radios | DPS - Utah Highway Patrol <https://highwaypatrol.utah.gov/uhp-history/1970-1979/cb-radios/>
 - CAN-S45 Vermont State Police: Dispatch | Vermont State Police <https://vsp.vermont.gov/post-type/dispatch>
 - CAN-S45 Vermont State Police: Emergency Communication Dispatcher Compensation and Benefits | Vermont State Police <https://vsp.vermont.gov/divisions/support/dispatch/compensation>
 - CAN-S45 Vermont State Police: Emergency Communications | Vermont State Police <https://vsp.vermont.gov/divisions/support/dispatch>
+- CAN-S46 Virginia State Police: Communications Division – Virginia State Police <https://vsp.virginia.gov/sections-units-bureaus/bass/communications/>
+- CAN-S46 Virginia State Police: STARS FAQ – Virginia State Police <https://vsp.virginia.gov/sections-units-bureaus/bass/communications/statewide-agencies-radio-system-program-stars/stars-faq/>
+- CAN-S46 Virginia State Police: Statewide Agencies Radio System Program (STARS) – Virginia State Police <https://vsp.virginia.gov/sections-units-bureaus/bass/communications/statewide-agencies-radio-system-program-stars/>
 - CAN-S47 Washington State Patrol: Breath Test Program Policy Manual Revision 11-04-2005.pdf <https://www.wsp.wa.gov/breathtest/docs/webdms/Protocols/policies/Breath%20Test%20Program%20Policy%20Manual%20Revision%2011-04-2005.pdf>
 - CAN-S47 Washington State Patrol: 2.2 Use of Police Radio Metropolitan Police Academy 2.2 Use of Police Radios <https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/2.2%20Use%20of%20Police%20Radios.pdf>
 - CAN-S47 Washington State Patrol: CLARK COUNTY (WA) REGIONAL COMMUNICATIONS AGENCY - RADIO OPERATING MANUAL | Office of Justice Programs <https://www.ojp.gov/ncjrs/virtual-library/abstracts/clark-county-wa-regional-communications-agency-radio-operating>
+- CAN-S49 Wisconsin State Patrol: November 4, 2020 Page 1 of 3 pages I. POLICY <https://wsp.wi.gov/PublishingImages/Pages/Policy-and-Procedures/pp5-6_2020-use-ctznbnd-radio.pdf>
+- CAN-S49 Wisconsin State Patrol: P&P 5-8: Mobile Radio Communications <https://wsp.wi.gov/PublishingImages/Pages/Policy-and-Procedures/pp5-8_2020-mobile-radio-comm.pdf>
+- CAN-S50 Wyoming Highway Patrol: WHP.WYO.GOV - Dispatch Careers <https://whp.wyo.gov/dispatch/dispatch-careers>
 - CAN-S50 Wyoming Highway Patrol: UNIVERSITY AMATEUR RADIO CLUB N7UW Department 3625 LARAMIE, WYOMING 82071 <https://www.uwyo.edu/uarc/cotw/nov08cotw.pdf>
+- CAN-S50 Wyoming Highway Patrol: WHP.WYO.GOV - Dispatch <https://whp.wyo.gov/dispatch>
+- CAN-X01 BART Police Department: SECTION 33 83 07 RADIO NETWORK / MUTUAL AID RADIO SYSTEM RELEASE – R3.1 <https://webapps.bart.gov/BFS/BFS_3_1_Spec/STDSPEC/33%2083%2007.pdf>
 - CAN-X05 Metro Transit Police Department: 2.2 Use of Police Radio Metropolitan Police Academy 2.2 Use of Police Radios <https://mpdc.dc.gov/sites/default/files/dc/sites/mpdc/publication/attachments/2.2%20Use%20of%20Police%20Radios.pdf>
+- CAN-X06 University of California, Berkeley Police Department: University of California, Berkeley, Police Department Policy Manual <https://ucpd.berkeley.edu/sites/default/files/university_of_california_berkeley_police_department_policy_manual.pdf>
+- CAN-X06 University of California, Berkeley Police Department: RELEASE_20240723_T145658_University of California Berkeley Police Department Policy Manual | Berkeley UCPD <https://ucpd.berkeley.edu/file/release20240723t145658university-california-berkeley-police-department-policy-manual>
+- CAN-X08 Ohio State University Police Division: Radio Request Form | Department of Public Safety - OSU DPS <https://dps.osu.edu/radio-request-form>
+- CAN-X08 Ohio State University Police Division: Radio Request | Department of Public Safety - OSU DPS <https://dps.osu.edu/contact/radio-request>
+- CAN-X08 Ohio State University Police Division: Radio Request | Department of Public Safety <https://dps.osu.edu/radio-request>
 - CAN-X13 Florida Fish and Wildlife Conservation Commission Division of Law Enforcement: state law enforcement 10-codes (jtf approved) - confidential <https://www.dms.myflorida.com/content/download/95007/556332/file/SOP%2014%2010-Codes.pdf>
 - CAN-X13 Florida Fish and Wildlife Conservation Commission Division of Law Enforcement: STATE LAW ENFORCEMENT SIGNAL CODES (JTF APPROVAL) 10-CODES / Conversational <https://www.dms.myflorida.com/content/download/95010/556341/file/SOP%2014%20Signal%20Codes.pdf>
+- CAN-X14 Texas Parks and Wildlife Department Law Enforcement Division: Texas Parks & Wildlife COMMISSION POLICY MANUAL Effective: May 22, 2025 <https://tpwd.texas.gov/about/commission/commission-policies/tpw-commission-policy-manual>
+- CAN-X16 Oneida Nation Police Department: Police Radio Codes <https://web.stanford.edu/~reneeb/bill/n.radio.code.html>
+- CAN-X18 Sunnyvale Department of Public Safety: Council Policy Manual | Sunnyvale, CA <https://www.sunnyvale.ca.gov/your-government/codes-and-policies/council-policy-manual>

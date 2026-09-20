@@ -22,12 +22,14 @@ are recorded in worker notes and lead titles for review.
 ## Execution
 
 1. `ingest-registry curated` + `ingest-registry fbi_cde_frontend`, then `resolve`.
-2. Discovery: 8 parallel search workers, 3 searches per agency (see
-   research-methodology.md §3), results recorded verbatim to
-   `data/canary/discovery_leads.jsonl` (1,938 lines: 1,786 results, 100 worker judgments,
-   52 explicit not-performed markers).
+2. Discovery: two rounds of parallel search workers, 3 searches per agency (see
+   research-methodology.md §3). Round 1 (8 workers) stopped at 69 agencies when the session
+   search budget ran out; round 2 (4 workers, after the budget reset) covered the remaining
+   searches. Results recorded verbatim to `data/canary/discovery_leads.jsonl` (2,847 lines:
+   2,746 results, 100 worker judgments, 1 explicit not-performed marker). Round-1
+   not-performed markers were superseded by round-2 results and removed by the merge script.
 3. `discover` classifies leads and sets official websites only on evidence.
-4. `acquire` attempts every official candidate lead (139).
+4. `acquire` attempts every official candidate lead (232).
 5. Fixtures loaded to exercise extraction → eligibility.
 6. `extract`, `classify-sources`, `validate`, `crosscheck`, `assign`, `export`, `stats`,
    `check-invariants`, `canary-report`.
@@ -36,8 +38,10 @@ are recorded in worker notes and lead titles for review.
 
 ## Known limitations of this run
 
-* The session's web-search budget (200 calls) was exhausted after 69 agencies; 31 agencies
-  have no search data and are marked `blocked`, not `no_public_source`.
+* The session's web-search budget (200 calls) was exhausted after 69 agencies in round 1;
+  those agencies were marked `blocked` (never `no_public_source`) until round 2 covered them.
+* The search backend loosely honours `site:` filters; most C searches returned off-host
+  results, which are recorded verbatim and classified as unrelated/secondary.
 * The search tool returned titles and URLs only (no snippets), so lead classification relies
   on title/URL terms.
 * All government and agency hosts were egress-denied from the build container, so no real

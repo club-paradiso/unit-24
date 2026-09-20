@@ -67,12 +67,12 @@ Eligibility states are assigned by `eligibility/policy.py` (see docs/schema.md).
 
 ## 6. What was and was not executed in the build session
 
-Executed: registry ingestion (23,243 + 100), resolution, discovery for 69 canary agencies from
-recorded search results, acquisition attempts for 139 official candidate leads, the full
-extraction→eligibility path on 7 synthetic fixture documents, tests, invariants, exports.
+Executed: registry ingestion (23,243 + 100), resolution, discovery for all 100 canary
+agencies from recorded search results (two rounds), acquisition attempts for 232 official
+candidate leads, the full extraction→eligibility path on 7 synthetic fixture documents,
+tests, invariants, exports.
 
 Not executed (environment): fetching any government/agency document (all such hosts were
-denied by the organization egress policy, recorded per lead as `blocked_egress`); searching
-the remaining 31 canary agencies (session search budget of 200 calls exhausted); downloading
-CSLLEA/LEAR/LEAIC. Reproduction commands for each blocked operation are in
+denied by the organization egress policy, recorded per lead as `blocked_egress`);
+downloading CSLLEA/LEAR/LEAIC. Reproduction commands for each blocked operation are in
 `docs/nationwide-expansion-plan.md`.
