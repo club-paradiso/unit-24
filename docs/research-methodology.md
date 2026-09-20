@@ -57,15 +57,13 @@ rejected).
 
 ## 5. Cross-checking, conflicts, eligibility
 
-Facts are grouped by (agency, fact type, key). Different normalized values from different
-sources produce a stored `Conflict` with a kind (official vs official, current vs obsolete,
-agency vs dispatch, secondary vs official, undated manual...). Resolution is attempted only
-with evidence: temporal (newer dated official wins; older marked historical), jurisdictional
-(agency's own manual beats dispatch/parent docs), quality (official beats secondary). Same-date
-disagreement and undated-vs-dated official documents stay `unresolved`. Nothing is deleted.
+Facts are grouped by (agency, fact type, key). Different normalized values, including
+disagreement within one source, produce a stored `Conflict`. All disagreements remain
+unresolved until structured resolution evidence is available. Dates, source labels and
+parent/dispatch relationships never select a winner. Nothing is deleted.
 Eligibility states are assigned by `eligibility/policy.py` (see docs/schema.md).
 
-## 6. What was and was not executed in the build session
+## 6. Historical foundation execution (superseded by hardening-audit.md)
 
 Executed: registry ingestion (23,243 + 100), resolution, discovery for 69 canary agencies from
 recorded search results, acquisition attempts for 139 official candidate leads, the full

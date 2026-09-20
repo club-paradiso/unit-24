@@ -2,14 +2,36 @@
   "baseline_pr": 1,
   "baseline_head": "48238acab2349418b1d0f88e3fc580ef7a84042b",
   "baseline_tests": 61,
-  "regression_before_fix": {"failed": 6, "passed": 3},
-  "local_tests": {"passed": 109, "failed": 0},
+  "regression_before_fix": {
+    "failed": 6,
+    "passed": 3
+  },
+  "local_tests": {
+    "passed": 109,
+    "failed": 0
+  },
   "local_ruff": "passed",
   "local_invariants": "passed including committed snapshots and reports",
   "branch": "astra/real-source-validation-hardening",
   "base_branch": "claude/radio-protocol-corpus-foundation-mm5s9g",
   "first_remote_commit": "bd3efd2be0d1eb4befec87db004c59afd14c0c42",
-  "github_ci": "pending publication",
+  "github_ci": {
+    "status": "completed",
+    "conclusion": "success",
+    "commit": "bb2efbc6e8f5b067db06162dc4d583531accf297",
+    "run_id": 35504706751,
+    "url": "https://github.com/club-paradiso/unit-24/actions/runs/35504706751",
+    "steps": [
+      "uv sync",
+      "uv run pytest",
+      "uv run ruff check src tests scripts",
+      "uv run radiocorpus check-invariants"
+    ]
+  },
   "readiness": "NOT_READY",
-  "merged": false
+  "merged": false,
+  "pr": 2,
+  "pr_url": "https://github.com/club-paradiso/unit-24/pull/2",
+  "hardening_commit": "3ec1f961c021cf4176a591aad2356777a45c2d8e",
+  "audit_commit": "bb2efbc6e8f5b067db06162dc4d583531accf297"
 }

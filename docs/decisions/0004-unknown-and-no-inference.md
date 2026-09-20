@@ -1,3 +1,5 @@
+> Historical foundation decision. Currentness and review semantics are superseded by [0005](0005-explicit-evidence.md).
+
 # ADR 0004 — UNKNOWN is a value; no inference across agencies; append-only evidence
 
 **Status:** accepted (2026-09-20)

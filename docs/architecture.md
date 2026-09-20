@@ -34,12 +34,12 @@ TrainingItem (future) --> fact_ids + source_ids (mandatory, non-empty)
 
 | # | stage | module | deterministic? | resumable key |
 |---|---|---|---|---|
-| 1 | registry ingestion | `registry/ingest.py` | yes | (registry, external_id) PK; INSERT OR IGNORE |
+| 1 | registry ingestion | `registry/ingest.py` | yes | (dated registry, external_id); changed payload rejected |
 | 2 | entity normalization + resolution | `registry/resolve.py` | yes | confirmed links skip |
 | 3 | official-domain discovery | `discovery/stage.py` | yes (classifier); search input recorded | stage_progress(agency) |
 | 4 | document discovery | same | yes | same |
 | 5 | acquisition | `acquisition/fetch.py` | yes | lead.acquisition_status |
-| 6 | text extraction | `extraction/text.py` | yes | stage_progress(document_hash) |
+| 6 | text extraction | `extraction/text.py` | yes | stage_progress(source_id, parser version, hash) |
 | 7 | candidate fact extraction | `extraction/codes.py`, `phonetics.py`, `procedures.py`, `llm.py` | parsers yes; model optional and opt-in | same |
 | 8 | validation | `validation/rules.py` | yes | status events |
 | 9 | source cross-checking | `conflicts/detect.py` | yes | conflict_id stable |
@@ -81,4 +81,6 @@ never conclusions.
 
 `radiocorpus stats` produces the metric set required by the sprint; `run-canary` writes
 `data/normalized/stats_{canary,fixtures,all}.json`. `check-invariants` exits non-zero on any
-violation of the eight invariants in `invariants.py`.
+violation of corpus invariants, committed-snapshot checks or generated-report consistency.
+Playback also requires structured human review, issuer/applicability evidence, confirmed
+currentness with a recheck deadline, and matching acquired bytes; see source-policy.md.

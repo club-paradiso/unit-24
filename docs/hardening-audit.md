@@ -51,6 +51,8 @@ missing/stale conflicts, verified snapshot rows without review/eligibility, miss
 human-review provenance, issuer/host confusion, uncertain facts, non-expiring currentness
 observations and unbound conflict-resolution labels. These paths have regression gates.
 Structured conflict resolution is deliberately unavailable; disagreement remains unresolved.
+[Sol’s focused retest](../data/audit/independent_review.json) found all reproduced bypasses
+closed, with 41 hardening tests and the full 109-test suite passing.
 
 Open BLOCKERs are real parser precision and incomplete validation coverage. HIGH gaps
 include real temporal-pair validation and registry currency. Scanned extraction is gated.
@@ -205,11 +207,12 @@ and `uv run radiocorpus check-invariants` on pull requests and pushes to main. T
 command checks committed snapshots and generated reports as well as the database.
 Final local run: 109 tests passed; ruff and all invariant/report checks passed.
 Local/remote results are recorded in `data/audit/verification.json` after publication.
-A workflow file is not by itself evidence that GitHub Actions completed successfully.
+[GitHub Actions run 35504706751](https://github.com/club-paradiso/unit-24/actions/runs/35504706751)
+completed successfully on audit commit `bb2efbc6e8f5b067db06162dc4d583531accf297`, including all four required commands.
 
 ## 15. Branch and PR
 
-Audit branch: `astra/real-source-validation-hardening`. The separate draft PR targets
+Audit branch: `astra/real-source-validation-hardening`. [Draft PR #2](https://github.com/club-paradiso/unit-24/pull/2) targets
 `claude/radio-protocol-corpus-foundation-mm5s9g`, not main. Neither PR is merged.
 Publication details and commits are recorded in `data/audit/verification.json`.
 
