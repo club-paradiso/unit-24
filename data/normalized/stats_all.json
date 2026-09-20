@@ -1,4 +1,5 @@
 {
+  "_snapshot_notice": "Historical foundation run before independent hardening; not current corpus metrics. Current exported canary metrics: stats_canary.json; real sample: data/audit/metrics.json.",
   "agencies_by_research_status": {
     "blocked": 31,
     "discovery_started": 6,

@@ -1,0 +1,17 @@
+{
+  "audited": 116,
+  "meaning_supported": 61,
+  "full_fact_supported": 24,
+  "learner_safe": 0,
+  "locator_correct": 116,
+  "recall": null,
+  "recall_reason": "Complete ground truth not enumerated",
+  "missing_strata": [
+    "signal/status codes",
+    "ordered structures",
+    "interoperability rules",
+    "callsign/unit conventions"
+  ],
+  "sampling": "Purposive complete candidate sets for four retrieved documents; not nationwide-representative",
+  "reviewer_is_human": false
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "canary_id": "CAN-S05",
+    "name": "California Highway Patrol",
+    "state": "CA",
+    "bucket": "state_principal",
+    "url": "https://www.chp.ca.gov/globalassets/chp-254---aural-brevity-card---01-2021-v2.pdf"
+  },
+  {
+    "canary_id": "CAN-S09",
+    "name": "Florida Highway Patrol",
+    "state": "FL",
+    "bucket": "state_principal",
+    "url": "https://www.flhsmv.gov/pdf/fhp/policies/1401.pdf"
+  },
+  {
+    "canary_id": "CAN-S12",
+    "name": "Idaho State Police",
+    "state": "ID",
+    "bucket": "state_principal",
+    "url": "https://isp.idaho.gov/wp-content/uploads/Procedures/EHP-07-12-Patrol-Radio-Operations.pdf"
+  },
+  {
+    "canary_id": "CAN-S14",
+    "name": "Indiana State Police",
+    "state": "IN",
+    "bucket": "state_principal",
+    "url": "https://www.in.gov/isp/files/Communications-Procedures.pdf"
+  },
+  {
+    "canary_id": "CAN-S22",
+    "name": "Michigan State Police",
+    "state": "MI",
+    "bucket": "state_principal",
+    "url": "https://www.michigan.gov/msp/divisions/intel-ops/rcc"
+  },
+  {
+    "canary_id": "CAN-S37",
+    "name": "Oregon State Police",
+    "state": "OR",
+    "bucket": "state_principal",
+    "url": "https://digitalcollections.library.oregon.gov/nodes/view/208212"
+  },
+  {
+    "canary_id": "CAN-S47",
+    "name": "Washington State Patrol",
+    "state": "WA",
+    "bucket": "state_principal",
+    "url": "https://wsp.wa.gov/wp-content/uploads/2026/04/NCIC-Code-Manual-March-2026.pdf"
+  },
+  {
+    "canary_id": "CAN-M01",
+    "name": "New York City Police Department",
+    "state": "NY",
+    "bucket": "municipal_large",
+    "url": "https://www.nyc.gov/site/nypd/about/about-nypd/patrol-guide.page"
+  },
+  {
+    "canary_id": "CAN-M02",
+    "name": "Los Angeles Police Department",
+    "state": "CA",
+    "bucket": "municipal_large",
+    "url": "https://www.lapdonline.org/newsroom/change-in-dispatch-policy-for-the-lapd/"
+  },
+  {
+    "canary_id": "CAN-M03",
+    "name": "Chicago Police Department",
+    "state": "IL",
+    "bucket": "municipal_large",
+    "url": "https://directives.chicagopolice.org/api/publicDirective/6607"
+  },
+  {
+    "canary_id": "CAN-M05",
+    "name": "Philadelphia Police Department",
+    "state": "PA",
+    "bucket": "municipal_large",
+    "url": "https://www.phillypolice.com/wp-content/uploads/2024/05/D7.1-REV-5-23-24-REDACTED.pdf"
+  },
+  {
+    "canary_id": "CAN-M09",
+    "name": "Seattle Police Department",
+    "state": "WA",
+    "bucket": "municipal_large",
+    "url": "https://www.seattle.gov/police-manual"
+  },
+  {
+    "canary_id": "CAN-M10",
+    "name": "Boston Police Department",
+    "state": "MA",
+    "bucket": "municipal_large",
+    "url": "https://police.boston.gov/wp-content/uploads/2024/03/322.pdf"
+  },
+  {
+    "canary_id": "CAN-M11",
+    "name": "Denver Police Department",
+    "state": "CO",
+    "bucket": "municipal_large",
+    "url": "https://www.denvergov.org/content/dam/denvergov/Portals/720/documents/OperationsManual/OMSBook/OM_Book.pdf"
+  },
+  {
+    "canary_id": "CAN-H01",
+    "name": "Los Angeles County Sheriff's Department",
+    "state": "CA",
+    "bucket": "sheriff_large",
+    "url": "https://pars.lasd.org/Viewer/Manuals/GeneratePDF/12516?reportIndex=1"
+  },
+  {
+    "canary_id": "CAN-H02",
+    "name": "Harris County Sheriff's Office",
+    "state": "TX",
+    "bucket": "sheriff_large",
+    "url": "https://www.harriscountyso.org/"
+  },
+  {
+    "canary_id": "CAN-H03",
+    "name": "Cook County Sheriff's Office",
+    "state": "IL",
+    "bucket": "sheriff_large",
+    "url": "https://cookcountysheriffil.gov/"
+  },
+  {
+    "canary_id": "CAN-H07",
+    "name": "King County Sheriff's Office",
+    "state": "WA",
+    "bucket": "sheriff_large",
+    "url": "https://kingcounty.gov/en/dept/kcit/data-information-services/radio-services"
+  },
+  {
+    "canary_id": "CAN-X01",
+    "name": "BART Police Department",
+    "state": "CA",
+    "bucket": "special_jurisdiction",
+    "url": "https://www.bart.gov/about/police"
+  },
+  {
+    "canary_id": "CAN-X02",
+    "name": "MBTA Transit Police Department",
+    "state": "MA",
+    "bucket": "special_jurisdiction",
+    "url": "https://www.mbta.com/transit-police"
+  }
+]

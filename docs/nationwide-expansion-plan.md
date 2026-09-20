@@ -1,28 +1,13 @@
-# Nationwide expansion plan and readiness gate
+# Nationwide expansion remains blocked
 
-## Readiness gate (evaluated 2026-09-20)
+The foundation readiness assessment is superseded by the independent
+[hardening audit](hardening-audit.md). Do not start nationwide discovery or ingestion.
+The old age-window, domain and corroboration assumptions were unsafe.
 
-| criterion | evidence | verdict |
-|---|---|---|
-| entity resolution behaves reliably | 54 exact confirmations, 1,183 sub-unit proposals, 10 fuzzy proposals, 0 ambiguous on 23,243 rows; trap cases (Berkeley PD vs UC Berkeley PD, Miami Beach vs Miami, Excise Police vs State Police, same-name different state) covered by tests; re-run changes nothing | **pass** |
-| provenance survives end-to-end | every fact carries source_id + locator + excerpt; `explain` returns hash, URL, locator, excerpt, reasons; invariants 1, 7, 8 hold | **pass** (on fixtures; real documents not yet acquired) |
-| UNKNOWN stays UNKNOWN | 41 canary agencies keep `official_website=None`; blocked ≠ no_public_source; neighbour-township fixture has no facts; invariant 6 holds | **pass** |
-| conflicts preserved | 3 fixture conflicts stored with all participants; 1 unresolved; nothing deleted; invariant 5 holds | **pass** |
-| current vs historical distinguishable | source quality/temporal status, superseded_by links, HISTORICAL_ONLY eligibility; invariant 3 holds | **pass** |
-| extraction errors measurable | validation stats (`passed/rejected/problem:*`), per-fact confidence, per-document `stage_progress` notes | **pass** (measured on fixtures only) |
-| retries/resumption work | item-level checkpoints; second `run-canary` skips all 100 agencies and 7 documents; acquisition resumes exactly the `blocked_egress` leads | **pass** |
-| tests pass | 61/61, ruff clean | **pass** |
-
-**Decision:** the schema and pipeline are ready for nationwide *registry ingestion and
-discovery*. **However**, two operations were impossible in the build session and must run
-in an environment with network access before any real fact enters the corpus:
-
-1. document acquisition (all government/agency hosts egress-blocked);
-2. search for the remaining 31 canary agencies (search budget exhausted).
-
-Nationwide registry ingestion has effectively already happened (23,243 FBI reporting units
-resolved). Nationwide *discovery* should start only after (1) has been exercised on the 139
-canary leads, so that the extraction parsers are validated on real documents before scaling.
+Required next gates: layout-aware real extraction, complete stratified source review,
+current-policy evidence, real temporal-pair testing, registry currency validation and
+independent review of the stacked hardening PR. Scanned documents remain explicitly
+gated. The commands below are bounded research operations, not authorization to scale.
 
 ## Blocked operations and their reproduction commands
 

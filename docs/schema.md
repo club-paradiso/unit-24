@@ -89,30 +89,16 @@ INSUFFICIENT_EVIDENCE), `reasons`, `supporting_source_ids`, `conflict_ids`, `pol
 `TrainingItem` (future app) requires non-empty `fact_ids` and `source_ids`;
 `radiocorpus explain <fact_id>` shows exactly what such an item would cite.
 
-## Eligibility policy (policy_version 2026-09-20.1)
+## Evidence and eligibility, version 2026-09-20.2
 
-| condition | verification | eligibility |
-|---|---|---|
-| rejected by validation or human | as is | INSUFFICIENT_EVIDENCE |
-| participates in an unresolved conflict | UNVERIFIED | CONFLICT_REQUIRES_REVIEW |
-| model-extracted, not human-accepted | UNVERIFIED | RESEARCH_ONLY |
-| contradicted by preferred source (quality/jurisdiction resolution) | UNVERIFIED | RESEARCH_ONLY |
-| superseded (temporal resolution) or historical source | VERIFIED (if official) | HISTORICAL_ONLY |
-| source OFFICIAL_CURRENT | VERIFIED | PLAYABLE_VERIFIED |
-| source OFFICIAL_PARTIAL | VERIFIED | PLAYABLE_WITH_LIMITATIONS |
-| same value in ≥2 independent non-official sources | CORROBORATED | PLAYABLE_WITH_LIMITATIONS |
-| otherwise | UNVERIFIED | RESEARCH_ONLY |
+See [source-policy.md](source-policy.md) for authoritative policy semantics and
+`schemas/IdentityEvidence.schema.json`, `CurrentnessEvidence.schema.json` and
+`ProtocolApplicabilityEvidence.schema.json` for typed evidence. All parsers produce
+unverified candidates. Neither source repetition nor document age grants playback.
+Both playable states are checked against evidence and fact dates. Cross-agency scope
+requires explicit reviewed evidence. Temporal preference requires a supersession link.
 
-Agency eligibility is the best state among its facts, else INSUFFICIENT_EVIDENCE.
-
-## Invariants (`invariants.py`)
-
-1. No PLAYABLE_VERIFIED fact without an OFFICIAL_CURRENT, hashed source.
-2. No fact cites a source attributed to a different agency (unless that agency is its
-   documented parent or dispatch provider) — no neighbour synthesis.
-3. No historical source yields a PLAYABLE_VERIFIED fact; temporal resolutions prefer the newer date.
-4. No model output is VERIFIED without human acceptance; no VERIFIED fact lacks an excerpt.
-5. Every fact referenced by a conflict still exists.
-6. `official_website` only with a recorded basis; REGISTRY_ONLY agencies carry no researched fields.
-7. Official quality only for hashed documents; never for crowdsourced/social/search sources.
-8. Every fact has a locator and a resolvable source.
+Export recomputes eligibility and refuses invariant violations. The command-line
+invariant check additionally loads committed normalized snapshots, avoiding empty-CI
+passes. `facts_verified.jsonl` excludes merely corroborated candidates. Legacy fixtures
+are migrated conservatively without deleting their evidence.

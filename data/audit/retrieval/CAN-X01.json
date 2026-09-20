@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-X01",
+  "name": "BART Police Department",
+  "state": "CA",
+  "bucket": "special_jurisdiction",
+  "url": "https://www.bart.gov/about/police",
+  "retrieved_at": "2026-09-20T07:00:06+00:00",
+  "status": "http_error",
+  "note": "HTTP 403 (not retried; no circumvention)",
+  "sources": [],
+  "capture_usable": false
+}

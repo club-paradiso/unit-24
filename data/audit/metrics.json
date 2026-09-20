@@ -1,0 +1,43 @@
+{
+  "agencies_attempted": 20,
+  "strata": {
+    "sheriff_large": 4,
+    "municipal_large": 7,
+    "state_principal": 7,
+    "special_jurisdiction": 2
+  },
+  "responses_saved": 14,
+  "invalid_saved_responses": 2,
+  "retrieved_pdfs": 6,
+  "native_pdf_pages": 1288,
+  "real_scanned_pdfs": 0,
+  "candidate_facts": 338,
+  "candidate_types": {
+    "phonetic_letter": 229,
+    "procedure_rule": 51,
+    "code_meaning": 56,
+    "phonetic_system": 2
+  },
+  "eligibility": {
+    "CONFLICT_REQUIRES_REVIEW": 244,
+    "RESEARCH_ONLY": 94
+  },
+  "audit": {
+    "audited": 116,
+    "meaning_supported": 61,
+    "full_fact_supported": 24,
+    "learner_safe": 0,
+    "locator_correct": 116,
+    "recall": null,
+    "recall_reason": "Complete ground truth not enumerated",
+    "missing_strata": [
+      "signal/status codes",
+      "ordered structures",
+      "interoperability rules",
+      "callsign/unit conventions"
+    ],
+    "sampling": "Purposive complete candidate sets for four retrieved documents; not nationwide-representative",
+    "reviewer_is_human": false
+  },
+  "protocols_confirmed_current": 0
+}

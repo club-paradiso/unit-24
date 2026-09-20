@@ -1,0 +1,12 @@
+{
+  "canary_id": "CAN-S12",
+  "name": "Idaho State Police",
+  "state": "ID",
+  "bucket": "state_principal",
+  "url": "https://isp.idaho.gov/wp-content/uploads/Procedures/EHP-07-12-Patrol-Radio-Operations.pdf",
+  "retrieved_at": "2026-09-20T06:59:13+00:00",
+  "status": "http_error",
+  "note": "HTTP 502",
+  "sources": [],
+  "capture_usable": false
+}

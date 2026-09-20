@@ -1,59 +1,49 @@
-# Source policy
+# Evidence policy, version 2026-09-20.2
 
-## Evidence hierarchy
+Government hosting, target identity, operative status and applicability are separate
+claims. A search result, ranking, domain suffix or document date proves none of the
+other claims. All evidence starts unverified.
 
-Preferred, in order:
+Official classification requires acquired bytes, a hash, an eligible document type,
+and reviewed identity evidence matching the source owner, canonical name, state and
+host. Playback separately requires reviewed document-issuer evidence. Official non-.gov sites can qualify through a government directory or reviewed
+agency page. Search candidates never set an agency website automatically.
 
-1. official agency policy / manual / general order (`agency_policy_manual`)
-2. official dispatch-centre documentation (`dispatch_center_document`)
-3. official city / county / state government documents (`government_document`)
-4. official training / accreditation material (`training_accreditation`)
-5. other governmental records (`other_government_record`)
-6. standards bodies (APCO, FEMA/NIMS, NPSTC) (`standards_body`) — for interoperability rules only, never for an agency's own codes
+Currentness is explicit: OFFICIAL_CURRENT_CONFIRMED, OFFICIAL_CURRENT_PRESUMED,
+OFFICIAL_UNDATED, OFFICIAL_HISTORICAL, OFFICIAL_SUPERSEDED or CURRENTNESS_UNKNOWN.
+A reviewed active portal/index or explicit operative-policy assertion may confirm
+status; a revision alone is presumed. A recent effective date alone cannot confirm
+status. Supersession and expired periods take precedence. Historical evidence stays
+stored. Legacy OFFICIAL_CURRENT/PARTIAL quality fields are derived compatibility
+fields; callers must evaluate the evidence, not trust an imported status string.
 
-Scanner-enthusiast sites, forums, wikis, crowdsourced code lists and social media
-(`enthusiast_or_crowdsourced`, `social_media`) are **discovery leads only**. The `Source`
-validator refuses to assign them any `OFFICIAL_*` quality. Search-engine results are always
-`UNVERIFIED`.
+Evidence pointers carry source ID, locator, short excerpt, review state and reviewer.
+A currentness claim is an observation on checked_on; it is not proof of future
+currency. Confirmed observations require an explicit recheck_by date; expired or unspecified deadlines fall to presumed.
 
-## Quality states
+Corroboration requires distinct URLs, document hashes, issuing authorities and known,
+disjoint evidence lineages. Unknown lineage is not independence. Mirrored bytes,
+copied pages and repeated enthusiast tables cannot become authority. Even genuine
+secondary corroboration remains RESEARCH_ONLY. Official evidence is preferred.
 
-| state | meaning | how assigned |
-|---|---|---|
-| `OFFICIAL_CURRENT` | official type, official host, bytes hashed, dated within 10 years, not superseded | `provenance/classify.py` |
-| `OFFICIAL_HISTORICAL` | official, but superseded by a newer official source | supersession link |
-| `OFFICIAL_PARTIAL` | official but undated, or dated more than 10 years ago | classifier |
-| `SECONDARY_CORROBORATED` | reserved for reviewer use when ≥2 independent non-official sources agree; the policy tracks corroboration on the fact level | manual |
-| `CONFLICTING` | reserved for reviewer use on a source known to contradict official sources | manual |
-| `UNVERIFIED` | default for anything not acquired, non-official, or unclassifiable | default |
-| `NO_PUBLIC_SOURCE` | discovery completed and nothing public exists | agency research status |
+A parent, county, state or dispatch relationship grants no protocol inheritance.
+Cross-agency facts need reviewed applicability evidence naming the source entity,
+target, source document, fact types, exact fact keys and effective interval. Incomplete
+membership lists do not authorize unlisted agencies or unrelated unit conventions.
 
-An `OFFICIAL_*` quality requires a document hash. A lead without bytes is never official.
+No parser has earned automatic verification. All extracted candidates require
+independent acceptance. A human review record must bind the fact ID, source ID, hash, normalized value, reviewer
+and review date. A review enum alone is insufficient: playback also needs
+hashed official evidence, confirmed currentness, identity, applicability, valid fact
+dates, an excerpt and absence of unresolved conflicts. PLAYABLE_WITH_LIMITATIONS is
+retained for compatibility but this policy does not award it. Model source comparison
+in the audit is explicitly not HUMAN_ACCEPTED review.
 
-## Host judgement
+Facts retain extraction rule/version and text method. Native PDF and HTML extraction
+are demonstrated. Image-only PDFs are detected and blocked pending an OCR backend;
+only the interface and synthetic page-locator behavior have been tested. Narrative
+regex output and multi-column code tables remain research candidates.
 
-`discovery/classify.py::judge_host` returns **True** for government TLDs (.gov/.us/.mil) and
-state portal hosts; **False** for a maintained list of non-official platforms (Wikipedia,
-social media, Quizlet, RadioReference, PowerDMS public portals, Scribd, MuckRock, ACLU
-mirrors...); **None** ("plausible, unproven") for agency-branded .org/.com/.edu hosts such as
-`lapdonline.org` or `lasd.org`. Only True sets `official_website` on an agency, and only when
-the search result title also names the agency. None keeps the field UNKNOWN.
-
-## Currency
-
-An undated official document is `OFFICIAL_PARTIAL` (playable with limitations), never
-current. The effective-date parser (`normalization/temporal.py`) only accepts a date that
-follows an explicit "Effective/Revised/Issued/Approved" hint; anything else stays `None`.
-
-## Excerpts
-
-Facts store at most 400 characters of verbatim text plus a locator (page or HTML path).
-Acquired documents are stored content-addressed under `data/raw/documents/` and are
-git-ignored; the corpus is not a document mirror.
-
-## Ethics and access
-
-Public information only. robots.txt is honoured; 401/403/407 are recorded and never retried;
-no authentication, CAPTCHA, paywall or technical-restriction circumvention. Egress denials
-from the build environment are recorded as `blocked_egress` with the reason so they can be
-resumed from an environment with access.
+Short excerpts and hashes are committed; full acquired third-party documents remain
+in ignored local storage. Synthetic fixtures are authored for this project. Public
+access only; no authentication, paywall, CAPTCHA or access-control circumvention.

@@ -1,0 +1,15 @@
+{
+  "baseline_pr": 1,
+  "baseline_head": "48238acab2349418b1d0f88e3fc580ef7a84042b",
+  "baseline_tests": 61,
+  "regression_before_fix": {"failed": 6, "passed": 3},
+  "local_tests": {"passed": 109, "failed": 0},
+  "local_ruff": "passed",
+  "local_invariants": "passed including committed snapshots and reports",
+  "branch": "astra/real-source-validation-hardening",
+  "base_branch": "claude/radio-protocol-corpus-foundation-mm5s9g",
+  "first_remote_commit": "bd3efd2be0d1eb4befec87db004c59afd14c0c42",
+  "github_ci": "pending publication",
+  "readiness": "NOT_READY",
+  "merged": false
+}

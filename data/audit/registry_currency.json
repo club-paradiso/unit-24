@@ -1,0 +1,69 @@
+{
+  "observed_on": "2026-09-20",
+  "baseline_registry": "FBI_CDE_FRONTEND_2018",
+  "replaced": false,
+  "sources": [
+    {
+      "url": "https://bjs.ojp.gov/data-collection/census-state-and-local-law-enforcement-agencies-csllea",
+      "observation": "CSLLEA page lists 2018 coverage; publication dates do not establish a current national roster. State POST lists and BJS agency-record resources are leads, not an acquired current replacement.",
+      "retrieval": "web_reader"
+    },
+    {
+      "url": "https://post.ca.gov/le-agencies",
+      "observation": "Current directory of POST participating agencies and noted exceptions; explicit agency links and relationship notes support identity research, not protocol inheritance.",
+      "retrieval": "web_reader"
+    },
+    {
+      "url": "https://www.mdso.com/",
+      "observation": "Official page identifies Miami-Dade Sheriff\u2019s Office. The old county police URL redirects here; exact legal transition date and continuity require separate evidence.",
+      "retrieval": "web_reader"
+    },
+    {
+      "url": "https://www.cannabis.ca.gov/about-us/",
+      "observation": "Current department page describes Law Enforcement Division; formation date not established by inspected page.",
+      "retrieval": "web_reader"
+    }
+  ],
+  "cases": [
+    {
+      "name": "Berkeley Police Department",
+      "state": "CA",
+      "relationship": "distinct from UC Berkeley Police Department",
+      "status": "directory_observation",
+      "auto_merge": false
+    },
+    {
+      "name": "CA Department of Financial Protection and Innovation",
+      "state": "CA",
+      "relationship": "directory names former Department of Business Oversight",
+      "status": "rename_observation_date_unknown",
+      "auto_merge": false
+    },
+    {
+      "name": "Blue Lake Police Department",
+      "state": "CA",
+      "relationship": "directory marks contract city served by Humboldt County Sheriff",
+      "status": "service_relationship_not_protocol_applicability",
+      "auto_merge": false
+    },
+    {
+      "name": "American River College Police Department",
+      "state": "CA",
+      "relationship": "directory redirects to Los Rios Community College District Police",
+      "status": "organizational_relationship_date_unknown",
+      "auto_merge": false
+    },
+    {
+      "name": "Miami-Dade Sheriff\u2019s Office",
+      "state": "FL",
+      "relationship": "current county identity differs from Miami municipal police",
+      "status": "identity_observation_transition_date_unknown",
+      "auto_merge": false
+    }
+  ],
+  "unresolved": [
+    "No newly acquired current nationwide machine-readable registry",
+    "Post-2018 formation and dissolution dates not established",
+    "No automatic legal-entity continuity or protocol inheritance from directory notes"
+  ]
+}

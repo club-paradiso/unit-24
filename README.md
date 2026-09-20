@@ -12,28 +12,25 @@ and a reproducible research pipeline. There is no learner-facing application her
 > Every playable fact traces to a hashed source document, a locator inside it, and a short
 > excerpt.
 
-## Status (foundation sprint, 2026-09-20)
+## Status (independent hardening audit, 2026-09-20)
 
-| area | state |
-|---|---|
-| Canonical registry | 23,243 FBI UCR reporting units (2018-06-28 snapshot) + 100 curated canary agencies, resolved with confirmed / proposed / ambiguous links |
-| Protocol schema | 8 fact types, evidence objects, conflicts, eligibility; JSON Schema in `schemas/` |
-| Pipeline | 12 stages, resumable and idempotent, SQLite-backed, `radiocorpus run-canary` reproduces everything |
-| Tests | 61 passing (`uv run pytest`), 8 corpus invariants enforced |
-| Canary discovery | 69 / 100 agencies searched (session search budget capped the rest), 59 official domains, 85 official radio-policy leads |
-| Canary acquisition | **0 documents acquired**: every government/agency host was blocked by the build environment's egress policy (137 leads recorded as `blocked_egress`) |
-| Extraction / conflicts / eligibility | Exercised end-to-end on a synthetic fixture corpus (7 documents, 89 facts, 3 conflicts) |
+Nationwide discovery remains blocked. The original Miami website assignment was
+South Miami's website. All 59 legacy search-only assignments are quarantined.
+Currentness, independence and cross-agency applicability now require explicit evidence.
 
-See `docs/canary-report.md` for the per-agency table and `docs/nationwide-expansion-plan.md`
-for what happens next.
+The bounded sample attempted 20 agencies. Fourteen responses were captured (including
+two unusable responses); six PDFs and HTML were exercised. The audit compared 116
+candidates from four documents: 24 complete facts supported, zero learner-safe facts.
+This was agent source review, not human acceptance. See [the audit](docs/hardening-audit.md)
+and [generated metrics](docs/real-source-metrics.md) for limitations and remaining gates.
+The 2018 registry remains a historical snapshot; it was not silently replaced.
 
 ## Quick start
 
 ```bash
 uv sync                       # Python 3.12, all dependencies
-uv run pytest                 # 61 tests
-uv run radiocorpus run-canary # full pipeline -> data/intermediate/corpus.sqlite, data/normalized/, docs/canary-report.md
-uv run radiocorpus check-invariants
+uv run pytest                 # offline regression suite
+uv run radiocorpus check-invariants # checks database, committed JSONL and generated reports
 uv run radiocorpus explain <fact_id>   # "why is this the expected answer?" from evidence only
 ```
 

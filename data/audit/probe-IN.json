@@ -1,0 +1,40 @@
+{
+  "name": "IN",
+  "url": "https://www.in.gov/isp/files/Communications-Procedures.pdf",
+  "status": "fetched",
+  "note": "ok",
+  "sources": [
+    {
+      "source_id": "src_b1ec55369bd8b386",
+      "source_type": "unknown",
+      "title": null,
+      "issuing_authority": null,
+      "agency_or_jurisdiction": "IN",
+      "canonical_url": "https://www.in.gov/isp/files/Communications-Procedures.pdf",
+      "original_file_url": "https://www.in.gov/isp/files/Communications-Procedures.pdf",
+      "retrieved_at": "2026-09-20T06:57:21Z",
+      "publication_date": null,
+      "effective_date": null,
+      "revision": null,
+      "page_count": null,
+      "document_hash": "sha256:e6518853a9579c22bc22b069f526656b5003ec0ddfedf55277a03c214f4933be",
+      "local_path": "data/raw/documents/e6518853a9579c22bc22b069f526656b5003ec0ddfedf55277a03c214f4933be.pdf",
+      "content_type": "application/pdf",
+      "host_is_government": null,
+      "host_matches_target_entity": null,
+      "identity_evidence": null,
+      "currentness": "CURRENTNESS_UNKNOWN",
+      "currentness_evidence": null,
+      "evidence_lineage": [],
+      "issuing_authority_id": null,
+      "applicability": [],
+      "source_quality": "UNVERIFIED",
+      "temporal_status": "uncertain",
+      "superseded_by": null,
+      "supersedes": null,
+      "is_fixture": false,
+      "notes": null,
+      "extra": {}
+    }
+  ]
+}

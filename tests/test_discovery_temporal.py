@@ -94,21 +94,10 @@ def _src(**kw):
 
 
 def test_source_classification_rules():
+    # Legacy date/TLD-only assertions were unsafe. Identity is now separately required.
     today = date(2026, 9, 20)
-    q, t, _ = classify_source(_src(effective_date=date(2024, 1, 1)), "City Police Department", "TX", today)
-    assert (q, t) == (SourceQuality.OFFICIAL_CURRENT, TemporalStatus.CURRENT)
-    q, t, _ = classify_source(_src(), "City Police Department", "TX", today)
-    assert (q, t) == (SourceQuality.OFFICIAL_PARTIAL, TemporalStatus.UNCERTAIN)
-    q, _, _ = classify_source(_src(effective_date=date(2009, 1, 1)), "City Police Department", "TX", today)
-    assert q == SourceQuality.OFFICIAL_PARTIAL
-    q, t, _ = classify_source(_src(effective_date=date(2024, 1, 1), superseded_by="s2"), "City Police Department", "TX", today)
-    assert (q, t) == (SourceQuality.OFFICIAL_HISTORICAL, TemporalStatus.HISTORICAL)
-    q, _, _ = classify_source(
-        _src(canonical_url="https://wiki.radioreference.com/x", effective_date=date(2024, 1, 1)), "City Police Department", "TX", today
-    )
-    assert q == SourceQuality.UNVERIFIED  # official type claimed, but host is not official
-    q, _, _ = classify_source(_src(document_hash=None), "City Police Department", "TX", today)
-    assert q == SourceQuality.UNVERIFIED
+    for source in [_src(), _src(effective_date=date(2024, 1, 1)), _src(effective_date=date(2009, 1, 1))]:
+        assert classify_source(source, "City Police Department", "TX", today)[:2] == (SourceQuality.UNVERIFIED, TemporalStatus.UNCERTAIN)
 
 
 def test_agency_model_unknown_defaults():

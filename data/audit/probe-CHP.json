@@ -1,0 +1,40 @@
+{
+  "name": "CHP",
+  "url": "https://www.chp.ca.gov/globalassets/chp-254---aural-brevity-card---01-2021-v2.pdf",
+  "status": "fetched",
+  "note": "ok",
+  "sources": [
+    {
+      "source_id": "src_29af34430672001d",
+      "source_type": "unknown",
+      "title": null,
+      "issuing_authority": null,
+      "agency_or_jurisdiction": "CHP",
+      "canonical_url": "https://www.chp.ca.gov/globalassets/chp-254---aural-brevity-card---01-2021-v2.pdf",
+      "original_file_url": "https://www.chp.ca.gov/globalassets/chp-254---aural-brevity-card---01-2021-v2.pdf",
+      "retrieved_at": "2026-09-20T06:57:14Z",
+      "publication_date": null,
+      "effective_date": null,
+      "revision": null,
+      "page_count": null,
+      "document_hash": "sha256:eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064",
+      "local_path": "data/raw/documents/eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064.pdf",
+      "content_type": "application/pdf",
+      "host_is_government": null,
+      "host_matches_target_entity": null,
+      "identity_evidence": null,
+      "currentness": "CURRENTNESS_UNKNOWN",
+      "currentness_evidence": null,
+      "evidence_lineage": [],
+      "issuing_authority_id": null,
+      "applicability": [],
+      "source_quality": "UNVERIFIED",
+      "temporal_status": "uncertain",
+      "superseded_by": null,
+      "supersedes": null,
+      "is_fixture": false,
+      "notes": null,
+      "extra": {}
+    }
+  ]
+}

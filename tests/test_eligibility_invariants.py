@@ -8,7 +8,6 @@ from radiocorpus.models.common import (
     EligibilityState,
     ExtractionMethod,
     FactType,
-    ReviewStatus,
     SourceQuality,
     SourceType,
     VerificationStatus,
@@ -47,26 +46,15 @@ def _fact(**kw):
 
 
 def test_policy_matrix():
-    assert decide_fact(_fact(), _src(), [], None, False)[1].state == EligibilityState.PLAYABLE_VERIFIED
-    assert decide_fact(_fact(), _src(SourceQuality.OFFICIAL_PARTIAL), [], None, False)[1].state == EligibilityState.PLAYABLE_WITH_LIMITATIONS
-    assert decide_fact(_fact(), _src(SourceQuality.OFFICIAL_HISTORICAL), [], None, False)[1].state == EligibilityState.HISTORICAL_ONLY
+    # Legacy sources have no identity/currentness proof and are unreviewed.
+    for quality in [SourceQuality.OFFICIAL_CURRENT, SourceQuality.OFFICIAL_PARTIAL, SourceQuality.OFFICIAL_HISTORICAL]:
+        assert decide_fact(_fact(), _src(quality), [], None, False)[1].state == EligibilityState.RESEARCH_ONLY
     assert decide_fact(_fact(), _src(), ["cfl_1"], None, False)[1].state == EligibilityState.CONFLICT_REQUIRES_REVIEW
-    assert (
-        decide_fact(_fact(), _src(SourceQuality.UNVERIFIED, SourceType.ENTHUSIAST_OR_CROWDSOURCED), [], None, False)[1].state
-        == EligibilityState.RESEARCH_ONLY
-    )
-    vs, dec = decide_fact(_fact(), _src(SourceQuality.UNVERIFIED, SourceType.SECONDARY_PUBLICATION), [], None, True)
-    assert dec.state == EligibilityState.PLAYABLE_WITH_LIMITATIONS and vs == VerificationStatus.CORROBORATED
-    model = _fact(extraction_method=ExtractionMethod.MODEL, extraction_model="m", review_status=ReviewStatus.NEEDS_REVIEW)
-    assert decide_fact(model, _src(), [], None, False)[1].state == EligibilityState.RESEARCH_ONLY
-    accepted = model.model_copy(update={"review_status": ReviewStatus.HUMAN_ACCEPTED})
-    assert decide_fact(accepted, _src(), [], None, False)[1].state == EligibilityState.PLAYABLE_VERIFIED
+    assert decide_fact(_fact(), _src(), [], None, True)[1].state == EligibilityState.RESEARCH_ONLY
     assert (
         decide_fact(_fact(verification_status=VerificationStatus.REJECTED), _src(), [], None, False)[1].state
         == EligibilityState.INSUFFICIENT_EVIDENCE
     )
-    assert decide_fact(_fact(), _src(), [], ("cfl_2", "resolved_temporal"), False)[1].state == EligibilityState.HISTORICAL_ONLY
-    assert decide_fact(_fact(), _src(), [], ("cfl_2", "resolved_jurisdictional"), False)[1].state == EligibilityState.RESEARCH_ONLY
 
 
 def test_invariant_catches_playable_without_official_source(store):
@@ -102,7 +90,7 @@ def test_invariant_unknown_stays_unknown(store):
             notes="website basis: search A rank 1",
         )
     )
-    assert not inv_unknown_stays_unknown(store)
+    assert inv_unknown_stays_unknown(store)  # a narrative search note is not identity evidence
 
 
 def test_source_status_changes_are_audited(store):
