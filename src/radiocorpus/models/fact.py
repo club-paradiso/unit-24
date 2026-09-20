@@ -16,6 +16,7 @@ from radiocorpus.models.common import (
     VerificationStatus,
     utcnow,
 )
+from radiocorpus.models.evidence import FactReviewEvidence
 
 MAX_EXCERPT_CHARS = 400  # minimal necessary excerpt; never a document mirror
 
@@ -130,7 +131,12 @@ class ProtocolFact(StrictModel):
     verification_status: VerificationStatus = VerificationStatus.UNVERIFIED
     extraction_method: ExtractionMethod
     extraction_model: str | None = None
+    extraction_rule: str | None = None
+    extraction_rule_version: str | None = None
+    text_extraction_method: Literal["native_pdf_text", "ocr", "html", "human", "model", "text"] | None = None
+    applicability_scope: str | None = None
     review_status: ReviewStatus = ReviewStatus.UNREVIEWED
+    review_evidence: FactReviewEvidence | None = None
     notes: str | None = None
     created_at: datetime = Field(default_factory=utcnow)
     run_id: str | None = None

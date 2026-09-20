@@ -1,0 +1,117 @@
+{
+  "$defs": {
+    "FactType": {
+      "enum": [
+        "code_meaning",
+        "phonetic_letter",
+        "phonetic_system",
+        "callsign_convention",
+        "procedure_rule",
+        "ordered_structure",
+        "interop_rule",
+        "protocol_mode"
+      ],
+      "title": "FactType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "effective_from": {
+      "format": "date",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective To"
+    },
+    "evidence_source_id": {
+      "minLength": 1,
+      "title": "Evidence Source Id",
+      "type": "string"
+    },
+    "excerpt": {
+      "maxLength": 400,
+      "minLength": 1,
+      "title": "Excerpt",
+      "type": "string"
+    },
+    "fact_keys": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Fact Keys",
+      "type": "array"
+    },
+    "locator": {
+      "minLength": 1,
+      "title": "Locator",
+      "type": "string"
+    },
+    "protocol_source_id": {
+      "title": "Protocol Source Id",
+      "type": "string"
+    },
+    "scope": {
+      "items": {
+        "$ref": "#/$defs/FactType"
+      },
+      "minItems": 1,
+      "title": "Scope",
+      "type": "array"
+    },
+    "source_agency_or_dispatcher": {
+      "title": "Source Agency Or Dispatcher",
+      "type": "string"
+    },
+    "target_agency": {
+      "title": "Target Agency",
+      "type": "string"
+    },
+    "verification_status": {
+      "default": "unverified",
+      "enum": [
+        "unverified",
+        "verified"
+      ],
+      "title": "Verification Status",
+      "type": "string"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified By"
+    }
+  },
+  "required": [
+    "evidence_source_id",
+    "locator",
+    "excerpt",
+    "source_agency_or_dispatcher",
+    "target_agency",
+    "protocol_source_id",
+    "scope",
+    "fact_keys",
+    "effective_from"
+  ],
+  "title": "ProtocolApplicabilityEvidence",
+  "type": "object"
+}

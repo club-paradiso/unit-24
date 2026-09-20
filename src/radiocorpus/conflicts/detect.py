@@ -1,13 +1,8 @@
-"""Stage 9+10: cross-check and conflict detection.
+"""Detect disagreements without destroying evidence.
 
-For each (agency, fact_type, key) with facts from more than one source, compare value
-fingerprints. Different values => a Conflict. Resolution is attempted ONLY with evidence:
-  * temporal: both sources official and dated, one strictly newer => newer preferred, the
-    older source's facts are marked HISTORICAL (never deleted, never demoted to rejected);
-  * quality: official vs non-official => official preferred (secondary kept as UNVERIFIED);
-  * jurisdictional: agency's own policy vs dispatch-centre/parent doc => agency's own preferred.
-Otherwise UNRESOLVED. Undated official vs official => UNDATED_MANUAL, unresolved.
-Nothing here ever infers a value for an agency from another agency's facts."""
+Conflicting values remain unresolved until structured resolution evidence exists.
+Dates, source labels and unbound human-resolution strings do not authorize a winner.
+"""
 
 from __future__ import annotations
 
@@ -66,15 +61,11 @@ def detect_conflicts(store: Store) -> StageRun:
             fact_ids = sorted(f.fact_id for f in grp)
             source_ids = sorted({f.source_id for f in grp})
             cid = ids.conflict_id(agency_id, ftype, key, fact_ids)
-            existing = {c.conflict_id: c for c in store.conflicts(agency_id)}
-            if cid in existing and existing[cid].resolution == ConflictResolution.RESOLVED_HUMAN:
-                stats["kept_human_resolution"] += 1
-                continue
             # pairwise kind: take the "strongest" pair classification across distinct values
             reps = [v[0] for v in by_value.values()]
             kinds = [_kind(src(a.source_id), src(b.source_id)) for i, a in enumerate(reps) for b in reps[i + 1 :]]
             kind = kinds[0] if len(set(kinds)) == 1 else ConflictKind.OTHER
-            resolution, preferred, rationale = _try_resolve(reps, src)
+            resolution, preferred, rationale = _try_resolve(grp, src)
             c = Conflict(
                 conflict_id=cid,
                 agency_id=agency_id,
@@ -106,35 +97,4 @@ def detect_conflicts(store: Store) -> StageRun:
 
 
 def _try_resolve(reps: list[ProtocolFact], src) -> tuple[ConflictResolution, str | None, str]:  # type: ignore[no-untyped-def]
-    officials = [f for f in reps if src(f.source_id).is_official]
-    if len(officials) == 1 and len(reps) > 1:
-        return (
-            ConflictResolution.RESOLVED_QUALITY,
-            officials[0].fact_id,
-            "single official source outranks non-official sources; non-official facts retained as UNVERIFIED",
-        )
-    if len(officials) >= 2:
-        own = [f for f in officials if src(f.source_id).source_type == SourceType.AGENCY_POLICY_MANUAL]
-        others = [f for f in officials if f not in own]
-        if (
-            len(own) == 1
-            and others
-            and all(src(o.source_id).source_type in {SourceType.DISPATCH_CENTER_DOCUMENT, SourceType.GOVERNMENT_DOCUMENT} for o in others)
-        ):
-            return (
-                ConflictResolution.RESOLVED_JURISDICTIONAL,
-                own[0].fact_id,
-                "agency's own policy manual outranks dispatch-centre/parent-government documents for agency-specific usage",
-            )
-        dated = [(d, f) for f in officials if (d := _date(src(f.source_id))) is not None]
-        if len(dated) == len(officials):
-            dated.sort(key=lambda x: x[0], reverse=True)
-            if len(dated) == 1 or dated[0][0] > dated[1][0]:
-                return (
-                    ConflictResolution.RESOLVED_TEMPORAL,
-                    dated[0][1].fact_id,
-                    f"newest dated official source ({dated[0][0]}) supersedes older ({dated[1][0]})",
-                )
-            return ConflictResolution.UNRESOLVED, None, "two official sources share the same date and disagree"
-        return ConflictResolution.UNRESOLVED, None, "official sources disagree and at least one is undated; cannot order them"
-    return ConflictResolution.UNRESOLVED, None, "no official source among conflicting values; nothing to prefer"
+    return ConflictResolution.UNRESOLVED, None, "disagreement requires structured resolution evidence; legacy links/status are insufficient"

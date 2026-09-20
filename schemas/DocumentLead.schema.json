@@ -14,6 +14,85 @@
       "title": "AcquisitionStatus",
       "type": "string"
     },
+    "IdentityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "official_directory",
+            "agency_page",
+            "government_link"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "canonical_name": {
+          "title": "Canonical Name",
+          "type": "string"
+        },
+        "evidence_source_id": {
+          "minLength": 1,
+          "title": "Evidence Source Id",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 400,
+          "minLength": 1,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "host": {
+          "title": "Host",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "target_agency_id": {
+          "title": "Target Agency Id",
+          "type": "string"
+        },
+        "verification_status": {
+          "default": "unverified",
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "verified_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified By"
+        }
+      },
+      "required": [
+        "evidence_source_id",
+        "locator",
+        "excerpt",
+        "target_agency_id",
+        "canonical_name",
+        "state",
+        "host",
+        "basis"
+      ],
+      "title": "IdentityEvidence",
+      "type": "object"
+    },
     "LeadClass": {
       "enum": [
         "official_homepage_candidate",
@@ -71,6 +150,18 @@
       "title": "Host",
       "type": "string"
     },
+    "host_is_government": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Is Government"
+    },
     "host_is_official": {
       "anyOf": [
         {
@@ -82,6 +173,29 @@
       ],
       "default": null,
       "title": "Host Is Official"
+    },
+    "host_matches_target_entity": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Host Matches Target Entity"
+    },
+    "identity_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/IdentityEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "lead_class": {
       "$ref": "#/$defs/LeadClass",

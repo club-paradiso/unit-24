@@ -18,9 +18,21 @@ from radiocorpus.models import (
     StageRun,
     TrainingItem,
 )
+from radiocorpus.models.evidence import (
+    CurrentnessEvidence,
+    FactReviewEvidence,
+    IdentityEvidence,
+    IssuingAuthorityEvidence,
+    ProtocolApplicabilityEvidence,
+)
 
 OUT = Path(__file__).resolve().parents[1] / "schemas"
 MODELS = [
+    FactReviewEvidence,
+    IssuingAuthorityEvidence,
+    CurrentnessEvidence,
+    IdentityEvidence,
+    ProtocolApplicabilityEvidence,
     RegistryRecord,
     Agency,
     AgencyLink,

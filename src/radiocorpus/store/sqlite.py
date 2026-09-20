@@ -73,6 +73,13 @@ class Store:
     def upsert_registry_record(self, rec: RegistryRecord, run_id: str | None = None) -> bool:
         """Insert if absent. Returns True if inserted. Existing rows are never modified —
         a registry re-ingest with changed content is a new registry code (dated snapshot)."""
+        existing = self.conn.execute(
+            "SELECT payload FROM registry_records WHERE registry=? AND external_id=?", (rec.registry, rec.external_id)
+        ).fetchone()
+        if existing:
+            old = RegistryRecord.model_validate_json(existing["payload"])
+            if old.model_dump(exclude={"ingested_at"}) != rec.model_dump(exclude={"ingested_at"}):
+                raise ValueError("registry snapshot collision: use a new dated registry code for changed content")
         cur = self.conn.execute(
             "INSERT OR IGNORE INTO registry_records(registry, external_id, payload, ingested_at, run_id) VALUES (?,?,?,?,?)",
             (rec.registry, rec.external_id, _dump(rec), rec.ingested_at.isoformat(), run_id),
@@ -201,11 +208,28 @@ class Store:
         s = self.get_source(source_id)
         if s is None:
             raise KeyError(source_id)
-        allowed = {"source_quality", "temporal_status", "superseded_by", "supersedes", "effective_date", "publication_date", "revision"}
+        allowed = {
+            "source_quality",
+            "temporal_status",
+            "superseded_by",
+            "supersedes",
+            "effective_date",
+            "publication_date",
+            "revision",
+            "currentness",
+            "currentness_evidence",
+            "identity_evidence",
+            "host_matches_target_entity",
+            "host_is_government",
+            "applicability",
+            "evidence_lineage",
+            "issuing_authority_id",
+            "issuing_authority_evidence",
+        }
         if field not in allowed:
             raise ValueError(f"field {field} is immutable on sources")
         old = getattr(s, field)
-        s2 = s.model_copy(update={field: new_value})
+        s2 = Source.model_validate({**s.model_dump(), field: new_value})
         self.conn.execute(
             "UPDATE sources SET source_quality=?, temporal_status=?, payload=? WHERE source_id=?",
             (s2.source_quality, s2.temporal_status, _dump(s2), source_id),
@@ -274,6 +298,7 @@ class Store:
         *,
         verification_status: VerificationStatus | None = None,
         review_status: ReviewStatus | None = None,
+        review_evidence: dict | None = None,
         temporal_status: str | None = None,
         superseded_by: str | None = None,
         reason: str,
@@ -283,6 +308,8 @@ class Store:
         if f is None:
             raise KeyError(fact_id)
         updates: dict[str, Any] = {}
+        if review_evidence is not None:
+            updates["review_evidence"] = review_evidence
         if verification_status is not None and verification_status != f.verification_status:
             updates["verification_status"] = verification_status
         if review_status is not None and review_status != f.review_status:
@@ -293,8 +320,7 @@ class Store:
             updates["superseded_by"] = superseded_by
         if not updates:
             return f
-        f2 = f.model_copy(update=updates)
-        ProtocolFact.model_validate(f2.model_dump())  # re-run invariants
+        f2 = ProtocolFact.model_validate({**f.model_dump(), **updates})
         for k, v in updates.items():
             self.conn.execute(
                 "INSERT INTO fact_events(fact_id, field, old_value, new_value, reason, run_id, at) VALUES (?,?,?,?,?,?,?)",

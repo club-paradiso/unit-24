@@ -9,6 +9,7 @@ from pydantic import Field, model_validator
 
 from radiocorpus.models.common import (
     AcquisitionStatus,
+    Currentness,
     LeadClass,
     SourceQuality,
     SourceType,
@@ -16,6 +17,7 @@ from radiocorpus.models.common import (
     TemporalStatus,
     utcnow,
 )
+from radiocorpus.models.evidence import CurrentnessEvidence, IdentityEvidence, IssuingAuthorityEvidence, ProtocolApplicabilityEvidence
 
 
 class DocumentLead(StrictModel):
@@ -33,7 +35,10 @@ class DocumentLead(StrictModel):
     retrieved_at: datetime
     lead_class: LeadClass = LeadClass.UNRELATED
     classification_basis: str | None = None
-    host_is_official: bool | None = None  # None == unknown
+    host_is_official: bool | None = None  # legacy government-host hint, NOT entity verification
+    host_is_government: bool | None = None
+    host_matches_target_entity: bool | None = None
+    identity_evidence: IdentityEvidence | None = None
     acquisition_status: AcquisitionStatus = AcquisitionStatus.PENDING
     acquisition_note: str | None = None
     source_id: str | None = None  # set once acquired
@@ -56,6 +61,15 @@ class Source(StrictModel):
     document_hash: str | None = None  # sha256:<hex> of the acquired bytes; None if never acquired
     local_path: str | None = None  # relative to repo root; None if not stored
     content_type: str | None = None
+    host_is_government: bool | None = None
+    host_matches_target_entity: bool | None = None
+    identity_evidence: IdentityEvidence | None = None
+    currentness: Currentness = Currentness.UNKNOWN
+    currentness_evidence: CurrentnessEvidence | None = None
+    evidence_lineage: list[str] = Field(default_factory=list)
+    issuing_authority_id: str | None = None
+    issuing_authority_evidence: IssuingAuthorityEvidence | None = None
+    applicability: list[ProtocolApplicabilityEvidence] = Field(default_factory=list)
     source_quality: SourceQuality = SourceQuality.UNVERIFIED
     temporal_status: TemporalStatus = TemporalStatus.UNCERTAIN
     superseded_by: str | None = None  # source_id

@@ -96,6 +96,65 @@
       "title": "ExtractionMethod",
       "type": "string"
     },
+    "FactReviewEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "decision": {
+          "enum": [
+            "accepted",
+            "rejected"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "document_hash": {
+          "title": "Document Hash",
+          "type": "string"
+        },
+        "fact_id": {
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "reviewed_on": {
+          "format": "date",
+          "title": "Reviewed On",
+          "type": "string"
+        },
+        "reviewer_id": {
+          "minLength": 1,
+          "title": "Reviewer Id",
+          "type": "string"
+        },
+        "reviewer_kind": {
+          "enum": [
+            "human",
+            "model"
+          ],
+          "title": "Reviewer Kind",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "value_fingerprint": {
+          "title": "Value Fingerprint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact_id",
+        "source_id",
+        "document_hash",
+        "value_fingerprint",
+        "reviewer_id",
+        "reviewer_kind",
+        "reviewed_on",
+        "decision"
+      ],
+      "title": "FactReviewEvidence",
+      "type": "object"
+    },
     "FactType": {
       "enum": [
         "code_meaning",
@@ -367,6 +426,18 @@
       "title": "Agency Id",
       "type": "string"
     },
+    "applicability_scope": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Applicability Scope"
+    },
     "confidence": {
       "maximum": 1.0,
       "minimum": 0.0,
@@ -431,6 +502,30 @@
       "default": null,
       "title": "Extraction Model"
     },
+    "extraction_rule": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extraction Rule"
+    },
+    "extraction_rule_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Extraction Rule Version"
+    },
     "fact_id": {
       "title": "Fact Id",
       "type": "string"
@@ -469,6 +564,17 @@
       ],
       "default": null,
       "title": "Raw Value"
+    },
+    "review_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FactReviewEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "review_status": {
       "$ref": "#/$defs/ReviewStatus",
@@ -517,6 +623,26 @@
     "temporal_status": {
       "$ref": "#/$defs/TemporalStatus",
       "default": "uncertain"
+    },
+    "text_extraction_method": {
+      "anyOf": [
+        {
+          "enum": [
+            "native_pdf_text",
+            "ocr",
+            "html",
+            "human",
+            "model",
+            "text"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Text Extraction Method"
     },
     "value": {
       "discriminator": {

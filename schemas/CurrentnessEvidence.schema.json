@@ -1,0 +1,112 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "basis": {
+      "enum": [
+        "active_policy_portal",
+        "current_policy_index",
+        "explicit_effective_policy",
+        "revision_metadata",
+        "archive",
+        "supersession"
+      ],
+      "title": "Basis",
+      "type": "string"
+    },
+    "checked_on": {
+      "format": "date",
+      "title": "Checked On",
+      "type": "string"
+    },
+    "effective_from": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective From"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective To"
+    },
+    "evidence_source_id": {
+      "minLength": 1,
+      "title": "Evidence Source Id",
+      "type": "string"
+    },
+    "excerpt": {
+      "maxLength": 400,
+      "minLength": 1,
+      "title": "Excerpt",
+      "type": "string"
+    },
+    "locator": {
+      "minLength": 1,
+      "title": "Locator",
+      "type": "string"
+    },
+    "recheck_by": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recheck By"
+    },
+    "target_source_id": {
+      "title": "Target Source Id",
+      "type": "string"
+    },
+    "verification_status": {
+      "default": "unverified",
+      "enum": [
+        "unverified",
+        "verified"
+      ],
+      "title": "Verification Status",
+      "type": "string"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified By"
+    }
+  },
+  "required": [
+    "evidence_source_id",
+    "locator",
+    "excerpt",
+    "target_source_id",
+    "basis",
+    "checked_on"
+  ],
+  "title": "CurrentnessEvidence",
+  "type": "object"
+}

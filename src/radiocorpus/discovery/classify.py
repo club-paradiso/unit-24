@@ -147,7 +147,7 @@ def judge_host(url: str, agency_name: str, state: str | None) -> HostJudgment:
             or first_label.startswith(acr + "online")
         ):
             name_hit.append(f"acronym:{acr}")
-    gov_like = host.endswith(".gov") or host.endswith(".us") or host.endswith(".mil")
+    gov_like = host.endswith(".gov") or host.endswith(".mil")
     if gov_like:
         return HostJudgment(host, True, f"government TLD host {host}" + (f"; name tokens {name_hit}" if name_hit else ""))
     for sg in _state_gov_hosts(state):
@@ -191,6 +191,8 @@ def classify_hit(url: str, title: str | None, snippet: str | None, agency_name: 
 def title_mentions_agency(title: str | None, agency_name: str) -> bool:
     if not title:
         return False
-    t = core_tokens(title)
-    a = core_tokens(agency_name)
-    return len(a) > 0 and len(t & a) / len(a) >= 0.6
+    # A search title is at most a name candidate. Never discard jurisdiction modifiers.
+    from radiocorpus.normalization.names import normalize_name
+
+    target = normalize_name(agency_name)
+    return any(normalize_name(part.strip()) == target for part in re.split(r"[|:]", title))

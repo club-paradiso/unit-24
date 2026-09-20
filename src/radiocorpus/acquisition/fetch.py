@@ -139,5 +139,10 @@ def _fetch_one(store: Store, lead: DocumentLead, client: httpx.Client, doc_dir: 
     base = ct.split(";")[0].strip().lower()
     if base not in ("application/pdf", "text/html", "application/xhtml+xml", "text/plain"):
         return AcquisitionStatus.UNSUPPORTED_CONTENT, f"content-type {base or 'unknown'}"
+    if "html" in base and any(marker in r.text.lower() for marker in (
+        "an issue occurred while submitting your request", "verify you are human", "checking your browser",
+        "<title>access denied", "<title>just a moment", "<title>403", "<title>502",
+    )):
+        return AcquisitionStatus.HTTP_ERROR, "HTTP 200 error/challenge document; not protocol evidence"
     register_document(store, lead, r.content, base, doc_dir=doc_dir)
     return AcquisitionStatus.FETCHED, "ok"

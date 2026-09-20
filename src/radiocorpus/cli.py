@@ -138,6 +138,14 @@ def check_invariants(db: Path | None = None) -> None:
     from radiocorpus.invariants import check_all
 
     res = check_all(_store(db))
+    from radiocorpus.config import PATHS
+    from radiocorpus.report_consistency import check_audit_metrics, check_report
+    from radiocorpus.snapshot_check import check_snapshot
+
+    res["normalized_snapshot"] = check_snapshot(PATHS.root / "data/normalized")
+    res["fixture_snapshot"] = check_snapshot(PATHS.root / "data/normalized/fixtures")
+    res["report_consistency"] = check_report(PATHS.root)
+    res["audit_metrics_consistency"] = check_audit_metrics(PATHS.root)
     bad = {k: v for k, v in res.items() if v}
     for k, v in res.items():
         rprint(f"[{'red' if v else 'green'}]{k}: {len(v)} violation(s)")

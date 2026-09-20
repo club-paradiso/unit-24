@@ -1,17 +1,8 @@
-"""Stage 11: confidence/verification assignment and training eligibility.
+"""Reviewed, current, entity-matched official evidence is required for playback.
 
-Fact-level:
-  VERIFIED   := passed validation AND source OFFICIAL_CURRENT AND (deterministic extraction or human accepted)
-                AND not part of an unresolved conflict AND not the losing side of a resolved conflict.
-  CORROBORATED := not VERIFIED, but the same normalized value appears in >=2 independent sources.
-Eligibility (fact):
-  PLAYABLE_VERIFIED           VERIFIED + temporal CURRENT
-  PLAYABLE_WITH_LIMITATIONS   source OFFICIAL_PARTIAL (undated/old) or CORROBORATED, no unresolved conflict
-  HISTORICAL_ONLY             temporal HISTORICAL or source OFFICIAL_HISTORICAL
-  CONFLICT_REQUIRES_REVIEW    participates in an unresolved conflict
-  RESEARCH_ONLY               UNVERIFIED (non-official only, or model-extracted without human acceptance)
-  INSUFFICIENT_EVIDENCE       REJECTED, or no evidence
-Eligibility (agency): best state among its facts; INSUFFICIENT_EVIDENCE if none.
+No parser is eligible for automatic verification. Corroboration requires distinct
+URL, hash, issuer and known disjoint lineage, and remains research-only. Expired,
+superseded, unresolved and unreviewed facts cannot become learner expectations.
 """
 
 from __future__ import annotations
@@ -21,17 +12,26 @@ from collections import Counter, defaultdict
 from radiocorpus.models import EligibilityDecision, ProtocolFact, Source, StageRun
 from radiocorpus.models.common import (
     ConflictResolution,
+    Currentness,
     EligibilityState,
-    ExtractionMethod,
     ReviewStatus,
     SourceQuality,
     TemporalStatus,
     VerificationStatus,
 )
 from radiocorpus.pipeline.runner import finish_run, start_run
+from radiocorpus.provenance.evidence import (
+    acquired_bytes_match,
+    applicability_matches,
+    currentness,
+    identity_matches,
+    independently_corroborated,
+    pointer_exists,
+    reviewed_fact_matches,
+)
 from radiocorpus.store import Store
 
-POLICY_VERSION = "2026-09-20.1"
+POLICY_VERSION = "2026-09-20.2"
 _RANK = [
     EligibilityState.PLAYABLE_VERIFIED,
     EligibilityState.PLAYABLE_WITH_LIMITATIONS,
@@ -45,7 +45,6 @@ _RANK = [
 def decide_fact(
     f: ProtocolFact, src: Source, unresolved_conflicts: list[str], losing: tuple[str, str] | None, corroborated: bool
 ) -> tuple[VerificationStatus, EligibilityDecision]:
-    reasons: list[str] = []
     if f.verification_status == VerificationStatus.REJECTED or f.review_status == ReviewStatus.HUMAN_REJECTED:
         return f.verification_status, _dec(
             f, EligibilityState.INSUFFICIENT_EVIDENCE, ["fact rejected by validation or human review"], src, unresolved_conflicts
@@ -54,31 +53,38 @@ def decide_fact(
         return VerificationStatus.UNVERIFIED, _dec(
             f, EligibilityState.CONFLICT_REQUIRES_REVIEW, [f"unresolved conflict(s): {', '.join(unresolved_conflicts)}"], src, unresolved_conflicts
         )
-    human_ok = f.review_status == ReviewStatus.HUMAN_ACCEPTED
-    method_ok = f.extraction_method in {ExtractionMethod.DETERMINISTIC_PARSER, ExtractionMethod.HUMAN} or human_ok
-    if not method_ok:
-        reasons.append("model-extracted candidate without human acceptance")
-        return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.RESEARCH_ONLY, reasons, src, [])
-    if losing and not (src.is_official and losing[1] == ConflictResolution.RESOLVED_TEMPORAL):
-        # contradicted by the preferred source (quality or jurisdiction resolution): not historical, just not usable
-        reasons.append(f"contradicted by preferred source in conflict {losing[0]} ({losing[1]})")
-        return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.RESEARCH_ONLY, reasons, src, [losing[0]])
-    if losing or f.temporal_status == TemporalStatus.HISTORICAL or src.source_quality == SourceQuality.OFFICIAL_HISTORICAL:
-        reasons.append("superseded by a newer dated official source" if losing else "historical evidence")
-        return VerificationStatus.VERIFIED if src.is_official else VerificationStatus.UNVERIFIED, _dec(
-            f, EligibilityState.HISTORICAL_ONLY, reasons, src, [losing[0]] if losing else []
+    from datetime import date
+
+    if f.source_id != src.source_id or f.superseded_by or (f.effective_to and f.effective_to < date.today()):
+        return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.RESEARCH_ONLY, ["source mismatch or expired/superseded fact"], src, [])
+    if f.effective_from and f.effective_from > date.today():
+        return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.RESEARCH_ONLY, ["fact is not yet effective"], src, [])
+    # No parser has yet earned an auto-verification allowlist entry on real data.
+    # ExtractionMethod.HUMAN alone also does not establish a completed review.
+    if f.review_status != ReviewStatus.HUMAN_ACCEPTED or not reviewed_fact_matches(f, src):
+        return VerificationStatus.UNVERIFIED, _dec(
+            f, EligibilityState.RESEARCH_ONLY, ["parser output requires independent acceptance; no validated auto-verification rule"], src, []
         )
-    if src.source_quality == SourceQuality.OFFICIAL_CURRENT:
-        reasons.append(f"official current source {src.source_id} ({src.canonical_url})")
-        return VerificationStatus.VERIFIED, _dec(f, EligibilityState.PLAYABLE_VERIFIED, reasons, src, [])
-    if src.source_quality == SourceQuality.OFFICIAL_PARTIAL:
-        reasons.append("official source without a usable effective date (or older than the currency window)")
-        return VerificationStatus.VERIFIED, _dec(f, EligibilityState.PLAYABLE_WITH_LIMITATIONS, reasons, src, [])
-    if corroborated:
-        reasons.append("value corroborated by >=2 independent sources, none official-current")
-        return VerificationStatus.CORROBORATED, _dec(f, EligibilityState.PLAYABLE_WITH_LIMITATIONS, reasons, src, [])
-    reasons.append(f"source quality {src.source_quality}; not usable for training")
-    return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.RESEARCH_ONLY, reasons, src, [])
+    if losing:
+        return VerificationStatus.UNVERIFIED, _dec(
+            f, EligibilityState.RESEARCH_ONLY, ["conflicting value is not the preferred evidence"], src, [losing[0]]
+        )
+    status = currentness(src)
+    if status in {Currentness.HISTORICAL, Currentness.SUPERSEDED} or f.temporal_status == TemporalStatus.HISTORICAL:
+        return VerificationStatus.UNVERIFIED, _dec(f, EligibilityState.HISTORICAL_ONLY, ["historical evidence retained"], src, [])
+    if (
+        f.temporal_status == TemporalStatus.CURRENT
+        and src.source_quality == SourceQuality.OFFICIAL_CURRENT
+        and status == Currentness.CONFIRMED
+        and identity_matches(src, src.agency_or_jurisdiction)
+        and f.excerpt
+    ):
+        return VerificationStatus.VERIFIED, _dec(
+            f, EligibilityState.PLAYABLE_VERIFIED, ["reviewed fact with explicit identity and currentness evidence"], src, []
+        )
+    return VerificationStatus.CORROBORATED if corroborated else VerificationStatus.UNVERIFIED, _dec(
+        f, EligibilityState.RESEARCH_ONLY, ["current authoritative evidence not established; repetition cannot grant eligibility"], src, []
+    )
 
 
 def _dec(f: ProtocolFact, state: EligibilityState, reasons: list[str], src: Source, conflicts: list[str]) -> EligibilityDecision:
@@ -94,6 +100,9 @@ def _dec(f: ProtocolFact, state: EligibilityState, reasons: list[str], src: Sour
 
 
 def assign_all(store: Store) -> StageRun:
+    from radiocorpus.conflicts.detect import detect_conflicts
+
+    detect_conflicts(store)  # newly appended facts cannot bypass a stale conflict table
     facts = store.facts()
     run = start_run(store, "eligibility", str(len(facts)))
     stats: Counter[str] = Counter()
@@ -110,7 +119,7 @@ def assign_all(store: Store) -> StageRun:
                 f = store.get_fact(fid)
                 if f and pref and f.value_fingerprint() != pref.value_fingerprint():
                     losing[fid] = (c.conflict_id, str(c.resolution))
-    # corroboration: same (agency, type, key, value) from >=2 distinct sources
+    # Group equal candidates, then require documented independence below.
     by_val: dict[tuple[str, str, str, str], set[str]] = defaultdict(set)
     for f in facts:
         by_val[(f.agency_id, f.fact_type, f.key, f.value_fingerprint())].add(f.source_id)
@@ -120,8 +129,23 @@ def assign_all(store: Store) -> StageRun:
             src = store.get_source(f.source_id)
             if src is None:
                 continue
-            corroborated = len(by_val[(f.agency_id, f.fact_type, f.key, f.value_fingerprint())]) >= 2
+            peers = [store.get_source(sid) for sid in by_val[(f.agency_id, f.fact_type, f.key, f.value_fingerprint())]]
+            corroborated = independently_corroborated([s for s in peers if s])
             vs, dec = decide_fact(f, src, unresolved_by_fact.get(f.fact_id, []), losing.get(f.fact_id), corroborated)
+            from datetime import date
+
+            from radiocorpus.provenance.classify import classify_source
+
+            owner = store.get_agency(src.agency_or_jurisdiction or "")
+            if dec.state in {EligibilityState.PLAYABLE_VERIFIED, EligibilityState.PLAYABLE_WITH_LIMITATIONS} and (
+                not owner
+                or classify_source(src, owner.canonical_name, owner.state, date.today())[0] != SourceQuality.OFFICIAL_CURRENT
+                or not acquired_bytes_match(store, src)
+                or not applicability_matches(store, f, src)
+                or not (pointer_exists(store, src.identity_evidence) and pointer_exists(store, src.currentness_evidence))
+            ):
+                vs = VerificationStatus.UNVERIFIED
+                dec = _dec(f, EligibilityState.RESEARCH_ONLY, ["missing scoped applicability or evidence source"], src, [])
             if vs != f.verification_status:
                 store.record_fact_status(
                     f.fact_id,

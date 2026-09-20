@@ -14,7 +14,8 @@ from collections import Counter
 from pathlib import Path
 
 from radiocorpus import ids
-from radiocorpus.discovery.classify import classify_hit, title_mentions_agency
+from radiocorpus.discovery.classify import classify_hit
+from radiocorpus.discovery.identity import verified_website
 from radiocorpus.discovery.providers import RecordedSearchProvider, SearchNotPerformed
 from radiocorpus.models import Agency, DocumentLead, StageRun
 from radiocorpus.models.common import AcquisitionStatus, LeadClass, ResearchStatus, utcnow
@@ -33,7 +34,7 @@ def _canary_agencies(store: Store, registry: str) -> dict[str, Agency]:
 
 def discover_from_recorded(store: Store, leads_path: Path, *, registry: str = "CURATED_CANARY", force: bool = False) -> StageRun:
     prov = RecordedSearchProvider(leads_path)
-    fp = file_fingerprint(leads_path)
+    fp = "identity-v2:" + file_fingerprint(leads_path)
     run = start_run(store, "discovery", fp)
     agencies = _canary_agencies(store, registry)
     stats: Counter[str] = Counter()
@@ -77,13 +78,12 @@ def discover_from_recorded(store: Store, leads_path: Path, *, registry: str = "C
                     lead_class=lc,
                     classification_basis=f"{basis}; host: {hj.basis}",
                     host_is_official=hj.is_official,
+                    host_is_government=hj.is_official,
+                    host_matches_target_entity=None,
                     acquisition_status=AcquisitionStatus.PENDING if lc != LeadClass.UNRELATED else AcquisitionStatus.SKIPPED_NOT_CANDIDATE,
                 )
                 store.upsert_lead(lead)
                 stats["leads"] += 1
-                if website is None and hj.is_official and h.search_index == "A" and title_mentions_agency(h.title, a.canonical_name):
-                    website = h.url
-                    website_basis = f"search A rank {h.rank}: title {h.title!r} on {hj.host}"
             searched = bool(hits)
             if searched:
                 if website:
@@ -106,9 +106,11 @@ def discover_from_recorded(store: Store, leads_path: Path, *, registry: str = "C
                 notes = (notes + "; " if notes else "") + f"website basis: {website_basis}"
             a2 = a.model_copy(
                 update={
-                    "official_website": website or a.official_website,
+                    "official_website": a.official_website
+                    if a.identity_evidence and verified_website(a, a.official_website or "", a.identity_evidence)
+                    else None,
                     "research_status": status,
-                    "last_verified": utcnow() if searched else a.last_verified,
+                    "last_verified": a.last_verified,
                     "notes": notes or None,
                 }
             )

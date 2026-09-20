@@ -8,3 +8,6 @@ data/intermediate/*.sqlite*
 data/raw/documents/
 !data/raw/documents/.gitkeep
 dist/
+
+data/raw/audit-text/
+*.transfer

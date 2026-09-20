@@ -1,0 +1,79 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "basis": {
+      "enum": [
+        "official_directory",
+        "agency_page",
+        "government_link"
+      ],
+      "title": "Basis",
+      "type": "string"
+    },
+    "canonical_name": {
+      "title": "Canonical Name",
+      "type": "string"
+    },
+    "evidence_source_id": {
+      "minLength": 1,
+      "title": "Evidence Source Id",
+      "type": "string"
+    },
+    "excerpt": {
+      "maxLength": 400,
+      "minLength": 1,
+      "title": "Excerpt",
+      "type": "string"
+    },
+    "host": {
+      "title": "Host",
+      "type": "string"
+    },
+    "locator": {
+      "minLength": 1,
+      "title": "Locator",
+      "type": "string"
+    },
+    "state": {
+      "title": "State",
+      "type": "string"
+    },
+    "target_agency_id": {
+      "title": "Target Agency Id",
+      "type": "string"
+    },
+    "verification_status": {
+      "default": "unverified",
+      "enum": [
+        "unverified",
+        "verified"
+      ],
+      "title": "Verification Status",
+      "type": "string"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified By"
+    }
+  },
+  "required": [
+    "evidence_source_id",
+    "locator",
+    "excerpt",
+    "target_agency_id",
+    "canonical_name",
+    "state",
+    "host",
+    "basis"
+  ],
+  "title": "IdentityEvidence",
+  "type": "object"
+}

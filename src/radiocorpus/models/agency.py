@@ -18,6 +18,7 @@ from radiocorpus.models.common import (
     StrictModel,
     utcnow,
 )
+from radiocorpus.models.evidence import IdentityEvidence
 
 
 class RegistryRecord(StrictModel):
@@ -46,6 +47,7 @@ class Agency(StrictModel):
     jurisdiction_description: str | None = None
     parent_agency: str | None = None  # agency_id of parent, when documented
     dispatch_provider: str | None = None  # free text or agency_id; UNKNOWN when None
+    identity_evidence: IdentityEvidence | None = None
     official_website: str | None = None  # None == UNKNOWN; set only from evidence
     official_contact_page: str | None = None
     source_registry_ids: dict[str, list[str]] = Field(default_factory=dict)  # registry -> [external ids]

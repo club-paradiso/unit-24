@@ -52,17 +52,29 @@ def extract_all(store: Store, *, extractor: Extractor | None = None, force: bool
     fp = f"{len(docs)}:{extractor.name}"
     run = start_run(store, "extraction", fp)
     stats: Counter[str] = Counter()
-    for doc in docs:
-        src = store.get_source(doc.source_id)
+    # Blobs are deduplicated by hash; source attribution and extraction are not.
+    for src in store.sources():
+        doc = store.get_document(src.document_hash or "")
+        if doc is None:
+            continue
         if src is None:
             stats["orphan_document"] += 1
             continue
-        item_fp = f"{doc.document_hash}:{extractor.name}"
-        if not force and store.progress_done("extraction", doc.document_hash, item_fp):
+        item_fp = f"parser-v2:{doc.document_hash}:{extractor.name}"
+        if not force and store.progress_done("extraction", src.source_id, item_fp):
             stats["skipped_resumed"] += 1
             continue
-        data = _resolve_path(doc.local_path).read_bytes()
-        blocks = blocks_for(data, doc.content_type)
+        try:
+            data = _resolve_path(doc.local_path).read_bytes()
+            if ids.document_hash(data) != doc.document_hash:
+                raise ValueError("document bytes no longer match provenance hash")
+            blocks = blocks_for(data, doc.content_type)
+        except Exception as error:
+            stats["parser_failures"] += 1
+            store.mark_progress("extraction", src.source_id, item_fp, "failed", run.run_id, str(error)[:200])
+            continue
+        if any(not b.text.strip() for b in blocks) and "pdf" in (doc.content_type or ""):
+            stats["documents_requiring_ocr_review"] += 1
         text = full_text(blocks)
         # Effective date discovered in the text is recorded on the source only when the source has none.
         if src.effective_date is None:
@@ -76,7 +88,7 @@ def extract_all(store: Store, *, extractor: Extractor | None = None, force: bool
         agency_id = src.agency_or_jurisdiction or ""
         if not agency_id or agency is None:
             stats["source_without_agency"] += 1
-            store.mark_progress("extraction", doc.document_hash, item_fp, "skipped", run.run_id, "no agency")
+            store.mark_progress("extraction", src.source_id, item_fp, "skipped", run.run_id, "no agency")
             continue
         eff_from, eff_to, tstatus = _eff_dates(src)
         n = 0
@@ -146,7 +158,7 @@ def extract_all(store: Store, *, extractor: Extractor | None = None, force: bool
                 f2 = _model_fact(agency_id, mc, src, eff_from, eff_to, tstatus, run.run_id)
                 if f2:
                     n += store.insert_fact(f2)
-            store.mark_progress("extraction", doc.document_hash, item_fp, "done", run.run_id, f"{n} facts")
+            store.mark_progress("extraction", src.source_id, item_fp, "done", run.run_id, f"{n} facts")
         stats["documents"] += 1
         stats["facts_inserted"] += n
     return finish_run(store, run, dict(stats))
@@ -169,6 +181,9 @@ def _fact(agency_id, ftype, key, value, raw, src, locator, excerpt, eff_from, ef
         confidence=conf,
         verification_status=VerificationStatus.UNVERIFIED,
         extraction_method=ExtractionMethod.DETERMINISTIC_PARSER,
+        extraction_rule=f"{ftype}:candidate",
+        extraction_rule_version="2",
+        text_extraction_method="native_pdf_text" if "pdf" in (src.content_type or "") else ("html" if "html" in (src.content_type or "") else "text"),
         review_status=ReviewStatus.UNREVIEWED,
         run_id=run_id,
     )
