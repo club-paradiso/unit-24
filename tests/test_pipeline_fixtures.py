@@ -94,7 +94,12 @@ def test_newer_extraction_never_overwrites_existing_fact(fixture_store):
 def test_stats_exclude_fixtures_by_default(fixture_store):
     assert corpus_stats(fixture_store)["total_agencies"] == 0
     st = corpus_stats(fixture_store, include_fixtures=True)
-    assert st["total_agencies"] == 5 and st["conflict_count"] == 6 and st["unresolved_conflict_count"] == 6
+    # Parser v3 emits fewer spurious candidates, so fewer spurious conflicts arise. The
+    # conflicts that carry the safety properties must all still be present and unresolved.
+    assert st["total_agencies"] == 5
+    assert st["conflict_count"] == 5 and st["unresolved_conflict_count"] == 5
+    keys = {c.key for c in fixture_store.conflicts()}
+    assert {"10-7", "SIGNAL 7", "10-50"} <= keys, "agency-vs-dispatch, same-date and current-vs-obsolete conflicts must survive"
     assert st["verified_fact_count"] == 0 and st["training_eligible_agency_count"] == 0
 
 
