@@ -8,11 +8,33 @@ element is *absent* where the sentence does not clearly state it.
 
 from __future__ import annotations
 
+import collections
+import hashlib
+import json
+from pathlib import Path
+
+from radiocorpus.evaluation.gold import audit_lines
 from radiocorpus.evaluation.stress import plan, render
 from radiocorpus.evaluation.stress import run as stress_run
 from radiocorpus.extraction.decomposition import decompose
 from radiocorpus.extraction.procedures import parse_procedures
 from radiocorpus.layout.backends import layout_for
+
+ROOT = Path(__file__).resolve().parents[1]
+REVIEW_PATH = ROOT / "data" / "evaluation" / "decomposition_refusal_review.json"
+
+
+def _real_rule_sentences() -> list[str]:
+    """The verbatim rule sentences the coverage probe measures, read the same way it reads them."""
+    seen: list[str] = []
+    for line in audit_lines(ROOT / "data" / "audit" / "real_facts.jsonl"):
+        fact = json.loads(line)
+        if fact["fact_type"] != "procedure_rule":
+            continue
+        text = (fact["value"].get("rule_text") or fact.get("excerpt") or "").strip()
+        if text and text not in seen:
+            seen.append(text)
+    return seen
 
 
 def _parts(sentence: str) -> tuple[str | None, str | None, str | None]:
@@ -210,3 +232,45 @@ def test_a_section_number_is_not_part_of_the_actor():
     assert d.actor is not None
     assert not d.actor.text.startswith("2.1")
     assert "dropped_leading_enumerator" in d.evidence
+
+
+# ---------------------------------------------------------------- the coverage evidence itself
+#
+# A coverage figure whose cases are not in the repository cannot be checked and cannot be
+# compared against after a repair. These guard the artifact rather than the parser.
+
+
+def _reviews() -> dict:
+    return json.loads(REVIEW_PATH.read_text())
+
+
+def test_every_real_rule_sentence_carries_a_review():
+    """A sentence the coverage figure counts but nobody looked at is an unexamined case."""
+    reviewed = set(_reviews()["reviews"])
+    for sentence in _real_rule_sentences():
+        digest = hashlib.sha256(sentence.encode()).hexdigest()
+        assert digest in reviewed, f"unreviewed sentence: {sentence[:80]!r}"
+
+
+def test_a_review_addresses_the_sentence_it_is_keyed_to():
+    """Keying by hash is what makes a review fall away instead of silently outliving its sentence."""
+    for digest, entry in _reviews()["reviews"].items():
+        assert hashlib.sha256(entry["sentence"].encode()).hexdigest() == digest
+
+
+def test_the_review_is_not_ground_truth_and_says_so():
+    """It is one automated reading. Counting it toward the readiness gate would be a lie."""
+    payload = _reviews()
+    assert payload["reviewer_is_human"] is False
+    vocabulary = set(payload["classifications"])
+    for entry in payload["reviews"].values():
+        assert entry["classification"] in vocabulary
+
+
+def test_the_review_records_defects_that_are_not_fixed():
+    """The point of the artifact: known-open defects stay visible instead of dissolving into a rate."""
+    classifications = collections.Counter(e["classification"] for e in _reviews()["reviews"].values())
+    assert classifications["defect"] > 0
+    # A refusal on a sentence that does state a directed act, and a located span that states
+    # something the sentence does not, are different failures and are counted apart.
+    assert "wrong" in _reviews()["classifications"]
