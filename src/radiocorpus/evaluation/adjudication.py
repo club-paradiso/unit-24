@@ -278,6 +278,7 @@ def worksheet_from_candidates(rows: list[dict], *, hashes: dict[str, str] | None
             value = {"letter": row.get("letter"), "word": row.get("word")}
             cid = f"{row.get('letter')}"
         else:
+            parts = row.get("decomposition") or {}
             value = {
                 "procedure": row.get("procedure"),
                 "medium": row.get("medium"),
@@ -286,6 +287,12 @@ def worksheet_from_candidates(rows: list[dict], *, hashes: dict[str, str] | None
                 "has_condition": row.get("has_condition"),
                 "has_exception": row.get("has_exception"),
                 "parser_context_complete": row.get("context_complete"),
+                # Present and null when the sentence states no actor: the candidate makes no
+                # such claim, and the worksheet must be able to tell that apart from nobody
+                # having looked.
+                "actor": (parts.get("actor") or {}).get("text"),
+                "communication_action": (parts.get("communication_action") or {}).get("text"),
+                "governed_object": (parts.get("governed_object") or {}).get("text"),
             }
             cid = f"{row.get('procedure')}"
         doc = row.get("document", "")

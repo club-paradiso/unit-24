@@ -1,7 +1,7 @@
 # Extraction metrics and parser readiness
 
 **Parser versions:** layout-2 (`layout_code_fingerprint` pins the source), code parser v4,
-phonetic parser v5, procedure parser v3. **Baseline:** commit `7d8e838`, parser v2.
+phonetic parser v5, procedure parser v4. **Baseline:** commit `7d8e838`, parser v2.
 
 The code and phonetic parsers moved to v4 when the randomized corpus exposed three defects in
 v3; the phonetic parser moved again to v5 when a real third-party PDF exposed a fourth. Facts
@@ -19,13 +19,13 @@ own quality gate could not be obtained:
 1. **No real document was parsed.** All four validation documents were refused by the
    organisation egress policy (HTTP 403 at CONNECT). Nothing was substituted. Precision on
    real documents is therefore unmeasured, and the ≥95% / ≥90% targets cannot be adjudicated.
-2. **Complete-fact precision is 0.000 on every family, for parser v2, and unmeasurable for the
+2. **Complete-fact precision is 0.000 on every family, for parser v2, and unmeasured for the
    current parsers.** The filled adjudication worksheet establishes why, and it is not a
    scoring artefact: the issuing authority is absent from all 116 candidates, the reviewer
-   judged 0 of 116 learner-safe, and a procedure candidate never carried an actor, a
-   communication action or a governed object. No parser version in the tree — including the
-   current one — decomposes a procedure, so a procedure cannot become a complete fact today
-   however well the layout works.
+   judged 0 of 116 learner-safe, and a v2 procedure candidate never carried an actor, a
+   communication action or a governed object. The parser now decomposes procedures (ADR 0009),
+   so the gate is reachable — but it has been exercised only on generated sentences, and no
+   real document has been through it.
 3. **No OCR validation against a real scan.** The fail-closed gate is exercised against a
    synthetic image-only page — it refuses, emits nothing, and refuses again when a supplied
    OCR backend returns blank — and against a real PDF with no extractable text, which now
@@ -204,11 +204,25 @@ The audit's "0/27 procedures with correct applicability scope" was never a scori
 topic label and nothing else (`applicability_scope: null`). It could not be a complete fact
 because it never made most of the claims a fact requires.
 
-And the current parser still does not close it. `ProcedureCandidate` today carries medium,
-section heading, condition and exception *flags* and a context-completeness judgement, but
-**no parser version in the tree decomposes a procedure into actor, communication action and
-governed object.** Under the complete-fact definition a procedure cannot pass with any parser
-this repository currently has. That is the concrete target for the next sprint.
+That gap is now closed in the parser. `ProcedureCandidate` v4 carries a **decomposition**:
+who must act, which communicative act, and what that act governs, each a span of the rule
+sentence with its offsets and the rule that located it (ADR 0009). A current-parser procedure
+candidate makes **13 claims a reviewer can judge** where v2 made 7 and left 6 unanswerable —
+only `issuing_authority_correct` is still decided by absence, and that is a gap in the source
+ledger rather than in the parser.
+
+Measured against the plan each sentence in the randomized corpus was written from — the only
+ground truth available while the real documents are unreachable — **precision 1.000 and recall
+1.000 over 61 rules, 0 elements differing from their plan, all 61 fully decomposed**. Building
+it also exposed a layout defect it had not caused: a revision stamp with no full stop was being
+merged into the sentence below it, so a rule's subject came out as
+`Revision Date: 10-11-19 … Units`. That is fixed at the layout layer, with a date guard in the
+decomposition as well.
+
+The worksheet above still shows those claims MISSING because it is seeded from the **v2**
+candidates the four documents produced. The decomposition changes what a reviewer will be
+asked about the *next* time those documents are parsed; it cannot retroactively change what v2
+claimed.
 
 A mechanical verdict is never mistaken for a review: every record names the claims that were
 decided by absence, and the summary separates them.

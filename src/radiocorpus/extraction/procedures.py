@@ -15,6 +15,12 @@ A candidate now has to survive four questions:
 The surrounding section heading and the neighbouring sentences are carried with the
 candidate, because several audited rules were unusable purely because their condition or
 exception sat in the next clause.
+
+A surviving candidate is then decomposed into the parts that make it a fact — who must act,
+which communicative act, and what that act governs — by :mod:`radiocorpus.extraction.
+decomposition`. The decomposition is additive: it changes no gate and no candidate is emitted
+or withheld because of it. What it changes is what a reviewer can adjudicate, which is the
+whole reason 27 audited procedures could be marked "scope wrong" with nothing to act on.
 """
 
 from __future__ import annotations
@@ -27,11 +33,12 @@ from radiocorpus.extraction.context import (
     analyse_communication,
     governed_by_comm_verb,
 )
+from radiocorpus.extraction.decomposition import Decomposition, decompose
 from radiocorpus.extraction.text import TextBlock, squash
 from radiocorpus.layout.model import BlockType, DocumentLayout, LayoutBlock
 
 PARSER_RULE = "procedure_rule:contextual"
-PARSER_VERSION = "3"
+PARSER_VERSION = "4"
 
 MIN_RULE_CHARS = 25
 MAX_RULE_CHARS = 400
@@ -113,6 +120,11 @@ class ProcedureCandidate:
     has_exception: bool = False
     context_complete: bool = True
     crosses_page: bool = False
+    #: Who must act, what communicative act, and what it governs — each a span of ``rule_text``
+    #: or absent. A rule is not a fact until all three are stated, and the previous versions
+    #: carried none of them, which is why every audited procedure failed the complete-fact test
+    #: without anyone being able to say which part was missing.
+    decomposition: Decomposition | None = None
     parser_rule: str = PARSER_RULE
     parser_version: str = PARSER_VERSION
     page_number: int | None = None
@@ -223,6 +235,8 @@ def parse_procedures(layout: DocumentLayout) -> list[ProcedureCandidate]:
                 evidence.append("antecedent_outside_sentence")
             if open_ended:
                 evidence.append("clause_continues_in_next_list_item")
+            parts = decompose(s)
+            evidence.append(f"decomposition:{'complete' if parts.complete else 'incomplete'}")
             out.append(
                 ProcedureCandidate(
                     procedure=proc,
@@ -240,6 +254,7 @@ def parse_procedures(layout: DocumentLayout) -> list[ProcedureCandidate]:
                     has_exception=has_exc,
                     context_complete=complete,
                     crosses_page=unit.crosses_page,
+                    decomposition=parts,
                     page_number=unit.block.page_number,
                 )
             )
@@ -267,4 +282,11 @@ def parse_procedure_blocks(blocks: list[TextBlock]) -> list[ProcedureCandidate]:
     return parse_procedures(_layout_from_text_blocks(blocks))
 
 
-__all__ = ["TRIGGERS", "ProcedureCandidate", "parse_procedure_blocks", "parse_procedures", "split_sentences"]
+__all__ = [
+    "TRIGGERS",
+    "Decomposition",
+    "ProcedureCandidate",
+    "parse_procedure_blocks",
+    "parse_procedures",
+    "split_sentences",
+]

@@ -12,7 +12,7 @@
     "code_parser_version": "4",
     "layout_version": "layout-2",
     "phonetic_parser_version": "5",
-    "procedure_parser_version": "3"
+    "procedure_parser_version": "4"
   },
   "per_fixture": {
     "lx01_multicolumn_code_table.pdf": {

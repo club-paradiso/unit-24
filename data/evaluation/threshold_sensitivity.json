@@ -5,10 +5,10 @@
   "note": "A setting is unusable if it invents a column on any document, however high its exact-match rate: a merged column loses facts, an invented one corrupts them. Synthetic geometry only. Recall is meaningful here solely because this corpus was generated from a plan that is its own ground truth. It is not evidence about any real document: the four real validation documents remain unretrieved.",
   "parser_versions": {
     "code_parser_version": "4",
-    "layout_code_fingerprint": "1e1dad4bdcd24682",
+    "layout_code_fingerprint": "c2182ffac80dc387",
     "layout_version": "layout-2",
     "phonetic_parser_version": "5",
-    "procedure_parser_version": "3"
+    "procedure_parser_version": "4"
   },
   "settings": {
     "gutter=12pt,tolerance=0,rows=2": {

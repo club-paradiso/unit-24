@@ -7,13 +7,13 @@
     "current_parser_versions": {
       "code_meaning": "4",
       "phonetic_letter": "5",
-      "procedure_rule": "3"
+      "procedure_rule": "4"
     },
     "measures_current_parsers": false,
     "seeded_from": [
       "data/audit/fact_audit.jsonl"
     ],
-    "warning": "These candidates were emitted by parser version(s) ['2']; the tree now runs ['3', '4', '5']. Every figure below is a measurement of the older parser on real documents, not of the current one."
+    "warning": "These candidates were emitted by parser version(s) ['2']; the tree now runs ['4', '5']. Every figure below is a measurement of the older parser on real documents, not of the current one."
   },
   "candidates": 116,
   "claims_decided_by": {

@@ -46,11 +46,25 @@ _LETTER_WORDS = ("ANCHOR", "BRIDGE", "CANYON", "DELTA", "EMBER", "FALCON", "GRAN
                  "UMBER", "VESSEL", "WILLOW", "XENON", "YARROW", "ZEPHYR")
 _ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-_RADIO_SENTENCES = (
-    "Members will advise the dispatcher of their {subject} over the radio before leaving the assignment.",
-    "The dispatcher will repeat the assignment on the radio when a member requests it.",
-    "Units will acknowledge the radio transmission by unit number and state their {subject}.",
-    "Members shall transmit the {subject} on the assigned radio channel {qualifier}.",
+#: Radio rules written as parts, so the corpus knows who must do what to what before any
+#: parser runs. A decomposition scored against a sentence the scorer itself read back would
+#: measure nothing; scored against the plan that produced the sentence, it measures the parser.
+_RADIO_RULES = (
+    {"actor": "Members", "modal": "will", "action": "advise",
+     "recipient": "the dispatcher", "marker": "of", "object": "their {subject} report",
+     "tail": "over the radio before leaving the assignment"},
+    {"actor": "The dispatcher", "modal": "will", "action": "repeat",
+     "recipient": None, "marker": None, "object": "the assignment",
+     "tail": "on the radio when a member requests it"},
+    {"actor": "Units", "modal": "shall", "action": "acknowledge",
+     "recipient": None, "marker": None, "object": "the radio transmission",
+     "tail": "by unit number"},
+    {"actor": "Assigned units", "modal": "shall", "action": "transmit",
+     "recipient": None, "marker": None, "object": "the {subject} description",
+     "tail": "on the assigned radio channel"},
+    {"actor": "Members", "modal": "must", "action": "notify",
+     "recipient": "the communications center", "marker": "of", "object": "any emergency traffic",
+     "tail": "on the primary radio channel"},
 )
 # Paperwork, property and records wording: superficially similar verbs, no radio act at all.
 _NON_RADIO_SENTENCES = (
@@ -86,6 +100,8 @@ class StressPlan:
     codes: tuple[tuple[str, str], ...] = ()
     letters: tuple[tuple[str, str], ...] = ()
     radio_sentences: tuple[str, ...] = ()
+    #: One ``{actor, action, object}`` per radio sentence, decided before rendering.
+    radio_parts: tuple[tuple[tuple[str, str], ...], ...] = ()
     non_radio_sentences: tuple[str, ...] = ()
     forbidden_codes: tuple[str, ...] = ()
     forbidden_letters: tuple[str, ...] = ()
@@ -156,7 +172,13 @@ def plan(seed: int) -> StressPlan:
         letters = tuple(zip(_ALPHABET, _LETTER_WORDS, strict=True))
         forbidden_letters = ()
 
-    radio = tuple(rng.sample(_RADIO_SENTENCES, k=rng.randint(1, 3))) if kind == "narrative" else ()
+    radio: tuple[str, ...] = ()
+    radio_parts: tuple[tuple[tuple[str, str], ...], ...] = ()
+    if kind == "narrative":
+        chosen = rng.sample(_RADIO_RULES, k=rng.randint(1, 3))
+        rendered = [render_rule(rule, rng.choice(_SUBJECTS)) for rule in chosen]
+        radio = tuple(text for text, _ in rendered)
+        radio_parts = tuple(tuple(sorted(parts.items())) for _, parts in rendered)
     non_radio = tuple(rng.sample(_NON_RADIO_SENTENCES, k=rng.randint(1, 3))) if kind == "narrative" else ()
 
     return StressPlan(
@@ -174,6 +196,7 @@ def plan(seed: int) -> StressPlan:
         codes=codes,
         letters=letters,
         radio_sentences=radio,
+        radio_parts=radio_parts,
         non_radio_sentences=non_radio,
         forbidden_codes=_decoy_dates(rng, rng.randint(2, 4)),
         forbidden_letters=forbidden_letters,
@@ -190,6 +213,14 @@ def _column_x(p: StressPlan, index: int) -> float:
 
 def _fill(sentence: str, rng: random.Random) -> str:
     return sentence.format(subject=rng.choice(_SUBJECTS), qualifier=rng.choice(_QUALIFIERS))
+
+
+def render_rule(rule: dict, subject: str) -> tuple[str, dict]:
+    """Write one radio rule out, and return it with the parts it was written from."""
+    obj = rule["object"].format(subject=subject)
+    middle = f"{rule['recipient']} {rule['marker']} {obj}" if rule["recipient"] else obj
+    sentence = f"{rule['actor']} {rule['modal']} {rule['action']} {middle} {rule['tail']}.".strip()
+    return sentence, {"actor": rule["actor"], "action": rule["action"], "object": obj}
 
 
 def render(p: StressPlan) -> bytes:
@@ -322,6 +353,11 @@ class StressResult:
     decoy_emitted: tuple[str, ...] = ()
     procedures_emitted: int = 0
     procedure_false_positive: bool = False
+    decomposition_tp: int = 0
+    decomposition_fp: int = 0
+    decomposition_fn: int = 0
+    decomposition_complete: int = 0
+    decomposition_scored: int = 0
     plan_overflow_lines: int = 0
     layout_error: str | None = None
 
@@ -378,10 +414,44 @@ def evaluate(p: StressPlan) -> StressResult:
 
     procedures = parse_procedures(layout)
     result.procedures_emitted = len(procedures)
+    _score_decomposition(p, procedures, result)
     # The only procedure claim this corpus can adjudicate: a page with no radio act at all
     # must yield nothing. What the parser *calls* a rule it does find is not scored here.
     result.procedure_false_positive = bool(procedures) and not p.radio_sentences
     return result
+
+
+def _score_decomposition(p: StressPlan, procedures, result: StressResult) -> None:
+    """Compare the located parts with the parts the sentence was written from.
+
+    Only sentences the parser actually emitted are scored, and each is matched to its plan by
+    the object phrase it was built around, so a decomposition is never compared with a rule it
+    did not come from. An element the plan states and the parser did not locate is a miss; an
+    element that differs from the plan is a false part, which is the direction that matters.
+    """
+    planned = [dict(parts) for parts in p.radio_parts]
+    if not planned:
+        return
+    for candidate in procedures:
+        parts = candidate.decomposition
+        if parts is None:
+            continue
+        text = _norm(candidate.rule_text)
+        match = next((q for q in planned if _norm(q["object"]) in text and _norm(q["action"]) in text), None)
+        if match is None:
+            continue
+        result.decomposition_scored += 1
+        if parts.complete:
+            result.decomposition_complete += 1
+        for key, span in (("actor", parts.actor), ("action", parts.communication_action),
+                          ("object", parts.governed_object)):
+            want = _norm(match[key])
+            if span is None:
+                result.decomposition_fn += 1
+            elif _norm(span.text) == want:
+                result.decomposition_tp += 1
+            else:
+                result.decomposition_fp += 1
 
 
 def run(seeds: range | list[int]) -> tuple[list[StressResult], dict]:
@@ -424,6 +494,13 @@ def summarise(results: list[StressResult]) -> dict:
         "documents_emitting_a_decoy": sum(1 for r in results if r.decoy_emitted),
         "procedure_false_positive_documents": sum(1 for r in results if r.procedure_false_positive),
         "procedure_candidates_emitted": sum(r.procedures_emitted for r in results),
+        "procedure_decomposition": {
+            **pr(sum(r.decomposition_tp for r in results), sum(r.decomposition_fp for r in results),
+                 sum(r.decomposition_fn for r in results)),
+            "rules_scored": sum(r.decomposition_scored for r in results),
+            "rules_fully_decomposed": sum(r.decomposition_complete for r in results),
+            "note": "actor, communication action and governed object, against the plan each sentence was written from",
+        },
         "layout_errors": sum(1 for r in results if r.layout_error),
         "plans_overflowing_their_columns": sum(1 for r in results if r.plan_overflow_lines),
     }

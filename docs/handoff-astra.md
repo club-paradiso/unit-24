@@ -1,7 +1,7 @@
 # Independent audit handoff — layout-aware extraction
 
 **Branch:** `opus/layout-aware-extraction` · **Base:** `7d8e838` (main)
-**Parser versions:** layout-2, code v4, phonetic v5, procedure v3
+**Parser versions:** layout-2, code v4, phonetic v5, procedure v4
 **Parser-specific status:** EXTRACTION_NOT_READY · **Project status:** NOT_READY (unchanged)
 
 ## What to audit, and what is already conceded
@@ -101,12 +101,14 @@ are unchanged and are the ones to attack.
   them, 0 left open — but **0 were decided by a human**, and no claim was judged against a
   source document in this sprint. This is the single largest gap and the only one that can
   close the readiness gate.
-* **No parser decomposes a procedure.** The filled worksheet showed that "0/27 correct scope"
-  was never a scoring problem: a v2 procedure candidate carries a sentence and a topic label
-  and nothing else. The current `ProcedureCandidate` adds medium, section heading, condition
-  and exception flags and a context judgement, but still carries **no actor, no communication
-  action and no governed object**. A procedure therefore cannot be a complete fact with any
-  parser in the tree. Build that decomposition before measuring procedures again.
+* **The decomposition has never seen a real sentence.** `ProcedureCandidate` v4 now locates
+  the actor, the communication action and the governed object as spans of the rule sentence,
+  and scores 1.000 precision and recall against the plan the randomized corpus writes its
+  sentences from. Every one of those sentences was generated here. Real policy prose is longer,
+  more embedded and more elliptical than anything the generator produces, and the fail-closed
+  branches — an ambiguous `of` phrase, a nearer non-communicating verb, an implied addressee —
+  have no real-document frequency attached to them. Expect coverage to be the finding, not
+  precision.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.

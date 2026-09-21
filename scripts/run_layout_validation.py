@@ -63,7 +63,8 @@ def main() -> int:
                          "medium": r.medium, "context_complete": r.context_complete, "crosses_page": r.crosses_page,
                          "has_condition": r.has_condition, "has_exception": r.has_exception,
                          "section_heading": r.section_heading, "rule_text": r.rule_text,
-                         "context_before": r.context_before, "context_after": r.context_after})
+                         "context_before": r.context_before, "context_after": r.context_after,
+                         "decomposition": r.decomposition.to_dict() if r.decomposition else None})
         summary[doc["key"]] = {
             "status": "PARSED",
             "pages": len(layout.pages),
@@ -76,6 +77,7 @@ def main() -> int:
             "phonetic_candidates": len(phon),
             "procedure_candidates": len(procs),
             "procedure_context_complete": sum(1 for r in procs if r.context_complete),
+            "procedure_decomposition_complete": sum(1 for r in procs if r.decomposition and r.decomposition.complete),
             "alphabet": report.to_dict() if phon else None,
             "text_extraction_methods": sorted(layout.text_extraction_methods),
             "warnings": list(layout.warnings),

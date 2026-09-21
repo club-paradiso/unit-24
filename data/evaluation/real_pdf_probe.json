@@ -31,7 +31,7 @@
   "expected_radio_facts": 0,
   "note": "Robustness probe over real third-party PDFs. No ground truth exists for these documents and no precision is claimed. They are not radio-protocol sources and are never ingested as evidence about any agency.",
   "parser_versions": {
-    "layout_code_fingerprint": "1e1dad4bdcd24682",
+    "layout_code_fingerprint": "c2182ffac80dc387",
     "layout_version": "layout-2"
   }
 }

@@ -151,7 +151,9 @@ def evaluate_fixtures() -> tuple[dict, list[dict]]:
         for r in procs:
             candidates.append({"fixture": name, "family": "procedure_rule", "procedure": r.procedure, "locator": r.locator,
                                "medium": r.medium, "context_complete": r.context_complete, "crosses_page": r.crosses_page,
-                               "section_heading": r.section_heading, "rule_text": r.rule_text})
+                               "section_heading": r.section_heading, "rule_text": r.rule_text,
+                               "has_condition": r.has_condition, "has_exception": r.has_exception,
+                               "decomposition": r.decomposition.to_dict() if r.decomposition else None})
 
         want_codes = truth.get("code_meaning", {})
         got_codes = {c.code: c.meaning for c in codes}

@@ -181,6 +181,15 @@ _LIST_LINE = re.compile(
     r"|^\s*[A-Z]\s*[-\u2013:=|]?\s+[A-Z][A-Za-z]{2,13}\s*$",
     re.I,
 )
+# A revision or issue stamp sits above the body without ending in a full stop, so paragraph
+# assembly used to glue it onto the first sentence beneath it. Everything downstream then
+# inherited it: the rule text, the excerpt, and the subject of the rule, which came out as
+# "Revision Date: 10-11-19 ... Units". A stamp is furniture, never the start of a sentence.
+_STAMP_LINE = re.compile(
+    r"^\s*(?:issued?|effective|revised?|revision|rev\.?|updated?|approved|amended|dated|supersedes?)\b"
+    r"[^.]*?\d{1,4}[-/.]\d{1,2}[-/.]\d{2,4}\s*$",
+    re.I,
+)
 PARAGRAPH_GAP_FACTOR = 1.8
 
 
@@ -208,6 +217,8 @@ def _merge_paragraph_lines(blocks: list[LayoutBlock]) -> list[LayoutBlock]:
             and not _STARTS_NEW_ITEM.match(b.text)
             and not _LIST_LINE.match(b.text)
             and not _LIST_LINE.match(out[-1].text)
+            and not _STAMP_LINE.match(out[-1].text)
+            and not _STAMP_LINE.match(b.text)
         ):
             prev = out[-1]
             gap = b.bbox.y0 - prev.bbox.y1
