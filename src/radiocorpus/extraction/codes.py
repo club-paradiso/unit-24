@@ -31,7 +31,7 @@ from radiocorpus.layout.model import BlockType, DocumentLayout, LayoutBlock, lay
 from radiocorpus.layout.records import assemble_records
 
 PARSER_RULE = "code_meaning:structural"
-PARSER_VERSION = "3"
+PARSER_VERSION = "4"
 
 MIN_SERIES = 3  # records in one lane before an unheaded list counts as a code table
 MAX_MEANING_CHARS = 160
@@ -121,6 +121,49 @@ def _valid_meaning(meaning: str) -> bool:
     return bool(re.search(r"[A-Za-z]{3}", meaning))
 
 
+CONTINUATION_GAP_FACTOR = 2.2  # multiples of line height before a vertical gap breaks a cell
+
+
+def _cell_continuations(
+    rows: dict[int, list[LayoutBlock]],
+    row_id: int,
+    meaning: LayoutBlock,
+    *,
+    key_cell_id: int,
+    meaning_cell_id: int,
+) -> list[LayoutBlock]:
+    """Blocks that continue a wrapped meaning cell downwards.
+
+    A meaning that wraps puts its remainder on the next visual row, in the same column, while
+    that row's key column stays empty. That emptiness is the evidence, and it is generic: no
+    knowledge of any particular document is used, only the shape of a two-column table.
+
+    Without geometry nothing is joined, for the same reason record assembly refuses it: two
+    lines cannot be shown to be neighbours without coordinates.
+    """
+    out: list[LayoutBlock] = []
+    anchor = meaning
+    for nxt_row in sorted(r for r in rows if r > row_id):
+        cells = {c.cell_id: c for c in rows[nxt_row] if c.cell_id is not None}
+        key = cells.get(key_cell_id)
+        if key is not None and key.text.strip():
+            break  # the key column speaks again: a new entry, not a continuation
+        cont = cells.get(meaning_cell_id)
+        if cont is None or not cont.text.strip():
+            break
+        if PURE_CODE.match(cont.text) or CODE_AT_START.match(cont.text):
+            break  # a line that opens its own code is never a remainder
+        if cont.bbox is None or anchor.bbox is None:
+            break
+        gap = cont.bbox.y0 - anchor.bbox.y1
+        line_h = max(anchor.bbox.height, cont.bbox.height, 1.0)
+        if gap > line_h * CONTINUATION_GAP_FACTOR or gap < -line_h:
+            break
+        out.append(cont)
+        anchor = cont
+    return out
+
+
 def _heading_governs(block: LayoutBlock, headings: dict[int, list[LayoutBlock]]) -> LayoutBlock | None:
     """Nearest preceding heading on the same page that names a code list."""
     best: LayoutBlock | None = None
@@ -142,45 +185,59 @@ def parse_codes(layout: DocumentLayout) -> list[CodeCandidate]:
             headings.setdefault(b.page_number, []).append(b)
 
     # ---- path 1: a cell holding only a code, paired with the next cell in the same row
-    by_row: dict[tuple[int, int, int], list[LayoutBlock]] = {}
+    tables: dict[tuple[int, int], dict[int, list[LayoutBlock]]] = {}
     for b in blocks:
         if b.table_id is not None and b.row_id is not None and b.cell_id is not None:
-            by_row.setdefault((b.page_number, b.table_id, b.row_id), []).append(b)
+            tables.setdefault((b.page_number, b.table_id), {}).setdefault(b.row_id, []).append(b)
     paired_blocks: set[int] = set()
-    for cells in by_row.values():
-        cells.sort(key=lambda b: (b.cell_id if b.cell_id is not None else 0))
-        for i, cell in enumerate(cells[:-1]):
-            m = PURE_CODE.match(cell.text)
-            if not m:
-                continue
-            nxt = cells[i + 1]
-            if PURE_CODE.match(nxt.text) or not nxt.text.strip():
-                continue
-            if _rejects(cell.text, m):
-                continue
-            meaning = _clean_meaning(nxt.text)
-            if not _valid_meaning(meaning):
-                continue
-            system, code = normalize_code(m["code"])
-            key = (cell.locator, code, meaning.lower())
-            if key in seen:
-                continue
-            seen.add(key)
-            paired_blocks.add(id(cell))
-            paired_blocks.add(id(nxt))
-            out.append(
-                CodeCandidate(
-                    code_system=system,
-                    code=code,
-                    meaning=meaning,
-                    raw=f"{cell.text.strip()} {nxt.text.strip()}"[:200],
-                    locator=cell.locator,
-                    excerpt=f"{cell.text.strip()} | {nxt.text.strip()}"[:300],
-                    structural_reason="TABLE_CELL_PAIR",
-                    evidence=tuple(cell.structural_evidence) + (f"paired_with:{nxt.locator}",),
-                    page_number=cell.page_number,
+    for rows in tables.values():
+        for row_id in sorted(rows):
+            cells = sorted(rows[row_id], key=lambda b: (b.cell_id if b.cell_id is not None else 0))
+            for i, cell in enumerate(cells[:-1]):
+                m = PURE_CODE.match(cell.text)
+                if not m:
+                    continue
+                nxt = cells[i + 1]
+                if PURE_CODE.match(nxt.text) or not nxt.text.strip():
+                    continue
+                if _rejects(cell.text, m):
+                    continue
+                # A meaning that wraps continues in the same column on rows whose key column
+                # is empty. Without this the cell is truncated, and a truncated meaning is a
+                # wrong fact rather than a partial one.
+                continuations = _cell_continuations(
+                    rows, row_id, nxt, key_cell_id=cell.cell_id, meaning_cell_id=nxt.cell_id
                 )
-            )
+                joined = " ".join([nxt.text.strip(), *(c.text.strip() for c in continuations)]).strip()
+                meaning = _clean_meaning(joined)
+                if not _valid_meaning(meaning):
+                    continue
+                system, code = normalize_code(m["code"])
+                key = (cell.locator, code, meaning.lower())
+                if key in seen:
+                    continue
+                seen.add(key)
+                paired_blocks.add(id(cell))
+                paired_blocks.add(id(nxt))
+                evidence = list(cell.structural_evidence) + [f"paired_with:{nxt.locator}"]
+                for c in continuations:
+                    paired_blocks.add(id(c))
+                if continuations:
+                    evidence.append(f"cell_continuations:{len(continuations)}")
+                out.append(
+                    CodeCandidate(
+                        code_system=system,
+                        code=code,
+                        meaning=meaning,
+                        raw=f"{cell.text.strip()} {joined}"[:200],
+                        locator=cell.locator,
+                        excerpt=f"{cell.text.strip()} | {joined}"[:300],
+                        structural_reason="TABLE_CELL_PAIR",
+                        evidence=tuple(evidence),
+                        continuation_lines=len(continuations),
+                        page_number=cell.page_number,
+                    )
+                )
 
     # ---- path 2: records that open with a code, assembled with their wrapped continuations
     def starts(b: LayoutBlock) -> bool:

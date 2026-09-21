@@ -10,68 +10,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from radiocorpus.evaluation.pdfwrite import pdf, wrap
+
 OUT = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "layout"
-CHAR_W = 0.50  # Helvetica width factor, good enough to wrap synthetic text realistically
-
-
-def pdf(pages: list[list[tuple]], width: int = 612, height: int = 792) -> bytes:
-    """Write a PDF placing each run at an exact (x, y-from-bottom) coordinate."""
-    objs: list[bytes] = []
-
-    def add(b: bytes) -> int:
-        objs.append(b)
-        return len(objs)
-
-    font = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
-    fontb = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>")
-    page_ids: list[int] = []
-    pages_obj_index = len(objs) + 1 + 2 * len(pages)
-    for runs in pages:
-        parts = []
-        for run in runs:
-            x, y, size, text = run[0], run[1], run[2], run[3]
-            key = "F2" if (len(run) > 4 and run[4] == "bold") else "F1"
-            esc = text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
-            parts.append(f"BT /{key} {size} Tf {x} {y} Td ({esc}) Tj ET")
-        stream = " ".join(parts).encode("latin-1", "replace")
-        contents = add(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
-        page_ids.append(
-            add(
-                f"<< /Type /Page /Parent {pages_obj_index} 0 R /MediaBox [0 0 {width} {height}] "
-                f"/Contents {contents} 0 R /Resources << /Font << /F1 {font} 0 R /F2 {fontb} 0 R >> >> >>".encode()
-            )
-        )
-    pages_obj = add(("<< /Type /Pages /Kids [" + " ".join(f"{p} 0 R" for p in page_ids) + f"] /Count {len(page_ids)} >>").encode())
-    assert pages_obj == pages_obj_index
-    catalog = add(f"<< /Type /Catalog /Pages {pages_obj} 0 R >>".encode())
-    out = bytearray(b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n")
-    offsets = []
-    for i, o in enumerate(objs, 1):
-        offsets.append(len(out))
-        out += f"{i} 0 obj\n".encode() + o + b"\nendobj\n"
-    xref = len(out)
-    out += f"xref\n0 {len(objs) + 1}\n0000000000 65535 f \n".encode()
-    for off in offsets:
-        out += f"{off:010d} 00000 n \n".encode()
-    out += f"trailer\n<< /Size {len(objs) + 1} /Root {catalog} 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
-    return bytes(out)
-
-
-def wrap(text: str, size: float, width: float) -> list[str]:
-    limit = max(4, int(width / (size * CHAR_W)))
-    lines: list[str] = []
-    cur = ""
-    for word in text.split():
-        nxt = (cur + " " + word).strip()
-        if len(nxt) <= limit:
-            cur = nxt
-        else:
-            if cur:
-                lines.append(cur)
-            cur = word
-    if cur:
-        lines.append(cur)
-    return lines
 
 
 def column_streams(cols: list[tuple[float, float]], streams: list[list[str]], *, top: float, size: float, lead: float) -> list[tuple]:

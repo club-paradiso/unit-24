@@ -104,20 +104,45 @@ class ColumnLayout:
     def count(self) -> int:
         return max(1, len(self.bounds))
 
-    def column_of(self, x_center: float) -> int:
+    def column_of(self, x: float) -> int:
+        """The column a word at ``x`` belongs to.
+
+        Membership is decided by the column *starts*, not by the band interiors. A band's
+        right edge is where the typical line in that column ends, because everything beyond
+        it is blank on most rows; the tail of an unusually long line therefore falls outside
+        every band. Attaching such a tail to the nearest edge can hand it to the next column,
+        which ends a fact's meaning with words belonging to its neighbour — a wrong meaning,
+        not a missing one. Columns are left-aligned, so the start is the reliable edge.
+        """
         if not self.bounds:
             return 0
-        for i, (a, b) in enumerate(self.bounds):
-            if a <= x_center <= b:
-                return i
-        # Outside every band: attach to the nearest band rather than inventing a column.
-        return min(range(len(self.bounds)), key=lambda i: min(abs(x_center - self.bounds[i][0]), abs(x_center - self.bounds[i][1])))
+        starts = [a for a, _ in self.bounds]
+        chosen = 0
+        for i, a in enumerate(starts):
+            if x >= a:
+                chosen = i
+        return chosen
 
 
-MIN_GUTTER_PT = 12.0
+MIN_GUTTER_PT = 6.0  # absolute floor; the working threshold is font-relative, see below
+GUTTER_SPACING_FACTOR = 3.0  # multiples of the page's own word spacing before a band is a gutter
 GUTTER_OCCUPANCY_TOLERANCE = 0.15  # share of rows allowed to cross a gutter (titles, spanning notes)
 MIN_COLUMN_ROWS = 3
 MIN_COLUMN_WIDTH_PT = 40.0
+
+
+def typical_word_spacing(lines: list[Line]) -> float:
+    """Median horizontal gap between adjacent words on the page.
+
+    A fixed point threshold means something different at 7 pt than at 12 pt. Measuring the
+    page's own spacing makes the gutter test scale with the type rather than with a constant
+    that was fitted to one document.
+    """
+    spacings: list[float] = []
+    for ln in lines:
+        ws = sorted(ln.words, key=lambda w: w.x0)
+        spacings.extend(b.x0 - a.x1 for a, b in zip(ws, ws[1:], strict=False) if b.x0 > a.x1)
+    return statistics.median(spacings) if spacings else 0.0
 
 
 def detect_columns(
@@ -145,6 +170,9 @@ def detect_columns(
         layout.evidence.append("single_column:narrow_text_area")
         return layout
 
+    # The gutter must be wide relative to this page's own word spacing, not to a constant.
+    effective_gutter = max(min_gutter, typical_word_spacing(body) * GUTTER_SPACING_FACTOR)
+
     nbins = max(1, int((x_max - x_min) / bin_size) + 1)
     # Occupancy counts LINES, not words, so one wide title cannot outvote the body.
     occupied = [0] * nbins
@@ -170,7 +198,7 @@ def detect_columns(
             while j < nbins and occupied[j] <= tolerance:
                 j += 1
             start, end = x_min + i * bin_size, x_min + j * bin_size
-            if i > 0 and j < nbins and (end - start) >= min_gutter:
+            if i > 0 and j < nbins and (end - start) >= effective_gutter:
                 gaps.append((start, end))
             i = j
         else:
@@ -228,24 +256,61 @@ def spans_columns(line: Line, columns: ColumnLayout) -> bool:
     return not _has_wide_intra_line_gap(line, columns.gutters)
 
 
-def _has_wide_intra_line_gap(line: Line, gaps: list[tuple[float, float]]) -> bool:
-    """True when the line's own word spacing contains one of the page gutters."""
+SPANNING_GAP_FACTOR = 3.0  # multiples of the line's own word spacing before a gap is a column break
+
+
+def column_break_indices(line: Line, gaps: list[tuple[float, float]], *, min_gutter: float = MIN_GUTTER_PT) -> list[int]:
+    """Positions in the line where the words genuinely break across a page gutter.
+
+    Requiring a word gap to *contain* the whole gutter band is too strict. The band is the
+    union of bins that most rows leave empty, so it reaches back to wherever the longest line
+    in that column ends; a row whose text runs long then has a gap that sits inside the band
+    rather than around it, and the row is mistaken for full-width text.
+
+    A gap that straddles the gutter's centre and is far wider than this line's own word
+    spacing is a column break. The width test is self-calibrating: it scales with the type
+    rather than with a constant, and an evenly-spaced banner heading cannot satisfy it.
+    """
     ws = sorted(line.words, key=lambda w: w.x0)
-    for a, b in zip(ws, ws[1:], strict=False):
+    if len(ws) < 2:
+        return []
+    spacings = [b.x0 - a.x1 for a, b in zip(ws, ws[1:], strict=False)]
+    positive = [s for s in spacings if s > 0]
+    typical = statistics.median(positive) if positive else 0.0
+    floor = max(min_gutter, typical * SPANNING_GAP_FACTOR)
+    out: list[int] = []
+    for i, ((a, b), width) in enumerate(zip(zip(ws, ws[1:], strict=False), spacings, strict=False), start=1):
         gap0, gap1 = a.x1, b.x0
         for g0, g1 in gaps:
-            if gap0 <= g0 and gap1 >= g1:
-                return True
-    return False
+            if (gap0 <= g0 and gap1 >= g1) or (width >= floor and gap0 <= (g0 + g1) / 2 <= gap1):
+                out.append(i)
+                break
+    return out
+
+
+def _has_wide_intra_line_gap(line: Line, gaps: list[tuple[float, float]], *, min_gutter: float = MIN_GUTTER_PT) -> bool:
+    """True when the line's own word spacing breaks across one of the page gutters."""
+    return bool(column_break_indices(line, gaps, min_gutter=min_gutter))
 
 
 def split_line_by_columns(line: Line, columns: ColumnLayout) -> dict[int, Line]:
-    """Cut one visual line into per-column fragments."""
+    """Cut one visual line into per-column fragments at its own column breaks.
+
+    Assigning each word independently by its x position looks equivalent but is not. A
+    detected band stops at the right-hand edge of the *typical* line in its column, because
+    anything further right is empty on most rows; the tail of an unusually long line then
+    falls outside every band and is attached to whichever band is nearest — which can be the
+    next column. The result is a fact whose meaning ends in words belonging to its neighbour,
+    and a wrong meaning is worse than a missing one.
+
+    Splitting at the line's own wide gaps keeps adjacent words together unless there is
+    physically a column gutter between them. Each resulting run is placed by where it starts.
+    """
     if columns.count <= 1:
         return {0: line}
     buckets: dict[int, list[Word]] = defaultdict(list)
     for w in line.words:
-        buckets[columns.column_of((w.x0 + w.x1) / 2)].append(w)
+        buckets[columns.column_of(w.x0)].append(w)
     return {c: Line(sorted(ws, key=lambda w: w.x0), column_id=c) for c, ws in sorted(buckets.items()) if ws}
 
 

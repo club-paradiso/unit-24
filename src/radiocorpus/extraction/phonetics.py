@@ -3,8 +3,13 @@
 A string shaped like ``LETTER + WORD`` is not a phonetic mapping. In the audited corpus the
 enumerated section headings ``C. COMMUNICATIONS``, ``A. Attempt to Locate`` and
 ``B. Broadcasts`` were all read as phonetic pairs. A mapping is now emitted only when the
-surrounding structure shows an alphabet: an explicit heading, a table of pairs, or a run of
-distinct letters in one region.
+surrounding structure shows an alphabet: an explicit heading, a table of pairs, a run of
+distinct letters in one region, or a region that is almost entirely letter-and-word pairs.
+
+That last route exists because a one-column alphabet prints as a column of short all-capital
+lines, which the layout layer types as headings on typography alone; skipping every heading
+lost all 26 letters of such a listing. It is gated on density rather than on a letter count,
+so a directive page with a handful of lettered section titles cannot reach it.
 
 Reference alphabets are used to *describe* what was found and never to change it. If a local
 alphabet differs from APCO on one letter, all 26 local mappings are preserved and the
@@ -22,7 +27,7 @@ from radiocorpus.layout.model import BlockType, DocumentLayout, LayoutBlock
 from radiocorpus.layout.segment import ENUMERATOR
 
 PARSER_RULE = "phonetic_letter:structural"
-PARSER_VERSION = "3"
+PARSER_VERSION = "4"
 
 NATO = {
     "A": "ALFA", "B": "BRAVO", "C": "CHARLIE", "D": "DELTA", "E": "ECHO", "F": "FOXTROT",
@@ -43,6 +48,11 @@ REFERENCE_ALPHABETS = {"NATO": NATO, "APCO_1941": APCO_1941}
 
 # Minimum distinct letters paired within one region before it may be called an alphabet.
 MIN_REGION_LETTERS = 4
+# A one-column alphabet prints as a run of short all-caps lines, which the layout layer calls
+# headings on typography alone. Such a region may still be an alphabet, but only on much
+# stronger evidence than a four-letter run: most of the region must *be* the listing.
+MIN_HEADING_RUN_LETTERS = 8
+MIN_HEADING_RUN_DENSITY = 0.5
 # Letters needed before a system label may be offered at all.
 MIN_LABEL_LETTERS = 13
 LABEL_MATCH_RATIO = 0.9
@@ -171,18 +181,30 @@ def parse_phonetics(layout: DocumentLayout) -> list[PhoneticCandidate]:
             paired.add(id(cell))
             paired.add(id(cells[i + 1]))
 
+    # A block the layout layer typed as a heading may still be one entry of a one-column
+    # alphabet: every line of such a listing is short and all-caps, which is all the layer
+    # judges on. The pairs are collected, but marked, so the region gate below can demand
+    # stronger evidence for them than for ordinary body text.
+    region_blocks: dict[str, int] = defaultdict(int)
+    heading_sourced: dict[str, int] = defaultdict(int)
+
     for b in blocks:
+        region_blocks[_region_of(b)] += 1
         if id(b) in paired:
             continue
-        if b.block_type is BlockType.HEADING:
-            continue
+        if b.block_type is BlockType.HEADING and PHONETIC_HEADING.search(b.text):
+            continue  # the alphabet heading itself is not one of its own entries
         if _is_enumerated_clause(b.text):
             continue
+        found = False
         for line in b.text.splitlines():
             if _is_enumerated_clause(line):
                 continue
             for letter, word in _pairs_in(line):
                 per_region[_region_of(b)].append((b, letter, word))
+                found = True
+        if found and b.block_type is BlockType.HEADING:
+            heading_sourced[_region_of(b)] += 1
 
     out: list[PhoneticCandidate] = []
     seen: set[tuple[str, str]] = set()
@@ -194,6 +216,9 @@ def parse_phonetics(layout: DocumentLayout) -> list[PhoneticCandidate]:
                 if h.reading_order < b.reading_order and (governing is None or h.reading_order > governing.reading_order):
                     governing = h
         table_pairs = sum(1 for b, _, _ in items if b.block_type is BlockType.TABLE_CELL)
+        body_letters = {letter for b, letter, _ in items if b.block_type is not BlockType.HEADING}
+        pair_blocks = len({id(b) for b, _, _ in items})
+        density = pair_blocks / region_blocks[region] if region_blocks.get(region) else 0.0
         reason: str | None = None
         evidence: list[str] = [f"region:{region}", f"distinct_letters:{len(distinct)}"]
         if governing is not None:
@@ -202,8 +227,18 @@ def parse_phonetics(layout: DocumentLayout) -> list[PhoneticCandidate]:
         elif len(distinct) >= MIN_REGION_LETTERS and table_pairs >= MIN_REGION_LETTERS:
             reason = "ALPHABET_TABLE"
             evidence.append(f"table_pairs:{table_pairs}")
-        elif len(distinct) >= MIN_REGION_LETTERS:
+        elif len(body_letters) >= MIN_REGION_LETTERS:
             reason = "LETTER_SEQUENCE"
+        elif (
+            heading_sourced.get(region)
+            and len(distinct) >= MIN_HEADING_RUN_LETTERS
+            and density >= MIN_HEADING_RUN_DENSITY
+        ):
+            # Almost every block in this region is a letter-and-word pair. A directive page
+            # whose sections happen to start with letters is a handful of such lines among
+            # many paragraphs and cannot reach this density; a printed alphabet always does.
+            reason = "ALPHABET_RUN"
+            evidence.append(f"pair_block_density:{density:.2f}")
         if reason is None:
             continue
         for b, letter, word in items:

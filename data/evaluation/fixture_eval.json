@@ -9,9 +9,9 @@
   "failed_structural_checks": 0,
   "ground_truth": "exhaustive_by_construction",
   "parser_versions": {
-    "code_parser_version": "3",
+    "code_parser_version": "4",
     "layout_version": "layout-2",
-    "phonetic_parser_version": "3",
+    "phonetic_parser_version": "4",
     "procedure_parser_version": "3"
   },
   "per_fixture": {

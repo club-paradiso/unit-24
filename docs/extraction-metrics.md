@@ -1,7 +1,11 @@
 # Extraction metrics and parser readiness
 
-**Parser versions:** layout-2 (`layout_code_fingerprint` pins the source), code parser v3,
-phonetic parser v3, procedure parser v3. **Baseline:** commit `7d8e838`, parser v2.
+**Parser versions:** layout-2 (`layout_code_fingerprint` pins the source), code parser v4,
+phonetic parser v4, procedure parser v3. **Baseline:** commit `7d8e838`, parser v2.
+
+The code and phonetic parsers moved to v4 when the randomized corpus below exposed three
+defects in v3. Facts already extracted keep the version that produced them; provenance records
+what happened, it is not rewritten.
 
 ## Readiness status
 
@@ -19,10 +23,17 @@ own quality gate could not be obtained:
    applicability scope. The new parser attaches scope, condition and exception fields to
    address exactly that, but those fields are unadjudicated: the existing labels were assigned
    to differently-shaped candidates and do not transfer.
-3. **No OCR validation.** No scanned source was tested. The fail-closed gate is unchanged and
-   remains a separate NOT_READY item.
+3. **No OCR validation against a real scan.** The fail-closed gate is now exercised against a
+   synthetic image-only page — it refuses, emits nothing, and refuses again when a supplied
+   OCR backend returns blank — but no real scanned document has been through it. Synthetic
+   coverage is not the same evidence, so this remains a NOT_READY item.
 
 Project status remains **NOT_READY** for nationwide discovery regardless of this sprint.
+
+The randomized corpus and threshold sweep added below **do not change this status**. They
+replace three unmeasured assertions with measurements and they found three real defects, but
+every document in them is synthetic. Precision on a document nobody wrote is not precision on
+a document an agency published.
 
 ## What the replay measures
 
@@ -120,6 +131,83 @@ A perfect score on nine fixtures the same author designed is weak evidence about
 documents. It is offered as a demonstration that the mechanism works when geometry exists,
 not as a precision claim.
 
+## Randomized geometry
+
+The nine fixtures above were written by the same author as the parsers, so a perfect score on
+them partly measures how well they were aimed. `data/evaluation/layout_stress.json` answers a
+harder question: **does the stack survive geometry it has never seen?**
+
+300 documents are generated from seeded plans that vary column count (1–4), gutter width
+(6–40 pt), font size (7–10 pt), leading, page count, repeated furniture, headings, and whether
+a code table is a two-cell row or an inline series. Every code, meaning, letter and decoy is
+decided *before* any parser runs, from an invented vocabulary; nothing is read back from a
+candidate. Each plan is also checked for self-consistency — a page whose text falls outside
+its own column is geometry no document has, and scoring detection on it would measure the
+generator's arithmetic rather than the parser.
+
+| measure | result |
+|---|---|
+| documents | 300 |
+| columns detected exactly | 238 |
+| columns conservatively merged | 62 |
+| **columns invented** | **0** |
+| code_meaning | precision **0.996**, recall **0.982** (tp 1779, fp 7, fn 32) |
+| phonetic_letter | precision **1.000**, recall **1.000** (tp 1898) |
+| revision dates emitted as codes | **0** |
+| documents with no radio act yielding a procedure | **0** |
+| plans whose text overflows its column | **0** |
+
+The two directions are not equivalent and are not scored as if they were. Merging two columns
+loses the facts in one table; *inventing* a column corrupts every line on the page. Zero
+inventions across 300 documents is the result that matters; the 62 merges are the documented
+conservative behaviour, concentrated at gutters of 6–9 pt.
+
+### What this found
+
+Building the corpus exposed three defects that the hand-written fixtures could not, each now
+fixed and covered by a test in `tests/test_layout_stress.py`:
+
+1. **A one-column phonetic alphabet was lost entirely.** Every `LETTER WORD` line is short and
+   all-capitals, so the layout layer types it as a heading on typography alone, and the
+   phonetic parser skipped every heading. The hand-written alphabet fixture happens to be
+   two-column and never took this path. Headings may now carry a pair, but only under an
+   explicit alphabet heading or where nearly every block in the region is itself a pair — a
+   directive page whose sections start with letters cannot reach that density, so the
+   enumerated-heading false positive stays closed. Recall on alphabet documents went from
+   0.40 to 1.000.
+2. **A wrapped meaning cell was truncated.** In a two-cell row, only the first line of a
+   meaning was kept; the remainder sits on following rows whose key column is empty. That
+   emptiness is now the evidence that joins them. A truncated meaning is a *wrong* fact, not a
+   partial one, which is why this was treated as the severe direction.
+3. **The tail of a long line was handed to the next column.** A detected column band stops
+   where the typical line in that column ends, because everything beyond is blank on most
+   rows; the tail of an unusually long line fell outside every band and was attached to the
+   nearest edge — sometimes the neighbour's. Column membership is now decided by the column
+   *starts*, which is the edge a left-aligned column actually has.
+
+A fourth change came out of the same measurements: the minimum gutter is now the larger of a
+6 pt floor and three times the page's own median word spacing. A constant in points means
+something different at 7 pt than at 12 pt.
+
+## Threshold sensitivity
+
+`data/evaluation/threshold_sensitivity.json` sweeps the three column-detection thresholds over
+120 documents — 45 combinations of minimum gutter (3–18 pt), gutter occupancy tolerance
+(0.0–0.30) and minimum rows per band (2–5). A setting is **unusable** if it invents a column on
+any document, whatever its exact-match rate.
+
+| finding | evidence |
+|---|---|
+| The values in use sit on the top plateau of usable settings | exact 0.758, tied with every other usable setting at tolerance 0.15 |
+| Occupancy tolerance is the sensitive parameter | every unusable setting has tolerance 0.30; none at 0.0 or 0.15 invents a column |
+| The gutter floor is inactive below ~9 pt | the font-relative rule dominates, so 3, 6 and 9 pt give identical results |
+| Minimum rows per band barely matters | 2 and 3 are identical; 5 costs ~7 points of exact match |
+
+The chosen values are therefore not a fitted peak: they are the widest safe setting, and the
+next step in the permissive direction (tolerance 0.30) is the one that starts inventing
+columns. The thresholds remain tuned against synthetic geometry, which is weaker evidence than
+a real corpus.
+
 ## Leave-one-document-out
 
 Four folds, each holding out one document. The parsers contain no agency-specific or
@@ -144,4 +232,6 @@ unmeasured. Layout is cached by content hash, so the cost is paid once per docum
 | `data/evaluation/fixture_eval.json` | fixture precision and recall |
 | `data/evaluation/fixture_candidates.jsonl` | every fixture candidate, for inspection |
 | `data/evaluation/real_document_metrics.json` | all four documents recorded MISSING with the block reason |
+| `data/evaluation/layout_stress.json` | 300 randomized documents, per-document results and summary |
+| `data/evaluation/threshold_sensitivity.json` | column detection under 45 threshold combinations |
 | `data/raw/layout-validation/MANIFEST.json` | document identity, expected hashes and page counts |

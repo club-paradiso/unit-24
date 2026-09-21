@@ -1,7 +1,7 @@
 # Independent audit handoff — layout-aware extraction
 
 **Branch:** `opus/layout-aware-extraction` · **Base:** `7d8e838` (main)
-**Parser versions:** layout-2, code v3, phonetic v3, procedure v3
+**Parser versions:** layout-2, code v4, phonetic v4, procedure v3
 **Parser-specific status:** EXTRACTION_NOT_READY · **Project status:** NOT_READY (unchanged)
 
 ## What to audit, and what is already conceded
@@ -48,6 +48,7 @@ uv run ruff check src tests scripts
 uv run radiocorpus check-invariants                  # run after rebuilding the corpus
 uv run python scripts/make_layout_fixtures.py        # regenerate the nine fixtures
 uv run python scripts/evaluate_extraction.py         # regenerate every evaluation artifact
+uv run python scripts/stress_layout.py               # regenerate the randomized corpus and sweep
 rm -f data/intermediate/corpus.sqlite* && uv run radiocorpus run-canary --skip-acquire
 ```
 
@@ -73,6 +74,8 @@ to re-label rather than reuse: the candidates are differently shaped.
 | `data/evaluation/replay_outcomes.jsonl` | per-candidate outcome, both replay modes |
 | `data/evaluation/metrics_replay.json` | per family, per document, failure-class elimination |
 | `data/evaluation/lodo.json` | leave-one-document-out folds |
+| `data/evaluation/layout_stress.json` | 300 randomized documents, ground truth from the generation plan |
+| `data/evaluation/threshold_sensitivity.json` | column detection under 45 threshold combinations |
 | `data/evaluation/fixture_truth.json` / `fixture_eval.json` / `fixture_candidates.jsonl` | fixture ground truth, scores, candidates |
 | `data/evaluation/real_document_metrics.json` | the blocked state, per document |
 | `data/raw/layout-validation/MANIFEST.json` | identity and expected hashes of the four documents |
@@ -82,17 +85,42 @@ to re-label rather than reuse: the candidates are differently shaped.
 
 ## Known weaknesses
 
-* **Fixtures are self-designed.** A perfect score on nine fixtures written by the same author
-  who wrote the parsers is weak external evidence.
+Three entries below were unmeasured assertions in the first version of this handoff. They are
+now measured, and the measurement found three defects, which are fixed. The remaining entries
+are unchanged and are the ones to attack.
+
+**Still open — attack these first**
+
+* **Procedure scope is unadjudicated.** 0/27 audited procedures had correct scope. The new
+  fields target that and nobody has checked them. This needs the real documents and a human;
+  it is the single largest gap.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.
 * **Seven true code facts are lost** in page-group mode. They need geometry; whether the real
   page supplies it is unverified.
-* **Procedure scope is unadjudicated.** 0/27 audited procedures had correct scope. The new
-  fields target that and nobody has checked them.
-* **Column detection thresholds** (12 pt gutter, 85% row agreement, 3 rows) are tuned on one
-  adversarial layout.
-* **No OCR validation.** The gate is unchanged and untested against a scanned source.
+* **No OCR validation against a real scan.** The gate is now exercised against a synthetic
+  image-only page (refuses, emits nothing, refuses again on blank OCR output), but no real
+  scanned document has been through it.
+* **Column merging at narrow gutters.** 62 of 300 randomized documents had columns merged
+  rather than split, concentrated at gutters of 6–9 pt; in 3 of them the merge let one
+  column's words reach a neighbouring meaning. No document had a column invented.
 * **`data/evaluation` is committed.** It is generated output; it is committed so the audit can
-  read it without a network, and it is regenerable by the command above.
+  read it without a network, and it is regenerable by the commands above.
+
+**Measured since, with what it found**
+
+* ~~Fixtures are self-designed.~~ `data/evaluation/layout_stress.json` adds 300 documents
+  generated from seeded plans that are their own ground truth, with an invented vocabulary and
+  geometry the parsers have never seen. Result: 0 invented columns, code precision 0.996 /
+  recall 0.982, phonetic precision and recall 1.000, 0 revision dates emitted as codes, 0
+  procedures from documents containing no radio act. It found a one-column alphabet being lost
+  entirely, a wrapped meaning cell being truncated, and a long line's tail being handed to the
+  next column. All three are fixed and covered by tests.
+* ~~Column detection thresholds are tuned on one adversarial layout.~~
+  `data/evaluation/threshold_sensitivity.json` sweeps 45 combinations. The values in use are on
+  the top plateau of settings that never invent a column; the occupancy tolerance is the
+  sensitive one, and the next permissive step (0.30) is where inventions begin. The gutter
+  floor is now font-relative, so the constant matters only below ~9 pt.
+
+Both remain synthetic evidence. Neither changes the readiness status.
