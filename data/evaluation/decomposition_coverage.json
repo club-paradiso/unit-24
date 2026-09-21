@@ -1,0 +1,217 @@
+{
+  "does_not_measure": "accuracy. Whether a located actor is the right actor still needs a reviewer. Unlike every other real-document question here the evidence is the sentence itself, and the sentence is present.",
+  "measures": "coverage and the reasons for refusal",
+  "question": "What fraction of real policy sentences yields an actor, a communication act and a governed object?",
+  "samples": [
+    {
+      "coverage": 0.1915,
+      "elements_located": {
+        "action": {
+          "n": 13,
+          "rate": 0.2766
+        },
+        "actor": {
+          "n": 19,
+          "rate": 0.4043
+        },
+        "object": {
+          "n": 12,
+          "rate": 0.2553
+        }
+      },
+      "examples": {
+        "communication_verb_too_far_from_modal": [
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "2.1 - Canadian Provinces These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Mak"
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "2.4 - Indian Nations These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Make (M"
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "It is recognized that under the Henry System, if a finger is missing or amputated, it is given a classification identical to the opposite finger; however, THIS MUST NOT BE DONE in the NCIC FPC since the location of finger or fingers missing"
+          }
+        ],
+        "complete": [
+          {
+            "action": "notify",
+            "actor": "Police Radio",
+            "object": "a Patrol Supervisor",
+            "origin": "PHL_PPD_DIRECTIVE_7_1",
+            "sentence": "Police Radio will notify a Patrol Supervisor to take the officer\u2019s location."
+          },
+          {
+            "action": "indicate",
+            "actor": "the employee (if possible)",
+            "object": "their location",
+            "origin": "IN_ISP_COMMUNICATIONS",
+            "sentence": "During this time, the employee (if possible) should indicate their location and status."
+          },
+          {
+            "action": "acknowledge",
+            "actor": "The assigned supervisor",
+            "object": "he or she is monitoring the motor vehicle pursuit",
+            "origin": "CHI_CPD_DIRECTIVE",
+            "sentence": "The assigned supervisor must acknowledge to the OEMC dispatcher that he or she is monitoring the motor vehicle pursuit."
+          }
+        ],
+        "missing:actor": [
+          {
+            "action": "contact",
+            "actor": null,
+            "object": "the Police Radio Operations desk",
+            "origin": "PHL_PPD_DIRECTIVE_7_1",
+            "sentence": "Upon completing the assignment, return to service by responding with complete unit number, disposition code, and the words \u201cBack in Service.\u201d NOTE: If further notifications are to be made to Police Radio, contact the Police Radio Operations"
+          }
+        ],
+        "nearer_non_communication_verb": [
+          {
+            "action": null,
+            "actor": "the highest ranking supervisor",
+            "object": null,
+            "origin": "PHL_PPD_DIRECTIVE_7_1",
+            "sentence": "Once the highest ranking supervisor on scene has resumed the Assist Officer Call and provided the location of a staging area, all units responding from the division of occurrence, bordering districts, and any Citywide Units shall be dispatc"
+          },
+          {
+            "action": null,
+            "actor": "Department members",
+            "object": null,
+            "origin": "CHI_CPD_DIRECTIVE",
+            "sentence": "Department members will follow procedures consistent with the Department directive titled \"Impoundment of Vehicles for Municipal Code Violations.\" NOTE: Department members must have a license plate or VIN to complete the Request to Impound "
+          }
+        ],
+        "no_communication_verb_after_modal": [
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "CHI_CPD_DIRECTIVE",
+            "sentence": "NOTE: A copy will be retained in the unit files in accordance with existing records-retention requirements."
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "In instances where a license plate has been issued, the code AT (for all-terrain vehicle) or SN (for snowmobile) should be entered in the LIT Field."
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "IN_ISP_COMMUNICATIONS",
+            "sentence": "If the employee sending the alarm cannot be contacted, a Department police employee (or other agency) shall be immediately sent to the location (if known) of the affected employee. 3."
+          }
+        ],
+        "no_modal": [
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "2.2 - Country Codes Code Location TW TAIWAN TY TURKEY TZ TANZANIA, UNITED REPUBLIC OF UG UGANDA UK UKRAINE UM MAURITIUS UN UNITED KINGDOM (ENGLAND-EN, SCOTLAND-SS, WALES-WL, NORTH IRELAND-NI, GREAT BRITIAN FOR REFERENCE ONLY) UR TURKMENISTA"
+          }
+        ],
+        "no_noun_phrase_after_verb": [
+          {
+            "action": "broadcast",
+            "actor": null,
+            "object": null,
+            "origin": "PHL_PPD_DIRECTIVE_7_1",
+            "sentence": "The assignment will be broadcast until acknowledged at least three (3) times using this format: Issued Date: 03-08-13 Effective Date: 03-08-13 Updated Date: 12-05-19"
+          }
+        ],
+        "subject_too_long": [
+          {
+            "action": "notify",
+            "actor": null,
+            "object": "Police Radio",
+            "origin": "PHL_PPD_DIRECTIVE_7_1",
+            "sentence": "While on the scene of a regional rail incident involving the SEPTA underground system, or an oversize building or parking garage, personnel who are experiencing diminished broadcasting, severe static or \u201cbonking\u201d transmissions, will immedia"
+          },
+          {
+            "action": "identify",
+            "actor": null,
+            "object": "himself",
+            "origin": "CHI_CPD_DIRECTIVE",
+            "sentence": "NOTE: Once acknowledged by radio call identification number, a nondistrict supervisor not assigned by OEMC who terminates a pursuit will identify himself or herself by rank and name."
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "src_5b4c1c3f38e564f1",
+            "sentence": "MY MILITARY%ANY TYPE OF MILITARY AIRCRAFT REGARDLESS OF DESIGN ORPRIMARY USE NG NATIONAL GUARD%MEMBER PERSONALLY OWNED VEHICLE PLATES NP CIVILIAN%NONPASSENGER INCLUDES ALL CIVILIAN AIRCRAFT DESIGNEDAND OR USED FOR PURPOSE OTHER THAN TRANSPO"
+          }
+        ]
+      },
+      "fully_decomposed": 9,
+      "label": "real_corpus_rule_sentences",
+      "note": "verbatim rule_text the previous parser read out of the retrieved documents",
+      "reasons": {
+        "communication_verb_too_far_from_modal": 9,
+        "complete": 9,
+        "missing:actor": 1,
+        "nearer_non_communication_verb": 2,
+        "no_communication_verb_after_modal": 21,
+        "no_modal": 1,
+        "no_noun_phrase_after_verb": 1,
+        "subject_too_long": 3
+      },
+      "sentences": 47
+    },
+    {
+      "coverage": 0.0,
+      "elements_located": {
+        "actor": {
+          "n": 3,
+          "rate": 0.5
+        }
+      },
+      "examples": {
+        "no_communication_verb_after_modal": [
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "NIBRS_DataDictionary.pdf",
+            "sentence": "The arrest transaction number may be the incident number of the incident"
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "NIBRS_DataDictionary.pdf",
+            "sentence": "C = The arrestee was involved in more than one incident and should be counted for"
+          },
+          {
+            "action": null,
+            "actor": null,
+            "object": null,
+            "origin": "NIBRS_DataDictionary.pdf",
+            "sentence": "arrestee, and should not be counted;"
+          }
+        ]
+      },
+      "fully_decomposed": 0,
+      "label": "real_third_party_document",
+      "note": "every modal-bearing sentence in the committed FBI NIBRS data dictionary; out of domain by design",
+      "reasons": {
+        "no_communication_verb_after_modal": 6
+      },
+      "sentences": 6
+    }
+  ],
+  "selection_bias": "The corpus sample is sentences an earlier parser chose to emit, not a random sample of the documents, so coverage on a full document may differ in either direction."
+}

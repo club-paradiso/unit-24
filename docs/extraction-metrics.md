@@ -238,6 +238,65 @@ Learner safety is deliberately unreachable by the mechanical pass — whether a 
 put in front of a learner is a judgement, not a shape — and a test asserts it stays open until
 somebody decides it.
 
+### Decomposition coverage on real sentences
+
+The 1.000 precision and recall the decomposition scores on the randomized corpus says nothing
+about real documents: those sentences were written by the same code that scores them, in the
+shapes it was built to produce. The question that matters is **coverage** — what fraction of
+the sentences an agency actually writes yields an actor, an act and an object at all.
+
+That question can be answered now, without the blocked PDFs, because a decomposition is a
+function of the sentence alone. `data/audit/real_facts.jsonl` holds the verbatim `rule_text`
+the previous parser read out of the retrieved documents: **47 distinct real rule sentences**.
+The committed FBI data dictionary supplies a second, out-of-domain sample.
+
+| sample | sentences | coverage |
+|---|---|---|
+| randomized corpus (generated here) | 61 | **1.000** |
+| **real rule sentences** | 47 | **0.191** |
+| real third-party document, modal-bearing sentences | 6 | 0.000 |
+
+| element located | rate on real sentences |
+|---|---|
+| actor | 0.404 |
+| communication action | 0.277 |
+| governed object | 0.255 |
+
+Most of the refusals are **correct**. `no_communication_verb_after_modal` accounts for 21 of
+the 38, and the sentences behind it are records rules, data-entry rules and movement orders —
+"A copy will be retained in the unit files", "the code ZZ should be entered in the LIT Field",
+"a Department police employee shall be immediately sent to the location". The sample is not a
+clean corpus of radio rules: it is what an earlier parser emitted, and 16 of the 27 audited
+candidates were judged meaning-unsupported. A refusal on a sentence that is not a radio rule
+is the parser working.
+
+The residue is honest limitation. Nine sentences put the communication verb further from the
+modal than the window allows, three have a subject the leading-clause rule cannot step over
+("In instances where a license plate has been issued, …"), and one carries no modal at all.
+None of those constants were loosened to raise the number: every example behind them in this
+sample is a non-radio sentence, and tuning a threshold against a sample that does not contain
+the thing being measured would be fitting to noise.
+
+**Two defects were found by running real sentences, and both are fixed.**
+
+1. **A passive made its patient the actor.** "The location will be relayed the assigned unit"
+   produced a *complete* decomposition with `actor = "The location"` — a confident false
+   statement about whom an agency directs, which is the worst outcome this instrument can
+   have. In a passive the phrase before the modal is what the act is done *to*. The actor is
+   now taken only from a `by`-phrase that names a role, and is absent otherwise. This is why
+   the actor rate above is 0.404 and not 0.808: **19 of those located actors were passive
+   patients, and removing them is a precision gain showing up as a coverage loss.**
+2. **A recipient marked by a preposition was not read.** "The assigned supervisor must
+   acknowledge **to** the OEMC dispatcher **that** he or she is monitoring the pursuit" yielded
+   no object. The shape is now handled, and a `that`-clause is taken whole rather than
+   truncated to a noun phrase — reading it as a phrase had reported "he" as the thing
+   communicated.
+
+What this measures and what it does not: coverage, and the reasons for refusal. Not accuracy.
+Whether a located actor is the *right* actor still needs a reviewer — but unlike every other
+real-document question in this project, the evidence is the sentence itself, and the sentence
+is present.
+
 ### Real-document metrics
 
 Completeness is reported twice, because one number conflates two different failures. The
@@ -414,6 +473,7 @@ unmeasured. Layout is cached by content hash, so the cost is paid once per docum
 | `data/adjudication/worksheet_coverage.json` | which claims the previous review actually judged |
 | `data/evaluation/real_document_adjudicated_metrics.json` | real-document metrics, with every unadjudicated figure null |
 | `data/evaluation/real_pdf_probe.json` | layout behaviour on real third-party PDFs |
+| `data/evaluation/decomposition_coverage.json` | decomposition coverage on real sentences, with refusal reasons |
 | `data/evaluation/ocr_validation_status.json` | what OCR validation established, and what it did not |
 | `data/fixtures/real/MANIFEST.json` | identity, issuer, licence and origin commit of the real fixtures |
 | `data/raw/layout-validation/retrieval_log.json` | per-document acquisition attempt, host and claimed issuer |

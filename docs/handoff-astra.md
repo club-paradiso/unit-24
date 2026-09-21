@@ -50,9 +50,11 @@ uv run python scripts/make_layout_fixtures.py        # regenerate the nine fixtu
 uv run python scripts/evaluate_extraction.py         # regenerate every evaluation artifact
 uv run python scripts/stress_layout.py               # regenerate the randomized corpus and sweep
 uv run python scripts/probe_real_documents.py        # real third-party PDFs; expects zero radio facts
+uv run python scripts/probe_decomposition_coverage.py  # decomposition coverage on real sentences
 uv run python scripts/build_adjudication_worksheet.py  # the adjudication instrument
 uv run python scripts/score_adjudication.py          # metrics; refuses to score unadjudicated claims
 uv run python scripts/probe_real_documents.py        # real third-party PDFs; expects zero radio facts
+uv run python scripts/probe_decomposition_coverage.py  # decomposition coverage on real sentences
 rm -f data/intermediate/corpus.sqlite* && uv run radiocorpus run-canary --skip-acquire
 ```
 
@@ -101,14 +103,16 @@ are unchanged and are the ones to attack.
   them, 0 left open — but **0 were decided by a human**, and no claim was judged against a
   source document in this sprint. This is the single largest gap and the only one that can
   close the readiness gate.
-* **The decomposition has never seen a real sentence.** `ProcedureCandidate` v4 now locates
-  the actor, the communication action and the governed object as spans of the rule sentence,
-  and scores 1.000 precision and recall against the plan the randomized corpus writes its
-  sentences from. Every one of those sentences was generated here. Real policy prose is longer,
-  more embedded and more elliptical than anything the generator produces, and the fail-closed
-  branches — an ambiguous `of` phrase, a nearer non-communicating verb, an implied addressee —
-  have no real-document frequency attached to them. Expect coverage to be the finding, not
-  precision.
+* **Decomposition coverage on real prose is 0.191.** `ProcedureCandidate` v4 locates the
+  actor, the communication action and the governed object as spans of the rule sentence, and
+  scores 1.000 precision and recall against the plan the randomized corpus writes its
+  sentences from — and **0.191 coverage** over the 47 verbatim rule sentences the real corpus
+  holds (`data/evaluation/decomposition_coverage.json`). Most refusals are correct: the sample
+  is what an earlier parser emitted, and it is full of records and data-entry rules that are
+  not radio rules at all. The open residue is a communication verb further from the modal than
+  the window allows (9), a subject the leading-clause rule cannot step over (3), and no modal
+  (1). Those constants were deliberately not loosened, because every example behind them in
+  this sample is a non-radio sentence. Coverage, not precision, is the thing to attack.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.

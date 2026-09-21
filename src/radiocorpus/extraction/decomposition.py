@@ -48,6 +48,11 @@ _INTERVENING = r"(?:\b(?:not|then|also|immediately|promptly|first|next|thereafte
 _INTERVENING += r"without delay|at once|normally|ordinarily|generally|always|never)\b\s+){0,3}"
 #: Markers that separate a recipient from the thing actually communicated.
 _CONTENT_MARKER = re.compile(r"\b(?:of|about|regarding|concerning|as to|that|whether)\b", re.I)
+#: ``that`` and ``whether`` introduce a clause, and a clause is not a noun phrase. Reading one
+#: as a noun phrase truncated "that he or she is monitoring the pursuit" to "he", which reports
+#: a pronoun as the thing communicated.
+_CLAUSE_MARKER = re.compile(r"^(?:that|whether)$", re.I)
+MAX_CLAUSE_CHARS = 160
 #: Tokens that close a noun phrase. An adjunct starts here, and so does a condition — and so
 #: does a content marker, because "advise the dispatcher of their location" is a recipient and
 #: a message, not one long thing. Letting the phrase run through "of" is what made the first
@@ -62,6 +67,18 @@ _ARTICLE = r"(?:the|a|an|their|his|her|its|our|all|any|each|every|both|this|thes
 #: A noun phrase: an optional determiner and up to six further words.
 _NP = re.compile(rf"\s*(?P<np>(?:{_ARTICLE}\s+)?[\w'’-]+(?:\s+[\w'’-]+){{0,5}})", re.I)
 _NON_COMM_VERB = re.compile("|".join([MOTION_VERB.pattern, HANDLING_VERB.pattern]), re.I)
+#: ``will be broadcast``, ``shall be transmitted``. In a passive the phrase before the modal is
+#: what the act is done *to*, not who does it, and reading it as the actor states something the
+#: document does not: "The location will be relayed" does not direct the location to do
+#: anything. Found on a real sentence, where it produced a complete decomposition with the
+#: wrong actor — the worst possible outcome.
+_PASSIVE = re.compile(r"\s*(?:not\s+)?(?:be|been|being)\b", re.I)
+#: An agent may be named in a by-phrase, but a by-phrase is as often a means ("by unit number",
+#: "by radio"). It is taken only when the phrase names a role, the same confirmation the
+#: ambiguous ``of`` reading requires.
+_BY_AGENT = re.compile(r"\bby\s+(?P<agent>(?:the|a|an)?\s*[\w'’-]+(?:\s+[\w'’-]+){0,3})", re.I)
+#: A section number glued to the front of a subject: "2.1 - Canadian Provinces These codes".
+_LEADING_ENUMERATOR = re.compile(r"^\s*(?:\d{1,3}(?:\.\d{1,3})*|[A-Za-z])\s*[-–.):]\s*")
 #: The longest an actor phrase may be before it stops looking like a subject.
 MAX_ACTOR_CHARS = 110
 MAX_OBJECT_WORDS = 6
@@ -121,6 +138,15 @@ def _trim(text: str, start: int, end: int) -> tuple[str, int, int]:
     return text[start:end], start, end
 
 
+def _message(sentence: str, marker: re.Match[str], *, rule: str) -> Span | None:
+    """What follows a content marker: a clause for ``that``/``whether``, otherwise a phrase."""
+    if _CLAUSE_MARKER.match(marker.group(0)):
+        end = min(len(sentence), marker.end() + MAX_CLAUSE_CHARS)
+        text, start, end = _trim(sentence, marker.end(), end)
+        return Span(text=text, start=start, end=end, rule=f"{rule}_clause") if text else None
+    return _noun_phrase(sentence, marker.end(), rule=rule)
+
+
 def _noun_phrase(sentence: str, at: int, *, rule: str) -> Span | None:
     """The noun phrase beginning at ``at``, ending where an adjunct or clause begins."""
     m = _NP.match(sentence, at)
@@ -139,6 +165,22 @@ def _noun_phrase(sentence: str, at: int, *, rule: str) -> Span | None:
     return Span(text=text, start=start, end=end, rule=rule)
 
 
+def _passive_agent(sentence: str, after: int) -> tuple[Span | None, list[str]]:
+    """The agent of a passive, when the sentence names one and it reads as a role."""
+    from radiocorpus.extraction.context import ACTOR
+
+    m = _BY_AGENT.search(sentence, after)
+    if m is None:
+        return None, ["passive_voice:agent_unstated"]
+    text, start, end = _trim(sentence, m.start("agent"), m.end("agent"))
+    stop = _NP_STOP.search(text)
+    if stop is not None:
+        text, start, end = _trim(sentence, start, start + stop.start())
+    if not text or not ACTOR.search(text):
+        return None, [f"passive_voice:by_phrase_is_not_a_role:{text!r}"]
+    return Span(text=text, start=start, end=end, rule="passive_by_agent"), ["passive_voice:agent_named"]
+
+
 def _find_actor(sentence: str, modal: re.Match[str]) -> tuple[Span | None, list[str]]:
     """The subject: everything from the start of the main clause up to the modal.
 
@@ -152,7 +194,15 @@ def _find_actor(sentence: str, modal: re.Match[str]) -> tuple[Span | None, list[
     if lead:
         begin = lead.end()
         evidence.append(f"stepped_over_leading_clause:{lead.group(0).strip()[:40]!r}")
+    if _PASSIVE.match(sentence, modal.end()):
+        agent, why = _passive_agent(sentence, modal.end())
+        return agent, evidence + why
     text, start, end = _trim(sentence, begin, modal.start())
+    enumerator = _LEADING_ENUMERATOR.match(text)
+    if enumerator:
+        start += enumerator.end()
+        text, start, end = _trim(sentence, start, end)
+        evidence.append("dropped_leading_enumerator")
     # A date is never part of who must act. When a revision stamp has been glued onto the
     # front of a sentence the subject begins after it, and reporting the stamp as the actor
     # would be a false statement about which people the rule directs.
@@ -214,11 +264,25 @@ def _find_object(sentence: str, after: int) -> tuple[Span | None, Span | None, l
 
     first = _noun_phrase(sentence, after, rule="np_after_comm_verb")
     if first is None:
-        return None, None, ["no_noun_phrase_after_verb"]
+        # "acknowledge to the dispatcher that …": the recipient is marked by a preposition
+        # rather than sitting bare after the verb, and the message follows the marker.
+        to = re.match(r"\s*to\b", sentence[after:], re.I)
+        if to is None:
+            return None, None, ["no_noun_phrase_after_verb"]
+        recipient = _noun_phrase(sentence, after + to.end(), rule="np_after_to")
+        if recipient is None:
+            return None, None, ["no_recipient_after_to"]
+        marker = _CONTENT_MARKER.match(sentence, _skip_space(sentence, recipient.end))
+        if marker is None:
+            return None, recipient, ["recipient_after_to_without_message"]
+        message = _message(sentence, marker, rule=f"after_to_{marker.group(0).lower()}")
+        if message is None:
+            return None, recipient, [f"content_marker_without_object:{marker.group(0)!r}"]
+        return message, recipient, [f"to_recipient_then_content:{marker.group(0)!r}"]
     marker = _CONTENT_MARKER.match(sentence, _skip_space(sentence, first.end))
     if marker is None:
         return first, None, [f"object:{first.rule}"]
-    second = _noun_phrase(sentence, marker.end(), rule=f"np_after_{marker.group(0).lower()}")
+    second = _message(sentence, marker, rule=f"after_{marker.group(0).lower()}")
     if second is None:
         # "advise the dispatcher of" with nothing after it states no content.
         return None, first, [f"content_marker_without_object:{marker.group(0)!r}"]

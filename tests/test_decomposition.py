@@ -155,3 +155,58 @@ def test_decomposition_does_not_change_which_candidates_are_emitted():
     assert all(c.decomposition is not None for c in candidates)
     # Every candidate still carries the gating fields the previous version decided on.
     assert all(c.medium and c.structural_reason for c in candidates)
+
+
+# ---------------------------------------------------------------- found on real sentences
+#
+# Everything below was found by running the decomposition over verbatim sentences from the
+# real corpus rather than over generated ones. The generator never produced these shapes.
+
+
+def test_a_passive_does_not_make_its_patient_the_actor():
+    """"The location will be relayed" does not direct the location to do anything.
+
+    This produced a *complete* decomposition with the wrong actor, which is the worst
+    outcome the instrument can have: a confident false statement about who an agency directs.
+    """
+    d = decompose("The location will be relayed the assigned unit.")
+    assert d.actor is None
+    assert "passive_voice:agent_unstated" in d.evidence
+    assert not d.complete
+
+
+def test_a_named_agent_in_a_passive_is_taken_when_it_reads_as_a_role():
+    d = decompose("The assignment shall be broadcast by the dispatcher on the primary channel.")
+    assert d.actor is not None and d.actor.text == "the dispatcher"
+
+
+def test_a_by_phrase_that_names_a_means_is_not_an_agent():
+    """"by radio" and "by unit number" say how, not who."""
+    d = decompose("The assignment shall be broadcast by radio.")
+    assert d.actor is None
+    assert any("by_phrase_is_not_a_role" in e for e in d.evidence)
+
+
+def test_a_recipient_marked_by_a_preposition_is_still_a_recipient():
+    """From a real directive: "acknowledge **to** the dispatcher **that** …"."""
+    d = decompose(
+        "The assigned supervisor must acknowledge to the OEMC dispatcher "
+        "that he or she is monitoring the motor vehicle pursuit."
+    )
+    assert d.actor.text == "The assigned supervisor"
+    assert d.communication_action.text == "acknowledge"
+    assert d.governed_object.text == "he or she is monitoring the motor vehicle pursuit"
+
+
+def test_a_that_clause_is_not_truncated_to_a_noun_phrase():
+    """Reading the clause as a phrase reported "he" as the thing communicated."""
+    d = decompose("Officers shall advise the dispatcher that he or she is en route to the scene.")
+    assert d.governed_object.text.startswith("he or she is en route")
+
+
+def test_a_section_number_is_not_part_of_the_actor():
+    """A heading number glued to a sentence is not one of the people the rule directs."""
+    d = decompose("2.1 - Canadian Provinces Members shall transmit the code on the assigned channel.")
+    assert d.actor is not None
+    assert not d.actor.text.startswith("2.1")
+    assert "dropped_leading_enumerator" in d.evidence
