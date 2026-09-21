@@ -116,6 +116,11 @@ FAMILY_FIELDS = {
 #: The claims that together are "applicability scope" — the set the previous audit found
 #: wrong on every single procedure without recording which part failed.
 SCOPE_FIELDS = ("section_scope_correct", "condition_correct", "exception_correct")
+#: Claims the extraction layer is not responsible for. The issuing authority is a property of
+#: the source ledger, and learner safety is the downstream human gate. Folding them into one
+#: completeness number makes a parser look broken for something it was never asked to do, so
+#: completeness is reported twice: what the parser owes, and what a learner-ready fact needs.
+DOWNSTREAM_FIELDS = ("issuing_authority_correct", "learner_safe_in_principle")
 
 
 @dataclass
@@ -159,11 +164,19 @@ class AdjudicationRecord:
     inspection: str = ""
     notes: str = ""
     seeded_from: str = ""
+    #: Claims decided without a reviewer, because the candidate never made them. Recorded so a
+    #: mechanical decision can never be mistaken for a judgement about a document.
+    mechanically_decided: tuple[str, ...] = ()
+    mechanical_rule: str = ""
     schema_version: str = ADJUDICATION_SCHEMA_VERSION
 
     # ----------------------------------------------------------------------------------
     def required_fields(self) -> tuple[str, ...]:
         return COMMON_FIELDS + FAMILY_FIELDS.get(self.family, ())
+
+    def extraction_fields(self) -> tuple[str, ...]:
+        """The claims the parser is answerable for."""
+        return tuple(f for f in self.required_fields() if f not in DOWNSTREAM_FIELDS)
 
     def unadjudicated_fields(self) -> list[str]:
         out = [f for f in self.required_fields() if getattr(self, f) == Verdict.UNADJUDICATED]
@@ -173,6 +186,23 @@ class AdjudicationRecord:
 
     def is_adjudicated(self) -> bool:
         return not self.unadjudicated_fields()
+
+    def reviewer_decided_fields(self) -> list[str]:
+        """Claims a reviewer judged, as opposed to ones decided by their own absence."""
+        mechanical = set(self.mechanically_decided)
+        return [
+            f for f in self.required_fields()
+            if getattr(self, f) != Verdict.UNADJUDICATED and f not in mechanical
+        ]
+
+    def blocking_fields(self) -> list[str]:
+        """Claims that stop this candidate being a complete fact."""
+        if not self.is_adjudicated():
+            return []
+        return [
+            f for f in self.required_fields()
+            if getattr(self, f) not in (Verdict.SUPPORTED, Verdict.NOT_APPLICABLE)
+        ]
 
     def meaning_is_supported(self) -> bool | None:
         if self.meaning_supported == Verdict.UNADJUDICATED:
@@ -187,6 +217,13 @@ class AdjudicationRecord:
             getattr(self, f) in (Verdict.SUPPORTED, Verdict.NOT_APPLICABLE)
             for f in self.required_fields()
         )
+
+    def is_extraction_complete(self) -> bool | None:
+        """Every claim the parser owes, supported. Says nothing about whether it may be used."""
+        fields = self.extraction_fields()
+        if any(getattr(self, f) == Verdict.UNADJUDICATED for f in fields):
+            return None
+        return all(getattr(self, f) in (Verdict.SUPPORTED, Verdict.NOT_APPLICABLE) for f in fields)
 
     def scope_is_correct(self) -> bool | None:
         if self.family != "procedure_rule":
@@ -280,6 +317,60 @@ def mark_inapplicable(record: AdjudicationRecord) -> AdjudicationRecord:
             if name not in required:
                 setattr(record, name, Verdict.NOT_APPLICABLE)
     return record
+
+
+# ---------------------------------------------------------------- claims a candidate never made
+
+#: Where a candidate would carry each claim, if it carried it at all. A claim is *absent* when
+#: none of its carrier keys appears in the candidate's recorded value.
+#:
+#: Absence is a fact about the candidate, not about the document, so it can be decided without
+#: the source. That distinction matters: everything else in this module needs the document, and
+#: conflating the two would let a mechanical pass masquerade as a review.
+CLAIM_CARRIERS: dict[str, tuple[str, ...]] = {
+    "issuing_authority_correct": ("issuing_authority", "issuer"),
+    "procedure_actor": ("actor", "procedure_actor"),
+    "communication_medium": ("medium",),
+    "communication_action": ("action", "communication_action"),
+    "governed_object": ("governed_object", "object"),
+    "condition_correct": ("has_condition", "condition"),
+    "exception_correct": ("has_exception", "exception"),
+    "section_scope_correct": ("section_heading", "section_path", "applicability_scope"),
+    "context_complete": ("context_complete", "parser_context_complete"),
+}
+ABSENCE_RULE = "claim_absent_from_candidate:no_carrier_key_in_parser_value"
+
+
+def claim_is_carried(record: AdjudicationRecord, claim: str) -> bool:
+    """Whether the candidate makes this claim at all.
+
+    A key present but false still carries a claim — ``has_condition: false`` asserts that no
+    condition governs the rule, which a reviewer can agree or disagree with. A key that is
+    absent, or present and null, carries nothing.
+    """
+    for key in CLAIM_CARRIERS.get(claim, ()):
+        if key in record.parser_value and record.parser_value[key] is not None:
+            return True
+    return False
+
+
+def mark_absent_claims(record: AdjudicationRecord) -> list[str]:
+    """Decide the claims this candidate never made, and only those.
+
+    Returns the field names decided. An existing verdict is never overwritten: a reviewer's
+    judgement outranks a mechanical one, always.
+    """
+    decided: list[str] = []
+    for claim in record.required_fields():
+        if getattr(record, claim) != Verdict.UNADJUDICATED:
+            continue
+        if claim in CLAIM_CARRIERS and not claim_is_carried(record, claim):
+            setattr(record, claim, Verdict.MISSING)
+            decided.append(claim)
+    if decided:
+        record.mechanically_decided = tuple(sorted(set(record.mechanically_decided) | set(decided)))
+        record.mechanical_rule = ABSENCE_RULE
+    return decided
 
 
 # ---------------------------------------------------------------- seeding from the prior review
@@ -475,6 +566,8 @@ def score(
         out: dict = {
             "candidate_meaning": _metric(subset, lambda r: r.meaning_is_supported() is True,
                                          field_names=("meaning_supported",)),
+            "extraction_complete": _metric(subset, lambda r: r.is_extraction_complete() is True,
+                                           field_names=subset[0].extraction_fields()),
             "complete_fact": _metric(subset, lambda r: r.is_complete_fact() is True,
                                      field_names=subset[0].required_fields()),
         }
@@ -508,6 +601,18 @@ def score(
             if r.meaning_is_supported() is False:
                 failures[r.structural_failure] = failures.get(r.structural_failure, 0) + 1
         out["structural_failures"] = dict(sorted(failures.items()))
+        # Which claims stop these candidates being complete facts. Without this the
+        # complete-fact rate is a number with no cause attached, and a systemic gap - one
+        # claim absent from every candidate - reads as if every candidate were wrong.
+        blocking: dict[str, int] = {}
+        for r in subset:
+            for name in r.blocking_fields():
+                blocking[name] = blocking.get(name, 0) + 1
+        out["blocking_claims"] = dict(sorted(blocking.items(), key=lambda kv: (-kv[1], kv[0])))
+        out["blocking_claims_note"] = (
+            "Counts overlap: one candidate can be blocked by several claims. A claim blocking "
+            "every candidate is a systemic gap, not a per-candidate error."
+        )
         return out
 
     per_family = {f: block([r for r in records if r.family == f], f, None) for f in families}
@@ -531,6 +636,9 @@ def score(
                 f"{sorted(set(current_parser_versions.values()))}. Every figure below is a measurement of "
                 "the older parser on real documents, not of the current one."
             )
+    reviewer_fields = sum(len(r.reviewer_decided_fields()) for r in records)
+    mechanical_fields = sum(len(r.mechanically_decided) for r in records)
+    open_fields = sum(len(r.unadjudicated_fields()) for r in records)
     return {
         "schema_version": ADJUDICATION_SCHEMA_VERSION,
         "candidates": len(records),
@@ -538,6 +646,16 @@ def score(
         "candidate_provenance": provenance,
         "fully_adjudicated": sum(1 for r in records if r.is_adjudicated()),
         "unadjudicated": sum(1 for r in records if not r.is_adjudicated()),
+        "claims_decided_by": {
+            "reviewer": reviewer_fields,
+            "absence_from_the_candidate": mechanical_fields,
+            "still_open": open_fields,
+            "note": (
+                "A claim decided by its own absence was never judged against a document. "
+                "'Fully adjudicated' therefore does not mean 'reviewed'."
+            ),
+        },
+        "human_adjudicated_candidates": sum(1 for r in records if r.reviewer_is_human),
         "reviewers": reviewers,
         "any_human_reviewer": any(r.reviewer_is_human for r in records),
         "per_family": per_family,
@@ -565,7 +683,9 @@ def read_records(path: Path) -> list[AdjudicationRecord]:
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             if line.strip():
-                out.append(AdjudicationRecord(**json.loads(line)))
+                row = json.loads(line)
+                row["mechanically_decided"] = tuple(row.get("mechanically_decided") or ())
+                out.append(AdjudicationRecord(**row))
     return out
 
 
@@ -584,6 +704,7 @@ __all__ = [
     "ADJUDICATION_SCHEMA_VERSION",
     "COMMON_FIELDS",
     "FAMILY_FIELDS",
+    "DOWNSTREAM_FIELDS",
     "SCOPE_FIELDS",
     "AdjudicationRecord",
     "Currentness",
@@ -592,6 +713,9 @@ __all__ = [
     "UNSEEDABLE_FIELDS",
     "Verdict",
     "mark_inapplicable",
+    "CLAIM_CARRIERS",
+    "claim_is_carried",
+    "mark_absent_claims",
     "read_missed",
     "read_records",
     "score",

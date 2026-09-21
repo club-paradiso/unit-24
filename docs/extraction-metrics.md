@@ -19,11 +19,13 @@ own quality gate could not be obtained:
 1. **No real document was parsed.** All four validation documents were refused by the
    organisation egress policy (HTTP 403 at CONNECT). Nothing was substituted. Precision on
    real documents is therefore unmeasured, and the ≥95% / ≥90% targets cannot be adjudicated.
-2. **Complete-fact precision is unestablished.** The independent review found 24/116 complete
-   facts and **0/27 complete procedure facts** — every audited procedure had incorrect
-   applicability scope. The new parser attaches scope, condition and exception fields to
-   address exactly that, but those fields are unadjudicated: the existing labels were assigned
-   to differently-shaped candidates and do not transfer.
+2. **Complete-fact precision is 0.000 on every family, for parser v2, and unmeasurable for the
+   current parsers.** The filled adjudication worksheet establishes why, and it is not a
+   scoring artefact: the issuing authority is absent from all 116 candidates, the reviewer
+   judged 0 of 116 learner-safe, and a procedure candidate never carried an actor, a
+   communication action or a governed object. No parser version in the tree — including the
+   current one — decomposes a procedure, so a procedure cannot become a complete fact today
+   however well the layout works.
 3. **No OCR validation against a real scan.** The fail-closed gate is exercised against a
    synthetic image-only page — it refuses, emits nothing, and refuses again when a supplied
    OCR backend returns blank — and against a real PDF with no extractable text, which now
@@ -169,33 +171,93 @@ authoritative source.
 ### The adjudication instrument, and what it exposed
 
 The parser must not define its own ground truth, so the adjudication set is now a first-class
-artifact (`src/radiocorpus/evaluation/adjudication.py`). One record per candidate, one verdict
-per claim that candidate makes, and three rules: **UNADJUDICATED is never read as agreement**,
-a complete fact requires every field, and recall is computed only against a reviewer-supplied
-inventory of what a document contains.
+artifact (`src/radiocorpus/evaluation/adjudication.py`, ADR 0008). One record per candidate,
+one verdict per claim that candidate makes, and three rules: **UNADJUDICATED is never read as
+agreement**, a complete fact requires every claim, and recall is computed only against a
+reviewer-supplied inventory of what a document contains.
 
-Restating the previous review through it measured something that had not been visible:
+The worksheet (`data/adjudication/real_document_worksheet.jsonl`) is filled as far as the
+available evidence allows, in two clearly separated passes.
 
-| | |
+**Pass 1 — restating the previous review.** Every flag the independent reviewer set becomes the
+corresponding verdict. Nothing is re-judged and nothing is inferred from a question that was
+never asked: the old instrument answered **6 of the 15 claims**, and the other nine were left
+open.
+
+**Pass 2 — claims the candidates never made.** A claim absent from a candidate is a fact about
+the *candidate*, not about the document, so it can be decided without the source. This closed
+the remaining nine — and what it closed them with is the finding:
+
+| claim | verdict | candidates |
+|---|---|---|
+| `issuing_authority_correct` | MISSING | **116 / 116** |
+| `procedure_actor` | MISSING | 27 / 27 |
+| `communication_action` | MISSING | 27 / 27 |
+| `governed_object` | MISSING | 27 / 27 |
+| `communication_medium` | MISSING | 27 / 27 |
+| `condition_correct` | MISSING | 27 / 27 |
+| `exception_correct` | MISSING | 27 / 27 |
+| `context_complete` | MISSING | 27 / 27 |
+
+The audit's "0/27 procedures with correct applicability scope" was never a scoring problem.
+**The scope was not wrong — it was absent.** A v2 procedure candidate is a sentence with a
+topic label and nothing else (`applicability_scope: null`). It could not be a complete fact
+because it never made most of the claims a fact requires.
+
+And the current parser still does not close it. `ProcedureCandidate` today carries medium,
+section heading, condition and exception *flags* and a context-completeness judgement, but
+**no parser version in the tree decomposes a procedure into actor, communication action and
+governed object.** Under the complete-fact definition a procedure cannot pass with any parser
+this repository currently has. That is the concrete target for the next sprint.
+
+A mechanical verdict is never mistaken for a review: every record names the claims that were
+decided by absence, and the summary separates them.
+
+| claims | count |
 |---|---|
-| candidates carried forward | 116 |
-| **fully adjudicated** | **0** |
-| claims the old instrument judged | 6 of 15 |
-| `issuing_authority_correct` unjudged | 116 / 116 |
-| procedure actor / medium / action / object / condition / exception / context unjudged | 27 / 27 each |
-| reviewer was human | **no** (`GPT-6 Astra`, `human_review: false`) |
+| decided by the reviewer | 579 |
+| decided by absence from the candidate | 305 |
+| still open | 0 |
+| **decided by a human** | **0** |
 
-This explains why "0/27 procedures with correct applicability scope" could never be acted on:
-the instrument recorded that scope was wrong without recording **which part** was wrong. The
-new schema splits scope into section scope, condition and exception, and adds the four claims
-a procedure makes about who does what, by what medium, to what object.
+Learner safety is deliberately unreachable by the mechanical pass — whether a fact is safe to
+put in front of a learner is a judgement, not a shape — and a test asserts it stays open until
+somebody decides it.
 
-The scorer behaves accordingly. Candidate-meaning precision is computable from the carried-
-forward verdicts and reproduces the known baseline figures — code 0.444, phonetic 0.765,
-procedure 0.407, all for **parser v2**, which the artifact states in a `candidate_provenance`
-block. Complete-fact precision, complete-scope precision and reviewer-judged context
-completeness all come back `null` with the count that blocked them. That is the correct
-answer, and it is the answer this sprint set out to stop guessing at.
+### Real-document metrics
+
+Completeness is reported twice, because one number conflates two different failures. The
+parser is answerable for the meaning, the normalised value, the agency and the region. It is
+not answerable for who issued the document (a property of the source ledger) or for learner
+safety (the downstream human gate).
+
+| family | candidate meaning | **extraction complete** | learner-ready | recall |
+|---|---|---|---|---|
+| code_meaning | 0.444 (24/54) | **0.444** (24/54) | 0.000 (0/54) | null — no inventory |
+| phonetic_letter | 0.765 (26/34) | **0.000** (0/34) | 0.000 (0/34) | null |
+| procedure_rule | 0.407 (11/27) | **0.000** (0/27) | 0.000 (0/27) | null |
+
+Three different stories, which a single number would have hidden:
+
+* **Codes.** Whenever the meaning was right, everything the parser owed was right. The 0.444
+  is a meaning problem, not a completeness problem.
+* **Phonetics.** Meaning supported on 26 of 34, but the reviewer marked the normalised pair
+  wrong on **all 34** — the letter and the word were recovered, the normalised mapping was
+  not. The gap between 0.765 and 0.000 is exactly what the coarser instrument could not show.
+* **Procedures.** Zero, because the candidate never decomposes the rule.
+
+Learner-ready is 0.000 everywhere, blocked by two systemic claims rather than by individual
+errors: the issuing authority is absent from all 116 candidates, and the reviewer judged
+**0 of 116** learner-safe. `blocking_claims` in the artifact reports this per family, so a
+systemic gap is never read as 116 separate mistakes.
+
+Structural failures are reported per class, not aggregated: for codes, 22 adjacent-column
+bleed, 7 lost wrapped continuation, 1 date/revision misread; for procedures, 9 semantic
+misclassification, 4 incorrect condition/exception scope, 1 header/footer contamination.
+
+**Every figure above is for parser v2.** The artifact states this in a `candidate_provenance`
+block that refuses to let an older parser's numbers be read as the current one's. There are no
+real-document metrics for the current parsers, because there are no real documents.
 
 ### Real third-party PDFs: two defects nothing synthetic had found
 
@@ -222,9 +284,14 @@ scores and the 300-document stress corpus are all unchanged.
 ### What real-document metrics still do not exist
 
 * No precision or recall for the **current** parsers on any of the four validation documents.
-* No complete-fact precision on any real document, for any parser version.
+* No complete-fact precision for the **current** parsers on any real document. The figures
+  above are v2's, and they are computable only because the claims v2 omitted can be decided
+  from the candidate itself.
 * No recall on any real document, because no inventory of what those documents contain exists.
-* No human adjudication of anything. Every verdict in the corpus was recorded by an agent.
+* No human adjudication of anything. Every reviewer verdict in the corpus was recorded by an
+  agent, and 305 of the 884 claim verdicts were decided by absence rather than by review.
+* No verdict on any claim a candidate *did* make that the previous reviewer did not judge.
+  Those need the documents, and the worksheet leaves them open by design.
 
 ## Randomized geometry
 

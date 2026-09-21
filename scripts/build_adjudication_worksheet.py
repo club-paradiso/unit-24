@@ -22,6 +22,7 @@ import sys
 from pathlib import Path
 
 from radiocorpus.evaluation.adjudication import (
+    mark_absent_claims,
     seed_from_audit,
     seeding_coverage,
     worksheet_from_candidates,
@@ -66,15 +67,26 @@ def main() -> int:
         records = seed_from_audit(audit_rows, facts, document_keys=DOCUMENT_KEYS, hashes=_source_hashes())
         origin = "previous independent review, restated from data/audit/fact_audit.jsonl"
 
+    # Second pass: decide the claims the candidates never made. This needs no document — a
+    # claim absent from a candidate is a fact about the candidate — and it never overwrites a
+    # reviewer's verdict. Everything it decides is recorded per record as mechanical.
+    mechanical = {name: 0 for name in sorted({f for r in records for f in r.required_fields()})}
+    for record in records:
+        for name in mark_absent_claims(record):
+            mechanical[name] = mechanical.get(name, 0) + 1
+
     write_records(records, OUT / "real_document_worksheet.jsonl")
     coverage = seeding_coverage(records)
     coverage["origin"] = origin
+    coverage["decided_by_absence"] = {k: v for k, v in sorted(mechanical.items()) if v}
     (OUT / "worksheet_coverage.json").write_text(json.dumps(coverage, indent=2, sort_keys=True) + "\n")
     print(f"wrote {len(records)} adjudication records from: {origin}")
     print(f"fully adjudicated: {coverage['fully_adjudicated']} / {coverage['records']}")
+    for name, count in coverage["decided_by_absence"].items():
+        print(f"  ABSENT FROM CANDIDATE {name:28s} {count:3d} (decided without a document)")
     for name, stats in coverage["per_field"].items():
         if stats["unadjudicated"]:
-            print(f"  UNADJUDICATED {name:28s} {stats['unadjudicated']:3d} / {stats['applicable']:3d} applicable")
+            print(f"  STILL UNADJUDICATED   {name:28s} {stats['unadjudicated']:3d} / {stats['applicable']:3d} applicable")
     return 0
 
 

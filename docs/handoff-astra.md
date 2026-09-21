@@ -52,6 +52,7 @@ uv run python scripts/stress_layout.py               # regenerate the randomized
 uv run python scripts/probe_real_documents.py        # real third-party PDFs; expects zero radio facts
 uv run python scripts/build_adjudication_worksheet.py  # the adjudication instrument
 uv run python scripts/score_adjudication.py          # metrics; refuses to score unadjudicated claims
+uv run python scripts/probe_real_documents.py        # real third-party PDFs; expects zero radio facts
 rm -f data/intermediate/corpus.sqlite* && uv run radiocorpus run-canary --skip-acquire
 ```
 
@@ -94,16 +95,18 @@ are unchanged and are the ones to attack.
 
 **Still open — attack these first**
 
-* **Nothing is adjudicated, and nothing was adjudicated by a human.** The worksheet in
-  `data/adjudication/` now carries all 116 candidates with one verdict per claim: **0 of 116
-  are fully adjudicated**, `issuing_authority_correct` is unjudged on every one, and the seven
-  claims a procedure makes about actor, medium, action, object, condition, exception and
-  context are unjudged on all 27. The previous review answered 6 of the 15 questions and
-  recorded `human_review: false`. This is the single largest gap and the only one that can
+* **Nothing was adjudicated by a human.** The worksheet in `data/adjudication/` carries all
+  116 candidates with one verdict per claim. It is now closed as far as the evidence allows —
+  579 claims restated from the previous review, 305 decided because the candidate never made
+  them, 0 left open — but **0 were decided by a human**, and no claim was judged against a
+  source document in this sprint. This is the single largest gap and the only one that can
   close the readiness gate.
-* **Procedure scope is unadjudicated.** 0/27 audited procedures had correct scope, and the old
-  instrument never recorded *which* part was wrong. The new schema splits it; nobody has
-  filled it in.
+* **No parser decomposes a procedure.** The filled worksheet showed that "0/27 correct scope"
+  was never a scoring problem: a v2 procedure candidate carries a sentence and a topic label
+  and nothing else. The current `ProcedureCandidate` adds medium, section heading, condition
+  and exception flags and a context judgement, but still carries **no actor, no communication
+  action and no governed object**. A procedure therefore cannot be a complete fact with any
+  parser in the tree. Build that decomposition before measuring procedures again.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.
