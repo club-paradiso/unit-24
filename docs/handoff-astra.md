@@ -107,12 +107,19 @@ are unchanged and are the ones to attack.
   actor, the communication action and the governed object as spans of the rule sentence, and
   scores 1.000 precision and recall against the plan the randomized corpus writes its
   sentences from — and **0.191 coverage** over the 47 verbatim rule sentences the real corpus
-  holds (`data/evaluation/decomposition_coverage.json`). Most refusals are correct: the sample
-  is what an earlier parser emitted, and it is full of records and data-entry rules that are
-  not radio rules at all. The open residue is a communication verb further from the modal than
-  the window allows (9), a subject the leading-clause rule cannot step over (3), and no modal
-  (1). Those constants were deliberately not loosened, because every example behind them in
-  this sample is a non-radio sentence. Coverage, not precision, is the thing to attack.
+  holds (`data/evaluation/decomposition_coverage.json`) — **0.333 over the four layout-
+  validation documents alone**, because 22 of the 47 sentences come from an NCIC code manual
+  and an equipment-surrender policy, which are not radio-communication documents. Every
+  sentence is enumerated with its spans, offsets, evidence and refusal reason; the judgement of
+  whether each refusal was correct is kept apart in
+  `data/evaluation/decomposition_refusal_review.json` (`reviewer_is_human: false`, keyed by a
+  hash of the sentence). Of the 38 refusals, 29 are correct, 3 are borderline and **6 are
+  defects that remain open**. Of the 9 complete decompositions, 6 are clean and 3 are cut short
+  of what the sentence states. The subject-length cap must not be the repair for the long
+  subjects: a 277-character NCIC table fragment sits just past it and would be emitted as an
+  actor. Coverage, not precision, is the thing to attack — but the 47-sentence sample is too
+  small and too biased to tune against, which is another way of saying the four documents are
+  the blocker here too.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.

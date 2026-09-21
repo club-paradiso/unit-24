@@ -253,49 +253,94 @@ The committed FBI data dictionary supplies a second, out-of-domain sample.
 | sample | sentences | coverage |
 |---|---|---|
 | randomized corpus (generated here) | 61 | **1.000** |
-| **real rule sentences** | 47 | **0.191** |
+| **real rule sentences — all sources** | 47 | **0.191** |
+| **real rule sentences — layout-validation documents only** | 24 | **0.333** |
 | real third-party document, modal-bearing sentences | 6 | 0.000 |
 
 | element located | rate on real sentences |
 |---|---|
-| actor | 0.404 |
+| actor | 0.425 |
 | communication action | 0.277 |
-| governed object | 0.255 |
+| governed object | 0.234 |
 
-Most of the refusals are **correct**. `no_communication_verb_after_modal` accounts for 21 of
-the 38, and the sentences behind it are records rules, data-entry rules and movement orders —
-"A copy will be retained in the unit files", "the code ZZ should be entered in the LIT Field",
-"a Department police employee shall be immediately sent to the location". The sample is not a
-clean corpus of radio rules: it is what an earlier parser emitted, and 16 of the 27 audited
-candidates were judged meaning-unsupported. A refusal on a sentence that is not a radio rule
-is the parser working.
+**0.191 says as much about the sample as about the parser.** Every sentence is enumerated in
+`data/evaluation/decomposition_coverage.json`, and the per-source rollup is the first thing the
+enumeration shows:
 
-The residue is honest limitation. Nine sentences put the communication verb further from the
-modal than the window allows, three have a subject the leading-clause rule cannot step over
-("In instances where a license plate has been issued, …"), and one carries no modal at all.
-None of those constants were loosened to raise the number: every example behind them in this
-sample is a non-radio sentence, and tuning a threshold against a sample that does not contain
-the thing being measured would be fitting to noise.
+| source | sentences | complete | coverage | what it is |
+|---|---|---|---|---|
+| `src_5b4c1c3f38e564f1` | 17 | 0 | **0.000** | NCIC code manual — a data dictionary |
+| `src_47153e6bcd095b90` | 5 | 0 | **0.000** | equipment-surrender / HR policy |
+| PHL Directive 7.1 | 10 | 2 | 0.200 | radio policy |
+| CHI CPD directive | 8 | 3 | 0.375 | radio policy |
+| IN ISP communications | 6 | 3 | 0.500 | radio policy |
+| `src_276a88deb386b0da` | 1 | 1 | 1.000 | victim-services notice |
 
-**Two defects were found by running real sentences, and both are fixed.**
+22 of the 47 come from two sources that are not radio-communication documents at all. Membership
+in the validation set is read from `DOCUMENT_KEYS`, so the 0.333 subtotal is a structural
+grouping and not a hand-listed set of agencies.
 
-1. **A passive made its patient the actor.** "The location will be relayed the assigned unit"
-   produced a *complete* decomposition with `actor = "The location"` — a confident false
-   statement about whom an agency directs, which is the worst outcome this instrument can
-   have. In a passive the phrase before the modal is what the act is done *to*. The actor is
-   now taken only from a `by`-phrase that names a role, and is absent otherwise. This is why
-   the actor rate above is 0.404 and not 0.808: **19 of those located actors were passive
-   patients, and removing them is a precision gain showing up as a coverage loss.**
-2. **A recipient marked by a preposition was not read.** "The assigned supervisor must
-   acknowledge **to** the OEMC dispatcher **that** he or she is monitoring the pursuit" yielded
-   no object. The shape is now handled, and a `that`-clause is taken whole rather than
-   truncated to a noun phrase — reading it as a phrase had reported "he" as the thing
-   communicated.
+#### Every case, reviewed
 
-What this measures and what it does not: coverage, and the reasons for refusal. Not accuracy.
-Whether a located actor is the *right* actor still needs a reviewer — but unlike every other
-real-document question in this project, the evidence is the sentence itself, and the sentence
-is present.
+A coverage rate that does not carry its cases cannot be checked, and cannot be compared against
+after a repair. All 53 sentences are recorded with their located spans, offsets, evidence and
+refusal reason. Whether a refusal was *correct* is a judgement, not a measurement, so it is kept
+in `data/evaluation/decomposition_refusal_review.json` — `reviewer_is_human: false`, keyed by a
+hash of the sentence so a review falls away rather than outliving what it was written about.
+It is joined into each record and never folded into the counts. **Nothing in it counts toward
+the readiness gate, which requires human acceptance.**
+
+| | 38 refusals | 9 complete |
+|---|---|---|
+| correct | **29** — a data entry, a records action, a personnel movement, a definition, an imperative, a table fragment | **6** |
+| cut short of what the sentence states | — | 3 `partial` |
+| reviewer could read it either way | 3 `borderline` | — |
+| **the parser should have found it** | **6 `defect`** | — |
+
+Six of the nine `communication_verb_too_far_from_modal` refusals are one NCIC boilerplate
+sentence repeated under six different headings.
+
+**Three defects were found by reading the enumeration, and all three are fixed.** None of them
+was a refusal — they were answers, and no coverage rate could have surfaced them.
+
+1. **A recipient was reported as the thing communicated.** "Police Radio will notify a Patrol
+   Supervisor to take the officer's location" came back *complete* with the supervisor as the
+   governed object — an agency transmitting a person, and the only outright false fact in the
+   sample. A to-infinitive after the noun phrase now blocks the object. The infinitive is not
+   read as the message either: in "notify the supervisor to take the location" the clause is
+   what was said, and in "contact the desk to obtain a copy" the same shape is why contact was
+   made. Only a known verb triggers this, so "transmit the location to Police Radio" keeps its
+   object.
+2. **A NOTE label contaminated the subject, and hid the clause behind it.** One directive
+   yielded the actor "NOTE: If feasible, officers". Less visibly, the label sat in front of the
+   leading-clause rule, so an entire condition landed in the subject — which is what the CPD
+   directive's `subject_too_long:131` actually was. **The cap was never its cause**, and with
+   the label stepped over, that rule decomposes with its full stated subject. These labels are
+   general document furniture, not any agency's vocabulary.
+3. **A clause was cut mid-word at the 160-character cap.** "… number of occupants … on th"
+   quotes nothing. It now stops at a word boundary and the span says it was cut.
+
+Coverage did not move: one false fact was removed and one true fact gained. That is the trade
+this instrument is supposed to make, and it is why coverage alone is the wrong thing to watch.
+
+#### What was deliberately not changed
+
+The six open defects are recorded, not repaired. The subject-length cap in particular must not
+be raised: a 277-character fragment of an NCIC plate table sits just past it and would be
+emitted as an actor. The repair is a better subject boundary, and that needs real documents to
+validate against, not a 47-sentence sample.
+
+One earlier claim in this document was wrong and is corrected here. **30 of the 53 sentences
+carry a passive flag, but only 2 reach a communication verb at all** — the other 28 refuse
+earlier, correctly, at "no communication verb". Reading a passive's patient as the governed
+object would therefore recover exactly one object in this sample, and it requires splitting the
+communication verbs by whether their object is a person ("members shall be notified **of** the
+change" makes the subject a recipient; "the assignment shall be broadcast" makes it the
+message). The evidence does not support making that change, so it is measured and left.
+
+What this measures and what it does not: coverage, and the reason each sentence was refused.
+Not accuracy — but unlike every other real-document question in this project, the evidence is
+the sentence itself, and the sentence is present.
 
 ### Real-document metrics
 
@@ -473,7 +518,8 @@ unmeasured. Layout is cached by content hash, so the cost is paid once per docum
 | `data/adjudication/worksheet_coverage.json` | which claims the previous review actually judged |
 | `data/evaluation/real_document_adjudicated_metrics.json` | real-document metrics, with every unadjudicated figure null |
 | `data/evaluation/real_pdf_probe.json` | layout behaviour on real third-party PDFs |
-| `data/evaluation/decomposition_coverage.json` | decomposition coverage on real sentences, with refusal reasons |
+| `data/evaluation/decomposition_coverage.json` | every real sentence the decomposition was run on, with its spans, evidence and refusal reason |
+| `data/evaluation/decomposition_refusal_review.json` | whether each of those refusals was correct — a judgement, kept apart from the measurement, not human |
 | `data/evaluation/ocr_validation_status.json` | what OCR validation established, and what it did not |
 | `data/fixtures/real/MANIFEST.json` | identity, issuer, licence and origin commit of the real fixtures |
 | `data/raw/layout-validation/retrieval_log.json` | per-document acquisition attempt, host and claimed issuer |
