@@ -268,6 +268,13 @@ def pdf_layout(data: bytes, *, ocr=None, document_hash: str | None = None) -> Do
             doc.pages.append(page_layout)
     if furniture:
         doc.warnings.append(f"suppressed_repeated_furniture:{len(furniture)}")
+    if not doc.included_blocks():
+        # A PDF whose pages carry no extractable text and no images yields nothing, and the
+        # OCR gate never fires because there is no image to point at. Emitting nothing is the
+        # right behaviour, but emitting nothing *silently* is indistinguishable from a document
+        # that was read successfully and happened to be empty — which is exactly the shape of
+        # an undetected scan. Found on a real government PDF whose text is drawn as vectors.
+        doc.warnings.append(f"no_text_extracted:{len(doc.pages)}_pages_yielded_no_blocks")
     return doc
 
 

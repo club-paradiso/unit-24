@@ -1,7 +1,7 @@
 # Independent audit handoff — layout-aware extraction
 
 **Branch:** `opus/layout-aware-extraction` · **Base:** `7d8e838` (main)
-**Parser versions:** layout-2, code v4, phonetic v4, procedure v3
+**Parser versions:** layout-2, code v4, phonetic v5, procedure v3
 **Parser-specific status:** EXTRACTION_NOT_READY · **Project status:** NOT_READY (unchanged)
 
 ## What to audit, and what is already conceded
@@ -49,6 +49,9 @@ uv run radiocorpus check-invariants                  # run after rebuilding the 
 uv run python scripts/make_layout_fixtures.py        # regenerate the nine fixtures
 uv run python scripts/evaluate_extraction.py         # regenerate every evaluation artifact
 uv run python scripts/stress_layout.py               # regenerate the randomized corpus and sweep
+uv run python scripts/probe_real_documents.py        # real third-party PDFs; expects zero radio facts
+uv run python scripts/build_adjudication_worksheet.py  # the adjudication instrument
+uv run python scripts/score_adjudication.py          # metrics; refuses to score unadjudicated claims
 rm -f data/intermediate/corpus.sqlite* && uv run radiocorpus run-canary --skip-acquire
 ```
 
@@ -91,17 +94,25 @@ are unchanged and are the ones to attack.
 
 **Still open — attack these first**
 
-* **Procedure scope is unadjudicated.** 0/27 audited procedures had correct scope. The new
-  fields target that and nobody has checked them. This needs the real documents and a human;
-  it is the single largest gap.
+* **Nothing is adjudicated, and nothing was adjudicated by a human.** The worksheet in
+  `data/adjudication/` now carries all 116 candidates with one verdict per claim: **0 of 116
+  are fully adjudicated**, `issuing_authority_correct` is unjudged on every one, and the seven
+  claims a procedure makes about actor, medium, action, object, condition, exception and
+  context are unjudged on all 27. The previous review answered 6 of the 15 questions and
+  recorded `human_review: false`. This is the single largest gap and the only one that can
+  close the readiness gate.
+* **Procedure scope is unadjudicated.** 0/27 audited procedures had correct scope, and the old
+  instrument never recorded *which* part was wrong. The new schema splits it; nobody has
+  filled it in.
 * **One unresolved false positive** remains in isolated replay (`CONTEXT_OMITTED`, Chicago
   location rule). It is flagged `context_complete=False`; with the real page its following
   exception would be captured, which is untested.
 * **Seven true code facts are lost** in page-group mode. They need geometry; whether the real
   page supplies it is unverified.
-* **No OCR validation against a real scan.** The gate is now exercised against a synthetic
-  image-only page (refuses, emits nothing, refuses again on blank OCR output), but no real
-  scanned document has been through it.
+* **No OCR validation against a real scan.** The gate is exercised against a synthetic
+  image-only page and against a real PDF with no extractable text, but never against a raster
+  scan; no PDF in the environment has an image-only page and none could be fetched. Status and
+  completion steps: `data/evaluation/ocr_validation_status.json`.
 * **Column merging at narrow gutters.** 62 of 300 randomized documents had columns merged
   rather than split, concentrated at gutters of 6–9 pt; in 3 of them the merge let one
   column's words reach a neighbouring meaning. No document had a column invented.
@@ -109,6 +120,14 @@ are unchanged and are the ones to attack.
   read it without a network, and it is regenerable by the commands above.
 
 **Measured since, with what it found**
+
+* ~~Every PDF the parsers have seen was written by this repository.~~ `data/fixtures/real/`
+  holds the FBI NIBRS data dictionary (US government work, CC0, pinned by commit and hash).
+  It found two defects nothing synthetic had: a letter-keyed code table emitted as a phonetic
+  alphabet (17 false candidates across two real documents, fixed by requiring alphabet-like
+  span coverage; phonetic parser → v5), and a document with no extractable text returning
+  empty in silence (fixed by a `no_text_extracted` warning). Neither fix changed any existing
+  measurement.
 
 * ~~Fixtures are self-designed.~~ `data/evaluation/layout_stress.json` adds 300 documents
   generated from seeded plans that are their own ground truth, with an invented vocabulary and

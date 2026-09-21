@@ -11,13 +11,15 @@ unretrieved.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
-from radiocorpus.evaluation.pdfwrite import scanned_pdf, text_width, wrap_exact
+from radiocorpus.evaluation.pdfwrite import empty_pdf, scanned_pdf, text_width, wrap_exact
 from radiocorpus.evaluation.sensitivity import Setting, sweep
 from radiocorpus.evaluation.stress import evaluate, plan, plan_overflow, render, run
 from radiocorpus.extraction.codes import parse_codes
-from radiocorpus.extraction.phonetics import parse_phonetics
+from radiocorpus.extraction.phonetics import alphabet_span_density, looks_like_an_alphabet, parse_phonetics
 from radiocorpus.extraction.procedures import parse_procedures
 from radiocorpus.extraction.text import OCRRequired
 from radiocorpus.layout.backends import MIN_NATIVE_CHARS, layout_for
@@ -25,6 +27,7 @@ from radiocorpus.layout.backends import MIN_NATIVE_CHARS, layout_for
 # Small but fixed. The published measurements use a larger range; these seeds keep the suite
 # quick while still covering every arrangement the generator can draw.
 SEEDS = range(1, 61)
+LAYOUT_FIXTURES_DIR = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "layout"
 
 
 # ---------------------------------------------------------------- the generator itself
@@ -116,8 +119,6 @@ def test_one_column_alphabet_is_recovered():
 
 def test_enumerated_headings_still_yield_no_phonetics():
     """The counterpart: recovering one-column alphabets must not reopen known failure B."""
-    from pathlib import Path
-
     fixture = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "layout" / "lx03_enumerated_headings.pdf"
     assert parse_phonetics(layout_for(fixture.read_bytes(), "application/pdf")) == []
 
@@ -205,3 +206,70 @@ def test_ocr_returning_nothing_still_refuses():
 
     with pytest.raises(OCRRequired):
         layout_for(scanned_pdf(), "application/pdf", ocr=EmptyOCR())
+
+
+# ---------------------------------------------------------------- real third-party documents
+#
+# Everything above this line runs on PDFs this repository generated. These do not. A real
+# document is the only place to find a defect that the generator was never told to produce,
+# and both tests below guard a defect found exactly that way.
+
+REAL_FIXTURES = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "real"
+
+
+def _real(name: str) -> bytes:
+    import hashlib
+    import json as _json
+
+    manifest = _json.loads((REAL_FIXTURES / "MANIFEST.json").read_text())
+    entry = next(d for d in manifest["documents"] if d["filename"] == name)
+    data = (REAL_FIXTURES / name).read_bytes()
+    digest = hashlib.sha256(data).hexdigest()
+    assert digest == entry["sha256"], f"{name} is not the document that was audited"
+    return data
+
+
+def test_letter_keyed_code_table_is_not_a_phonetic_alphabet():
+    """Found on a real FBI data dictionary, not on any fixture written here.
+
+    Its sex, race and offence-attempt tables pair a letter with a word beginning with that
+    letter — "M = Male", "F = Female", "A = Attempted", "C = Completed" — which is the exact
+    shape of a phonetic mapping. Ten such rows were emitted as alphabet entries. A spelling
+    alphabet fills a contiguous stretch of A-Z; a code table uses whichever letters its domain
+    happens to need, and that is what now separates them.
+    """
+    layout = layout_for(_real("NIBRS_DataDictionary.pdf"), "application/pdf")
+    assert parse_phonetics(layout) == []
+
+
+def test_real_document_yields_no_spurious_codes_or_procedures():
+    """The same document must not produce radio codes or radio procedures either."""
+    layout = layout_for(_real("NIBRS_DataDictionary.pdf"), "application/pdf")
+    assert parse_codes(layout) == []
+    assert parse_procedures(layout) == []
+
+
+def test_alphabet_likeness_matches_the_real_evidence():
+    """The measured ranges, kept as a unit test so the thresholds stay tied to their evidence."""
+    assert looks_like_an_alphabet(set("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+    assert looks_like_an_alphabet(set("ABCDEFGHIJKLM"))  # a half-card or one column
+    assert looks_like_an_alphabet(set("ABCDE"))  # short but contiguous
+    assert not looks_like_an_alphabet(set("FHMNRU"))  # NIBRS sex/arrest disposition codes
+    assert not looks_like_an_alphabet(set("ACJMOUW"))  # NIBRS race codes
+    assert not looks_like_an_alphabet(set("ACF"))  # too few to claim anything
+    assert round(alphabet_span_density(set("ACJMOUW")), 3) == 0.304
+
+
+def test_document_with_no_extractable_text_says_so():
+    """A vector-drawn page yields nothing and cannot trigger the OCR gate, because there is no
+    image. Returning an empty document silently is indistinguishable from a successful parse of
+    a blank one, which is the shape of an undetected scan."""
+    doc = layout_for(empty_pdf(pages=2), "application/pdf")
+    assert doc.included_blocks() == []
+    assert any(w.startswith("no_text_extracted:") for w in doc.warnings)
+
+
+def test_a_document_with_text_carries_no_empty_warning():
+    doc = layout_for((LAYOUT_FIXTURES_DIR / "lx09_single_column_narrative.pdf").read_bytes(), "application/pdf")
+    assert doc.included_blocks()
+    assert not any(w.startswith("no_text_extracted:") for w in doc.warnings)

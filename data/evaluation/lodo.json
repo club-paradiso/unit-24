@@ -178,7 +178,7 @@
   "parser_versions": {
     "code_parser_version": "4",
     "layout_version": "layout-2",
-    "phonetic_parser_version": "4",
+    "phonetic_parser_version": "5",
     "procedure_parser_version": "3"
   }
 }

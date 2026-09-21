@@ -1,11 +1,12 @@
 # Extraction metrics and parser readiness
 
 **Parser versions:** layout-2 (`layout_code_fingerprint` pins the source), code parser v4,
-phonetic parser v4, procedure parser v3. **Baseline:** commit `7d8e838`, parser v2.
+phonetic parser v5, procedure parser v3. **Baseline:** commit `7d8e838`, parser v2.
 
-The code and phonetic parsers moved to v4 when the randomized corpus below exposed three
-defects in v3. Facts already extracted keep the version that produced them; provenance records
-what happened, it is not rewritten.
+The code and phonetic parsers moved to v4 when the randomized corpus exposed three defects in
+v3; the phonetic parser moved again to v5 when a real third-party PDF exposed a fourth. Facts
+already extracted keep the version that produced them; provenance records what happened, it is
+not rewritten.
 
 ## Readiness status
 
@@ -23,10 +24,15 @@ own quality gate could not be obtained:
    applicability scope. The new parser attaches scope, condition and exception fields to
    address exactly that, but those fields are unadjudicated: the existing labels were assigned
    to differently-shaped candidates and do not transfer.
-3. **No OCR validation against a real scan.** The fail-closed gate is now exercised against a
+3. **No OCR validation against a real scan.** The fail-closed gate is exercised against a
    synthetic image-only page — it refuses, emits nothing, and refuses again when a supplied
-   OCR backend returns blank — but no real scanned document has been through it. Synthetic
-   coverage is not the same evidence, so this remains a NOT_READY item.
+   OCR backend returns blank — and against a real PDF with no extractable text, which now
+   warns instead of returning empty in silence. Neither is a raster scan. Every PDF in the
+   execution environment was examined and none has an image-only page; no scan could be
+   fetched. Recorded as explicitly unresolved in `data/evaluation/ocr_validation_status.json`.
+4. **Nothing has been adjudicated by a human.** The one independent review in the corpus was
+   performed by an agent and records `human_review: false` on all 116 candidates. The
+   readiness gate requires human acceptance, and no artifact in this repository satisfies it.
 
 Project status remains **NOT_READY** for nationwide discovery regardless of this sprint.
 
@@ -131,6 +137,95 @@ A perfect score on nine fixtures the same author designed is weak evidence about
 documents. It is offered as a demonstration that the mechanism works when geometry exists,
 not as a precision claim.
 
+## Real-document validation
+
+This is the sprint's primary gate, and it did not pass. What follows is what was actually
+established, separated from what was not.
+
+### Acquisition: still blocked, re-attempted and logged
+
+All four validation documents were re-requested on 2026-09-21. Every one was refused by the
+organisation egress policy with **403 at CONNECT**, and the refusal is now recorded per
+document in `data/raw/layout-validation/retrieval_log.json` with the canonical URL, the host,
+the claimed issuing authority and the attempt timestamp.
+
+The block is an allowlist, not a transient failure: `pypi.org` and `github.com` answer, every
+`.gov` host and `archive.org` do not. No alternative fetch path was used to route around it —
+the policy is a technical restriction set by the environment owner, and the project's own
+source rules forbid circumventing technical restrictions.
+
+The bytes are also not recoverable locally. Every object in the repository's full git history
+was hashed against the four expected digests: **no match, and no PDF blob has ever been
+committed**. The layout cache holds only fixture documents. One document (CHP) *was* retrieved
+in an earlier session — `data/audit/retrieval/CAN-S05.json` records the fetch at
+2026-09-20T06:57:14Z — but its bytes lived in a git-ignored directory that did not survive the
+container.
+
+`scripts/fetch_layout_validation.py` now refuses three things it previously accepted: a
+redirect onto a different host, a response whose content type is not `application/pdf`, and
+any body whose SHA-256 does not match. A 200 is not provenance, and a mirror is not an
+authoritative source.
+
+### The adjudication instrument, and what it exposed
+
+The parser must not define its own ground truth, so the adjudication set is now a first-class
+artifact (`src/radiocorpus/evaluation/adjudication.py`). One record per candidate, one verdict
+per claim that candidate makes, and three rules: **UNADJUDICATED is never read as agreement**,
+a complete fact requires every field, and recall is computed only against a reviewer-supplied
+inventory of what a document contains.
+
+Restating the previous review through it measured something that had not been visible:
+
+| | |
+|---|---|
+| candidates carried forward | 116 |
+| **fully adjudicated** | **0** |
+| claims the old instrument judged | 6 of 15 |
+| `issuing_authority_correct` unjudged | 116 / 116 |
+| procedure actor / medium / action / object / condition / exception / context unjudged | 27 / 27 each |
+| reviewer was human | **no** (`GPT-6 Astra`, `human_review: false`) |
+
+This explains why "0/27 procedures with correct applicability scope" could never be acted on:
+the instrument recorded that scope was wrong without recording **which part** was wrong. The
+new schema splits scope into section scope, condition and exception, and adds the four claims
+a procedure makes about who does what, by what medium, to what object.
+
+The scorer behaves accordingly. Candidate-meaning precision is computable from the carried-
+forward verdicts and reproduces the known baseline figures — code 0.444, phonetic 0.765,
+procedure 0.407, all for **parser v2**, which the artifact states in a `candidate_provenance`
+block. Complete-fact precision, complete-scope precision and reviewer-judged context
+completeness all come back `null` with the count that blocked them. That is the correct
+answer, and it is the answer this sprint set out to stop guessing at.
+
+### Real third-party PDFs: two defects nothing synthetic had found
+
+Every PDF this repository had ever parsed was written by this repository. `data/fixtures/real/`
+now holds one that was not: the FBI NIBRS data dictionary, a US government work released under
+CC0 in the Crime Data Explorer repository, pinned by commit and hash. It is not a radio-protocol
+source and is never ingested as evidence about any agency; it exists to exercise the gates
+against real-world PDF structure. Running it found:
+
+1. **A letter-keyed code table read as a phonetic alphabet.** Its sex, race and offence tables
+   pair a letter with a word beginning with that letter — `M = Male`, `F = Female`,
+   `A = Attempted`, `C = Completed` — which is exactly the shape of a phonetic mapping. **17
+   false candidates across two real documents.** A spelling alphabet fills a contiguous stretch
+   of A–Z; the NIBRS tables span 6 to 23 letters and fill 0.30 to 0.50 of that range. Emission
+   now requires that density, with a tighter floor for short runs. Phonetic parser → v5.
+2. **A document that yielded nothing, silently.** A real PDF whose text is drawn as vector
+   outlines produces no blocks, and cannot trigger the OCR gate because it carries no image.
+   Returning an empty document without comment is indistinguishable from successfully parsing a
+   blank one — the shape of an undetected scan. The layout now warns `no_text_extracted`.
+
+Both fixes cost nothing measurable elsewhere: the audited replay figures, the nine fixture
+scores and the 300-document stress corpus are all unchanged.
+
+### What real-document metrics still do not exist
+
+* No precision or recall for the **current** parsers on any of the four validation documents.
+* No complete-fact precision on any real document, for any parser version.
+* No recall on any real document, because no inventory of what those documents contain exists.
+* No human adjudication of anything. Every verdict in the corpus was recorded by an agent.
+
 ## Randomized geometry
 
 The nine fixtures above were written by the same author as the parsers, so a perfect score on
@@ -234,4 +329,11 @@ unmeasured. Layout is cached by content hash, so the cost is paid once per docum
 | `data/evaluation/real_document_metrics.json` | all four documents recorded MISSING with the block reason |
 | `data/evaluation/layout_stress.json` | 300 randomized documents, per-document results and summary |
 | `data/evaluation/threshold_sensitivity.json` | column detection under 45 threshold combinations |
+| `data/adjudication/real_document_worksheet.jsonl` | one record per candidate, one verdict per claim |
+| `data/adjudication/worksheet_coverage.json` | which claims the previous review actually judged |
+| `data/evaluation/real_document_adjudicated_metrics.json` | real-document metrics, with every unadjudicated figure null |
+| `data/evaluation/real_pdf_probe.json` | layout behaviour on real third-party PDFs |
+| `data/evaluation/ocr_validation_status.json` | what OCR validation established, and what it did not |
+| `data/fixtures/real/MANIFEST.json` | identity, issuer, licence and origin commit of the real fixtures |
+| `data/raw/layout-validation/retrieval_log.json` | per-document acquisition attempt, host and claimed issuer |
 | `data/raw/layout-validation/MANIFEST.json` | document identity, expected hashes and page counts |

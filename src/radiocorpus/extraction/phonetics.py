@@ -11,6 +11,13 @@ lines, which the layout layer types as headings on typography alone; skipping ev
 lost all 26 letters of such a listing. It is gated on density rather than on a letter count,
 so a directive page with a handful of lettered section titles cannot reach it.
 
+Structure alone is still not enough, because a *code* table has the same structure. The FBI
+NIBRS data dictionary pairs "M" with "Male", "F" with "Female", "A" with "Attempted" and
+"C" with "Completed" in ruled two-cell rows, and every one of those rows satisfies both the
+pair shape and the requirement that the word begin with its letter. Ten of them were emitted
+as alphabet entries. What separates the two is coverage: a spelling alphabet runs through a
+contiguous stretch of A-Z, while a code table uses whichever letters its domain needs.
+
 Reference alphabets are used to *describe* what was found and never to change it. If a local
 alphabet differs from APCO on one letter, all 26 local mappings are preserved and the
 divergence is reported.
@@ -27,7 +34,7 @@ from radiocorpus.layout.model import BlockType, DocumentLayout, LayoutBlock
 from radiocorpus.layout.segment import ENUMERATOR
 
 PARSER_RULE = "phonetic_letter:structural"
-PARSER_VERSION = "4"
+PARSER_VERSION = "5"
 
 NATO = {
     "A": "ALFA", "B": "BRAVO", "C": "CHARLIE", "D": "DELTA", "E": "ECHO", "F": "FOXTROT",
@@ -53,6 +60,17 @@ MIN_REGION_LETTERS = 4
 # stronger evidence than a four-letter run: most of the region must *be* the listing.
 MIN_HEADING_RUN_LETTERS = 8
 MIN_HEADING_RUN_DENSITY = 0.5
+# A letter-keyed *code* table is not a spelling alphabet. Real government documents are full
+# of them — "M = Male; F = Female", "A = Asian; C = Chinese; J = Japanese" — and every row
+# satisfies the shape test, because a code's expansion naturally begins with its own letter.
+# A spelling alphabet is distinguishable by what it covers: it runs through a contiguous
+# stretch of A-Z, while a code table picks out whichever letters its domain happens to use.
+# A long run may have gaps — a card can omit a letter, or a page break can split it — but a
+# short run has to be essentially contiguous before it is worth believing, because a handful
+# of scattered letters is what a code table looks like and what an alphabet never does.
+MIN_TABLE_ALPHABET_LETTERS = 8
+MIN_ALPHABET_SPAN_DENSITY = 0.6
+SMALL_RUN_SPAN_DENSITY = 0.9
 # Letters needed before a system label may be offered at all.
 MIN_LABEL_LETTERS = 13
 LABEL_MATCH_RATIO = 0.9
@@ -128,6 +146,34 @@ def _is_enumerated_clause(text: str) -> bool:
     words = rest.split()
     # "C. COMMUNICATIONS FAILURE:" -> 2 words; "A. Attempt to Locate ..." -> many.
     return len(words) >= 2 or bool(_SENTENCE_TAIL.search(rest)) or rest.rstrip().endswith(":")
+
+
+def alphabet_span_density(letters: set[str]) -> float:
+    """Share of the A-Z stretch between the lowest and highest letter that is actually present.
+
+    A spelling alphabet fills its range: 26 of 26, or 13 of the 13 letters on a half-card.
+    A code table is sparse within its range — {A, C, J, M, O, U, W} spans 23 letters and
+    fills 7 of them. The measure needs no vocabulary and no list of known alphabets.
+    """
+    usable = {x for x in letters if len(x) == 1 and "A" <= x <= "Z"}
+    if not usable:
+        return 0.0
+    span = ord(max(usable)) - ord(min(usable)) + 1
+    return len(usable) / span
+
+
+def looks_like_an_alphabet(letters: set[str]) -> bool:
+    """Whether a region's letters are dense enough over their range to be a spelling alphabet.
+
+    Measured against real documents: the sex, race and offence-attempt code tables in the FBI
+    NIBRS data dictionary span 6 to 23 letters and fill 0.30 to 0.50 of that range, while a
+    printed alphabet — whole, or split in half by a column or a page — fills all of it.
+    """
+    usable = {x for x in letters if len(x) == 1 and "A" <= x <= "Z"}
+    if len(usable) < MIN_REGION_LETTERS:
+        return False
+    floor = MIN_ALPHABET_SPAN_DENSITY if len(usable) >= MIN_TABLE_ALPHABET_LETTERS else SMALL_RUN_SPAN_DENSITY
+    return alphabet_span_density(usable) >= floor
 
 
 def _region_of(block: LayoutBlock) -> str:
@@ -221,16 +267,23 @@ def parse_phonetics(layout: DocumentLayout) -> list[PhoneticCandidate]:
         density = pair_blocks / region_blocks[region] if region_blocks.get(region) else 0.0
         reason: str | None = None
         evidence: list[str] = [f"region:{region}", f"distinct_letters:{len(distinct)}"]
+        # Without an explicit alphabet heading, the letters themselves have to look like an
+        # alphabet. Four pairs in a table is the shape of a code table as often as it is the
+        # shape of a spelling alphabet, and a code table is the more common thing in a
+        # government document.
+        alphabet_like = looks_like_an_alphabet(distinct)
+        evidence.append(f"span_density:{alphabet_span_density(distinct):.2f}")
         if governing is not None:
             reason = "PHONETIC_HEADING"
             evidence.append(f"heading:{governing.text[:60]!r}")
-        elif len(distinct) >= MIN_REGION_LETTERS and table_pairs >= MIN_REGION_LETTERS:
+        elif alphabet_like and table_pairs >= MIN_REGION_LETTERS:
             reason = "ALPHABET_TABLE"
             evidence.append(f"table_pairs:{table_pairs}")
-        elif len(body_letters) >= MIN_REGION_LETTERS:
+        elif alphabet_like and len(body_letters) >= MIN_REGION_LETTERS:
             reason = "LETTER_SEQUENCE"
         elif (
             heading_sourced.get(region)
+            and alphabet_like
             and len(distinct) >= MIN_HEADING_RUN_LETTERS
             and density >= MIN_HEADING_RUN_DENSITY
         ):
@@ -314,10 +367,14 @@ def label_system(cands: list[PhoneticCandidate]) -> tuple[str, float]:
 
 __all__ = [
     "APCO_1941",
+    "MIN_ALPHABET_SPAN_DENSITY",
+    "MIN_TABLE_ALPHABET_LETTERS",
     "NATO",
     "AlphabetReport",
     "PhoneticCandidate",
+    "alphabet_span_density",
     "describe_alphabet",
+    "looks_like_an_alphabet",
     "label_system",
     "parse_phonetic_blocks",
     "parse_phonetics",

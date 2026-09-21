@@ -137,6 +137,36 @@ def scanned_pdf(*, width: int = 612, height: int = 792, caption: str | None = No
     return _assemble(objs, catalog)
 
 
+def empty_pdf(*, pages: int = 1, width: int = 612, height: int = 792) -> bytes:
+    """A PDF with pages but no text and no images.
+
+    Real documents look like this when their text is drawn as vector outlines. Nothing can be
+    extracted and the scanned-page gate cannot fire, because there is no image to point at, so
+    the document has to announce that it yielded nothing rather than pass silently.
+    """
+    objs: list[bytes] = []
+
+    def add(b: bytes) -> int:
+        objs.append(b)
+        return len(objs)
+
+    page_ids: list[int] = []
+    pages_obj_index = len(objs) + 1 + 2 * pages
+    for _ in range(pages):
+        stream = b"0 0 m 10 10 l S"  # a drawn line: ink, but no text and no image
+        contents = add(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
+        page_ids.append(
+            add(
+                f"<< /Type /Page /Parent {pages_obj_index} 0 R /MediaBox [0 0 {width} {height}] "
+                f"/Contents {contents} 0 R /Resources << >> >>".encode()
+            )
+        )
+    pages_obj = add(("<< /Type /Pages /Kids [" + " ".join(f"{p} 0 R" for p in page_ids) + f"] /Count {pages} >>").encode())
+    assert pages_obj == pages_obj_index
+    catalog = add(f"<< /Type /Catalog /Pages {pages_obj} 0 R >>".encode())
+    return _assemble(objs, catalog)
+
+
 def _assemble(objs: list[bytes], catalog: int) -> bytes:
     out = bytearray(b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n")
     offsets = []
@@ -151,4 +181,4 @@ def _assemble(objs: list[bytes], catalog: int) -> bytes:
     return bytes(out)
 
 
-__all__ = ["CHAR_W", "pdf", "scanned_pdf", "text_width", "wrap", "wrap_exact"]
+__all__ = ["CHAR_W", "empty_pdf", "pdf", "scanned_pdf", "text_width", "wrap", "wrap_exact"]

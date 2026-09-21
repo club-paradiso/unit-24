@@ -1,0 +1,531 @@
+{
+  "any_human_reviewer": false,
+  "candidate_provenance": {
+    "candidate_parser_versions": [
+      "2"
+    ],
+    "current_parser_versions": {
+      "code_meaning": "4",
+      "phonetic_letter": "5",
+      "procedure_rule": "3"
+    },
+    "measures_current_parsers": false,
+    "seeded_from": [
+      "data/audit/fact_audit.jsonl"
+    ],
+    "warning": "These candidates were emitted by parser version(s) ['2']; the tree now runs ['3', '4', '5']. Every figure below is a measurement of the older parser on real documents, not of the current one."
+  },
+  "candidates": 116,
+  "documents": [
+    "CHI_CPD_DIRECTIVE",
+    "CHP_AURAL_BREVITY",
+    "IN_ISP_COMMUNICATIONS",
+    "PHL_PPD_DIRECTIVE_7_1"
+  ],
+  "fully_adjudicated": 0,
+  "note": "Real-document metrics only. Never combine with the synthetic stress corpus: a figure from generated geometry is not evidence about a published document.",
+  "per_document": {
+    "CHI_CPD_DIRECTIVE": {
+      "code_meaning": {
+        "emitted": 0
+      },
+      "phonetic_letter": {
+        "emitted": 0
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "candidate_meaning": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 6,
+          "precision": 0.25,
+          "tp": 2,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "8 of 8 candidates have an unadjudicated field",
+          "emitted": 8,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 8
+        },
+        "complete_scope": {
+          "adjudicated": 0,
+          "blocked_reason": "8 of 8 candidates have an unadjudicated field",
+          "emitted": 8,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 8
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 2
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 0,
+          "blocked_reason": "8 of 8 candidates have an unadjudicated field",
+          "emitted": 8,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 8
+        },
+        "structural_failures": {
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 2,
+          "SEMANTIC_MISCLASSIFICATION": 4
+        }
+      }
+    },
+    "CHP_AURAL_BREVITY": {
+      "code_meaning": {
+        "candidate_meaning": {
+          "adjudicated": 53,
+          "emitted": 53,
+          "fp": 29,
+          "precision": 0.4528,
+          "tp": 24,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "53 of 53 candidates have an unadjudicated field",
+          "emitted": 53,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 53
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 24
+        },
+        "structural_failures": {
+          "ADJACENT_COLUMN_BLEED": 22,
+          "LOST_WRAPPED_CONTINUATION": 7
+        }
+      },
+      "phonetic_letter": {
+        "candidate_meaning": {
+          "adjudicated": 31,
+          "emitted": 31,
+          "fp": 5,
+          "precision": 0.8387,
+          "tp": 26,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "31 of 31 candidates have an unadjudicated field",
+          "emitted": 31,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 31
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 26
+        },
+        "structural_failures": {
+          "LOST_WRAPPED_CONTINUATION": 1,
+          "OTHER": 4
+        }
+      },
+      "phonetic_system": {
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "1 of 1 candidates have an unadjudicated field",
+          "emitted": 1,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 1
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "OTHER": 1
+        }
+      },
+      "procedure_rule": {
+        "emitted": 0
+      }
+    },
+    "IN_ISP_COMMUNICATIONS": {
+      "code_meaning": {
+        "emitted": 0
+      },
+      "phonetic_letter": {
+        "candidate_meaning": {
+          "adjudicated": 2,
+          "emitted": 2,
+          "fp": 2,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "2 of 2 candidates have an unadjudicated field",
+          "emitted": 2,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 2
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "HEADING_MISCLASSIFICATION": 2
+        }
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "candidate_meaning": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 4,
+          "precision": 0.3333,
+          "tp": 2,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "6 of 6 candidates have an unadjudicated field",
+          "emitted": 6,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 6
+        },
+        "complete_scope": {
+          "adjudicated": 0,
+          "blocked_reason": "6 of 6 candidates have an unadjudicated field",
+          "emitted": 6,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 6
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 2
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 0,
+          "blocked_reason": "6 of 6 candidates have an unadjudicated field",
+          "emitted": 6,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 6
+        },
+        "structural_failures": {
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 1,
+          "OTHER": 2,
+          "SEMANTIC_MISCLASSIFICATION": 1
+        }
+      }
+    },
+    "PHL_PPD_DIRECTIVE_7_1": {
+      "code_meaning": {
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "1 of 1 candidates have an unadjudicated field",
+          "emitted": 1,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 1
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "DATE_OR_REVISION_MISREAD": 1
+        }
+      },
+      "phonetic_letter": {
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "1 of 1 candidates have an unadjudicated field",
+          "emitted": 1,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 1
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "HEADING_MISCLASSIFICATION": 1
+        }
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "candidate_meaning": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 6,
+          "precision": 0.5385,
+          "tp": 7,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 0,
+          "blocked_reason": "13 of 13 candidates have an unadjudicated field",
+          "emitted": 13,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 13
+        },
+        "complete_scope": {
+          "adjudicated": 0,
+          "blocked_reason": "13 of 13 candidates have an unadjudicated field",
+          "emitted": 13,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 13
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 7
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 0,
+          "blocked_reason": "13 of 13 candidates have an unadjudicated field",
+          "emitted": 13,
+          "fp": null,
+          "precision": null,
+          "tp": null,
+          "unadjudicated": 13
+        },
+        "structural_failures": {
+          "HEADER_FOOTER_CONTAMINATION": 1,
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 1,
+          "SEMANTIC_MISCLASSIFICATION": 4
+        }
+      }
+    }
+  },
+  "per_family": {
+    "code_meaning": {
+      "candidate_meaning": {
+        "adjudicated": 54,
+        "emitted": 54,
+        "fp": 30,
+        "precision": 0.4444,
+        "tp": 24,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 0,
+        "blocked_reason": "54 of 54 candidates have an unadjudicated field",
+        "emitted": 54,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 54
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 24
+      },
+      "structural_failures": {
+        "ADJACENT_COLUMN_BLEED": 22,
+        "DATE_OR_REVISION_MISREAD": 1,
+        "LOST_WRAPPED_CONTINUATION": 7
+      }
+    },
+    "phonetic_letter": {
+      "candidate_meaning": {
+        "adjudicated": 34,
+        "emitted": 34,
+        "fp": 8,
+        "precision": 0.7647,
+        "tp": 26,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 0,
+        "blocked_reason": "34 of 34 candidates have an unadjudicated field",
+        "emitted": 34,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 34
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 26
+      },
+      "structural_failures": {
+        "HEADING_MISCLASSIFICATION": 3,
+        "LOST_WRAPPED_CONTINUATION": 1,
+        "OTHER": 4
+      }
+    },
+    "phonetic_system": {
+      "candidate_meaning": {
+        "adjudicated": 1,
+        "emitted": 1,
+        "fp": 1,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 0,
+        "blocked_reason": "1 of 1 candidates have an unadjudicated field",
+        "emitted": 1,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 1
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 0
+      },
+      "structural_failures": {
+        "OTHER": 1
+      }
+    },
+    "procedure_rule": {
+      "candidate_meaning": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 16,
+        "precision": 0.4074,
+        "tp": 11,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 0,
+        "blocked_reason": "27 of 27 candidates have an unadjudicated field",
+        "emitted": 27,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 27
+      },
+      "complete_scope": {
+        "adjudicated": 0,
+        "blocked_reason": "27 of 27 candidates have an unadjudicated field",
+        "emitted": 27,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 27
+      },
+      "parser_context_complete_subset": {
+        "emitted": 0,
+        "note": "the parser marked no candidate context_complete"
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 11
+      },
+      "reviewer_context_complete": {
+        "adjudicated": 0,
+        "blocked_reason": "27 of 27 candidates have an unadjudicated field",
+        "emitted": 27,
+        "fp": null,
+        "precision": null,
+        "tp": null,
+        "unadjudicated": 27
+      },
+      "structural_failures": {
+        "HEADER_FOOTER_CONTAMINATION": 1,
+        "INCORRECT_CONDITION_EXCEPTION_SCOPE": 4,
+        "OTHER": 2,
+        "SEMANTIC_MISCLASSIFICATION": 9
+      }
+    }
+  },
+  "reviewers": [
+    "GPT-6 Astra independent source review"
+  ],
+  "schema_version": "adjudication-1",
+  "unadjudicated": 116
+}

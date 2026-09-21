@@ -78,6 +78,9 @@ def main() -> int:
             "procedure_context_complete": sum(1 for r in procs if r.context_complete),
             "alphabet": report.to_dict() if phon else None,
             "text_extraction_methods": sorted(layout.text_extraction_methods),
+            "warnings": list(layout.warnings),
+            "document_sha256": digest,
+            "yielded_no_text": not layout.included_blocks(),
         }
     with (OUT / "real_document_candidates.jsonl").open("w", encoding="utf-8") as handle:
         for row in rows:

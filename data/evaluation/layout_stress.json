@@ -12,9 +12,9 @@
   "note": "Synthetic geometry only. Recall is meaningful here solely because this corpus was generated from a plan that is its own ground truth. It is not evidence about any real document: the four real validation documents remain unretrieved.",
   "parser_versions": {
     "code_parser_version": "4",
-    "layout_code_fingerprint": "90c8ba147f3a2f5e",
+    "layout_code_fingerprint": "1e1dad4bdcd24682",
     "layout_version": "layout-2",
-    "phonetic_parser_version": "4",
+    "phonetic_parser_version": "5",
     "procedure_parser_version": "3"
   },
   "results": [
