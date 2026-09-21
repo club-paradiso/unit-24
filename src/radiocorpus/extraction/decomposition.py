@@ -39,8 +39,21 @@ DECOMPOSITION_VERSION = "decomposition-1"
 MODAL = re.compile(r"\b(?:shall(?:\s+not)?|must(?:\s+not)?|will(?:\s+not)?|should(?:\s+not)?|are to|is to|may(?:\s+not)?)\b", re.I)
 #: A leading subordinate clause: "When a unit is dispatched, members shall …". The actor is on
 #: the far side of the comma, so the clause is stepped over rather than read as the subject.
+#: No ``^``: this is matched from a position, and ``^`` would anchor to the start of the string
+#: regardless of that position, which silently disables the rule once anything precedes it.
 _LEADING_CLAUSE = re.compile(
-    r"^\s*(?:when|whenever|if|upon|before|after|while|during|once|in the event|as soon as|should)\b[^,]{0,120},\s*",
+    r"\s*(?:when|whenever|if|upon|before|after|while|during|once|in the event|as soon as|should)\b[^,]{0,120},\s*",
+    re.I,
+)
+#: Furniture that labels a passage rather than taking part in it. A rule printed under a NOTE
+#: heading directs the same people as one printed without it, but the label sits inside the
+#: sentence the text extractor produces, and it both contaminates the subject — a real
+#: directive yielded the actor "NOTE: If feasible, officers" — and hides the leading clause
+#: behind it from the rule above. These labels are general technical-document furniture, not
+#: any agency's vocabulary, which is why matching them by name is a format rule and not a
+#: branch on whose document this is.
+_FURNITURE_LABEL = re.compile(
+    r"\s*(?:note|notes|caution|warning|important|exception|reminder|example)\b\s*[:.\-–]?\s+",
     re.I,
 )
 #: Adverbs that can sit between the modal and its verb: "shall immediately notify".
@@ -142,8 +155,17 @@ def _message(sentence: str, marker: re.Match[str], *, rule: str) -> Span | None:
     """What follows a content marker: a clause for ``that``/``whether``, otherwise a phrase."""
     if _CLAUSE_MARKER.match(marker.group(0)):
         end = min(len(sentence), marker.end() + MAX_CLAUSE_CHARS)
+        cut = ""
+        if end < len(sentence):
+            # A span addresses characters of the source, so a reader checks the claim by reading
+            # them. Stopping at the cap mid-word produced "… number of occupants … on th", which
+            # is not a quotation of anything. Back off to a word boundary and say it was cut.
+            boundary = sentence.rfind(" ", marker.end(), end)
+            if boundary > marker.end():
+                end = boundary
+            cut = "_truncated"
         text, start, end = _trim(sentence, marker.end(), end)
-        return Span(text=text, start=start, end=end, rule=f"{rule}_clause") if text else None
+        return Span(text=text, start=start, end=end, rule=f"{rule}_clause{cut}") if text else None
     return _noun_phrase(sentence, marker.end(), rule=rule)
 
 
@@ -190,7 +212,11 @@ def _find_actor(sentence: str, modal: re.Match[str]) -> tuple[Span | None, list[
     """
     evidence: list[str] = []
     begin = 0
-    lead = _LEADING_CLAUSE.match(sentence)
+    label = _FURNITURE_LABEL.match(sentence)
+    if label:
+        begin = label.end()
+        evidence.append(f"dropped_document_furniture_label:{label.group(0).strip()!r}")
+    lead = _LEADING_CLAUSE.match(sentence, begin)
     if lead:
         begin = lead.end()
         evidence.append(f"stepped_over_leading_clause:{lead.group(0).strip()[:40]!r}")
@@ -248,6 +274,11 @@ def _find_action(sentence: str, after: int) -> tuple[Span | None, list[str]]:
 
 
 _DETERMINED = re.compile(rf"^\s*{_ARTICLE}\b", re.I)
+#: ``to`` followed by a verb is an infinitive; ``to`` followed by anything else is a recipient
+#: phrase ("transmit the location to Police Radio"), where the noun phrase before it really is
+#: the thing communicated. Only a verb the project already knows counts, so an unrecognised word
+#: leaves the existing reading alone rather than discarding a correct object.
+_TO_INFINITIVE = re.compile(rf"\s*to\s+(?P<verb>{COMM_VERB.pattern}|{_NON_COMM_VERB.pattern})", re.I)
 
 
 def _find_object(sentence: str, after: int) -> tuple[Span | None, Span | None, list[str]]:
@@ -279,6 +310,19 @@ def _find_object(sentence: str, after: int) -> tuple[Span | None, Span | None, l
         if message is None:
             return None, recipient, [f"content_marker_without_object:{marker.group(0)!r}"]
         return message, recipient, [f"to_recipient_then_content:{marker.group(0)!r}"]
+    infinitive = _TO_INFINITIVE.match(sentence, _skip_space(sentence, first.end))
+    if infinitive is not None:
+        # "notify a Patrol Supervisor to take the officer's location". The supervisor is who was
+        # told, not what was told, and reporting the supervisor as the governed object states
+        # that an agency transmits a person. This is the recipient/message confusion the of- and
+        # that-rules exist to prevent, reached through a shape they do not cover — and it arrived
+        # as a *complete* decomposition, which is worse than any refusal.
+        #
+        # The infinitive is not read as the message either, because the verb decides what it is
+        # and the two readings are not distinguishable here: in "notify the supervisor to take
+        # the location" the clause is what was communicated, and in "contact the desk to obtain a
+        # copy" the same shape is why the actor made contact. Absent beats guessed.
+        return None, first, [f"to_infinitive_after_recipient:{infinitive.group('verb')!r}"]
     marker = _CONTENT_MARKER.match(sentence, _skip_space(sentence, first.end))
     if marker is None:
         return first, None, [f"object:{first.rule}"]

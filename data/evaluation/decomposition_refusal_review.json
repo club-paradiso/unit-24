@@ -117,9 +117,9 @@
     "4b3c498fd72860c03393a6b8cacc0f8795d0b7986440f353455855a85e7cf391": {
       "classification": "defect",
       "causes": [
-        "communication_verb_missing"
+        "transmission_content_shape_unhandled"
       ],
-      "note": "A real rule about what a radio greeting must contain, phrased with 'include' rather than a communication verb.",
+      "note": "A real rule about what a radio greeting must contain: 'The greeting will include the employee's name…'. The subject is the transmission and the verb states its contents. Adding 'include' to the communication verbs would be the wrong repair — 'the report will include the date' is not a transmission — so this needs a third sentence shape, not a longer verb list.",
       "sentence": "The greeting will include the employee’s name and a reference to the specific location answering, e.g."
     },
     "529afc08b9d519a2e8d444fef8e844a1372d9e5a4ab14c52272146df27faf94a": {
@@ -179,11 +179,9 @@
       "sentence": "For all-terrain vehicles and snowmobiles displaying a registration number, the code ZZ should be entered in the LIT Field."
     },
     "62c67949ccecb9046f03ccc224d2420d3991f8b8ccc8e41e1def326cd043101c": {
-      "classification": "defect",
-      "causes": [
-        "subject_length_cap"
-      ],
-      "note": "A real radio-identification rule. The stated 131-character subject was discarded for length alone.",
+      "classification": "correct",
+      "causes": [],
+      "note": "Was refused as subject_too_long:131. The cap was never the cause — a leading NOTE label hid the condition clause from the rule that steps over it, so the whole condition landed in the subject. Now decomposes with the full stated subject.",
       "sentence": "NOTE: Once acknowledged by radio call identification number, a nondistrict supervisor not assigned by OEMC who terminates a pursuit will identify himself or herself by rank and name."
     },
     "6939cbce74a002872e33e96697691161d587196f5190565ee1c31cfed7a4f20b": {
@@ -219,19 +217,19 @@
       "sentence": "the system will store the average age here, decimal value truncated. (For data before"
     },
     "726b52149401cbbf7e868c6052111240f7e51c7a5f00365f49eaf0313fe70db4": {
-      "classification": "wrong",
+      "classification": "defect",
       "causes": [
-        "recipient_read_as_object"
+        "to_infinitive_message_not_read"
       ],
-      "note": "COMPLETE and wrong. 'notify a Patrol Supervisor to take the location': the supervisor is the recipient, not the thing communicated. Same error class the of/that rule exists to prevent, reached through a to-infinitive the rule does not cover.",
+      "note": "Was COMPLETE and wrong: the recipient was reported as the thing communicated. Now refused, with the recipient separated out. The instruction 'to take the officer's location' is most likely the message, so this is still a gap — but a gap traded for a false fact, which is the right way round.",
       "sentence": "Police Radio will notify a Patrol Supervisor to take the officer’s location."
     },
     "72bb74932cd9640299b7b9c74a065edd266b3f351e831ba00cd56652ffe4a588": {
       "classification": "partial",
       "causes": [
-        "clause_truncated_mid_word"
+        "clause_truncated_at_cap"
       ],
-      "note": "COMPLETE, but the clause is cut at the 160-character cap mid-word ('on th'), so the quoted span is not a well-formed quotation of the source.",
+      "note": "The clause is longer than the 160-character cap and is still cut short of what the sentence states. It is now cut at a word boundary and the span says it was cut, so it quotes the source rather than ending mid-word.",
       "sentence": "Personnel making a traffic stop will inform the radio dispatcher that they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on the vehicle stopped."
     },
     "7ccac104e71b2d26a6224d6fcd2f4c8f8f3528c0c89e5b6c8113bfe9e4f6304b": {
@@ -385,11 +383,9 @@
       "sentence": "THIS NUMBER SHOULD BE ENTERED IN BOTH THE MNU AND SOC FIELDS."
     },
     "e89fade626dbd455783d76140094690ebbbbc36dd3c63526d008a66a520d172c": {
-      "classification": "contaminated",
-      "causes": [
-        "actor_contaminated_by_leading_furniture"
-      ],
-      "note": "COMPLETE, act and object correct, but the actor span reads 'NOTE: If feasible, officers' — a furniture label and a condition reported as part of who must act.",
+      "classification": "correct",
+      "causes": [],
+      "note": "Was contaminated: the actor span read 'NOTE: If feasible, officers'. The furniture label and the condition are now stepped over and the actor is 'officers'.",
       "sentence": "NOTE: If feasible, officers should inform Police Radio of their location before going underground and conduct a radio check with Police Radio when underground to make sure the ASR is working properly. 2."
     },
     "e92103b89493a21cf558344bc0bf79201877784f24b75a9d155b3376769b653a": {

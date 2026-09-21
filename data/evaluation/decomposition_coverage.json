@@ -12,8 +12,8 @@
     {
       "by_source": {
         "CHI_CPD_DIRECTIVE": {
-          "coverage": 0.25,
-          "fully_decomposed": 2,
+          "coverage": 0.375,
+          "fully_decomposed": 3,
           "in_validation_set": true,
           "sentences": 8
         },
@@ -24,8 +24,8 @@
           "sentences": 6
         },
         "PHL_PPD_DIRECTIVE_7_1": {
-          "coverage": 0.3,
-          "fully_decomposed": 3,
+          "coverage": 0.2,
+          "fully_decomposed": 2,
           "in_validation_set": true,
           "sentences": 10
         },
@@ -51,16 +51,16 @@
       "coverage": 0.1915,
       "elements_located": {
         "actor": {
-          "n": 19,
-          "rate": 0.4043
+          "n": 20,
+          "rate": 0.4255
         },
         "communication_action": {
           "n": 13,
           "rate": 0.2766
         },
         "governed_object": {
-          "n": 12,
-          "rate": 0.2553
+          "n": 11,
+          "rate": 0.234
         }
       },
       "fully_decomposed": 9,
@@ -70,11 +70,12 @@
         "communication_verb_too_far_from_modal": 9,
         "complete": 9,
         "missing:actor": 1,
+        "missing:object": 1,
         "nearer_non_communication_verb": 2,
         "no_communication_verb_after_modal": 21,
         "no_modal": 1,
         "no_noun_phrase_after_verb": 1,
-        "subject_too_long": 3
+        "subject_too_long": 2
       },
       "records": [
         {
@@ -134,6 +135,7 @@
           "communication_action": null,
           "complete": false,
           "evidence": [
+            "dropped_document_furniture_label:'NOTE:'",
             "passive_voice:agent_unstated",
             "no_communication_verb_after_modal"
           ],
@@ -212,26 +214,26 @@
             "start": 18,
             "text": "notify"
           },
-          "complete": true,
+          "complete": false,
           "evidence": [
-            "object:np_after_comm_verb"
+            "to_infinitive_after_recipient:'take'"
           ],
-          "governed_object": {
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "missing:object",
+          "recipient": {
             "end": 44,
             "rule": "np_after_comm_verb",
             "start": 25,
             "text": "a Patrol Supervisor"
           },
-          "in_validation_set": true,
-          "origin": "PHL_PPD_DIRECTIVE_7_1",
-          "reason": "complete",
-          "recipient": null,
           "review": {
             "causes": [
-              "recipient_read_as_object"
+              "to_infinitive_message_not_read"
             ],
-            "classification": "wrong",
-            "note": "COMPLETE and wrong. 'notify a Patrol Supervisor to take the location': the supervisor is the recipient, not the thing communicated. Same error class the of/that rule exists to prevent, reached through a to-infinitive the rule does not cover."
+            "classification": "defect",
+            "note": "Was COMPLETE and wrong: the recipient was reported as the thing communicated. Now refused, with the recipient separated out. The instruction 'to take the officer's location' is most likely the message, so this is still a gap — but a gap traded for a false fact, which is the right way round."
           },
           "sentence": "Police Radio will notify a Patrol Supervisor to take the officer’s location.",
           "sha256": "726b52149401cbbf7e868c6052111240f7e51c7a5f00365f49eaf0313fe70db4"
@@ -302,6 +304,7 @@
           "communication_action": null,
           "complete": false,
           "evidence": [
+            "dropped_document_furniture_label:'NOTE'",
             "passive_voice:agent_unstated",
             "no_communication_verb_after_modal"
           ],
@@ -604,8 +607,8 @@
           "actor": {
             "end": 27,
             "rule": "subject_before_modal",
-            "start": 0,
-            "text": "NOTE: If feasible, officers"
+            "start": 19,
+            "text": "officers"
           },
           "communication_action": {
             "end": 41,
@@ -615,6 +618,8 @@
           },
           "complete": true,
           "evidence": [
+            "dropped_document_furniture_label:'NOTE:'",
+            "stepped_over_leading_clause:'If feasible,'",
             "recipient_then_content:'of'"
           ],
           "governed_object": {
@@ -633,11 +638,9 @@
             "text": "Police Radio"
           },
           "review": {
-            "causes": [
-              "actor_contaminated_by_leading_furniture"
-            ],
-            "classification": "contaminated",
-            "note": "COMPLETE, act and object correct, but the actor span reads 'NOTE: If feasible, officers' — a furniture label and a condition reported as part of who must act."
+            "causes": [],
+            "classification": "correct",
+            "note": "Was contaminated: the actor span read 'NOTE: If feasible, officers'. The furniture label and the condition are now stepped over and the actor is 'officers'."
           },
           "sentence": "NOTE: If feasible, officers should inform Police Radio of their location before going underground and conduct a radio check with Police Radio when underground to make sure the ASR is working properly. 2.",
           "sha256": "e89fade626dbd455783d76140094690ebbbbc36dd3c63526d008a66a520d172c"
@@ -706,10 +709,10 @@
             "recipient_then_content:'that'"
           ],
           "governed_object": {
-            "end": 229,
-            "rule": "after_that_clause",
+            "end": 226,
+            "rule": "after_that_clause_truncated",
             "start": 70,
-            "text": "they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on th"
+            "text": "they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on"
           },
           "in_validation_set": true,
           "origin": "PHL_PPD_DIRECTIVE_7_1",
@@ -722,25 +725,31 @@
           },
           "review": {
             "causes": [
-              "clause_truncated_mid_word"
+              "clause_truncated_at_cap"
             ],
             "classification": "partial",
-            "note": "COMPLETE, but the clause is cut at the 160-character cap mid-word ('on th'), so the quoted span is not a well-formed quotation of the source."
+            "note": "The clause is longer than the 160-character cap and is still cut short of what the sentence states. It is now cut at a word boundary and the span says it was cut, so it quotes the source rather than ending mid-word."
           },
           "sentence": "Personnel making a traffic stop will inform the radio dispatcher that they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on the vehicle stopped.",
           "sha256": "72bb74932cd9640299b7b9c74a065edd266b3f351e831ba00cd56652ffe4a588"
         },
         {
-          "actor": null,
+          "actor": {
+            "end": 131,
+            "rule": "subject_before_modal",
+            "start": 61,
+            "text": "a nondistrict supervisor not assigned by OEMC who terminates a pursuit"
+          },
           "communication_action": {
             "end": 145,
             "rule": "comm_verb_after_modal",
             "start": 137,
             "text": "identify"
           },
-          "complete": false,
+          "complete": true,
           "evidence": [
-            "subject_too_long:131",
+            "dropped_document_furniture_label:'NOTE:'",
+            "stepped_over_leading_clause:'Once acknowledged by radio call identifi'",
             "object:np_after_comm_verb"
           ],
           "governed_object": {
@@ -751,14 +760,12 @@
           },
           "in_validation_set": true,
           "origin": "CHI_CPD_DIRECTIVE",
-          "reason": "subject_too_long",
+          "reason": "complete",
           "recipient": null,
           "review": {
-            "causes": [
-              "subject_length_cap"
-            ],
-            "classification": "defect",
-            "note": "A real radio-identification rule. The stated 131-character subject was discarded for length alone."
+            "causes": [],
+            "classification": "correct",
+            "note": "Was refused as subject_too_long:131. The cap was never the cause — a leading NOTE label hid the condition clause from the rule that steps over it, so the whole condition landed in the subject. Now decomposes with the full stated subject."
           },
           "sentence": "NOTE: Once acknowledged by radio call identification number, a nondistrict supervisor not assigned by OEMC who terminates a pursuit will identify himself or herself by rank and name.",
           "sha256": "62c67949ccecb9046f03ccc224d2420d3991f8b8ccc8e41e1def326cd043101c"
@@ -1321,10 +1328,10 @@
           "recipient": null,
           "review": {
             "causes": [
-              "communication_verb_missing"
+              "transmission_content_shape_unhandled"
             ],
             "classification": "defect",
-            "note": "A real rule about what a radio greeting must contain, phrased with 'include' rather than a communication verb."
+            "note": "A real rule about what a radio greeting must contain: 'The greeting will include the employee's name…'. The subject is the transmission and the verb states its contents. Adding 'include' to the communication verbs would be the wrong repair — 'the report will include the date' is not a transmission — so this needs a third sentence shape, not a longer verb list."
           },
           "sentence": "The greeting will include the employee’s name and a reference to the specific location answering, e.g.",
           "sha256": "4b3c498fd72860c03393a6b8cacc0f8795d0b7986440f353455855a85e7cf391"
@@ -1399,12 +1406,11 @@
       "review_rollup": {
         "causes": {
           "actor_contaminated_by_heading": 1,
-          "actor_contaminated_by_leading_furniture": 1,
           "actor_contaminated_by_parenthetical": 1,
           "actor_contaminated_by_section_number": 1,
           "administrative_provision": 1,
-          "clause_truncated_mid_word": 1,
-          "communication_verb_missing": 2,
+          "clause_truncated_at_cap": 1,
+          "communication_verb_missing": 1,
           "data_entry_rule": 6,
           "definition": 2,
           "imperative_names_no_actor": 1,
@@ -1418,21 +1424,20 @@
           "personnel_rule": 1,
           "property_rule": 1,
           "reason_mislabelled_note_as_verb": 1,
-          "recipient_read_as_object": 1,
           "records_rule": 4,
           "second_modal_clause_ignored": 1,
           "sentence_splitting_contamination": 3,
-          "subject_length_cap": 2,
-          "table_fragment": 2
+          "subject_length_cap": 1,
+          "table_fragment": 2,
+          "to_infinitive_message_not_read": 1,
+          "transmission_content_shape_unhandled": 1
         },
         "classifications": {
           "borderline": 3,
-          "contaminated": 1,
-          "correct": 4,
+          "correct": 6,
           "correct_refusal": 29,
           "defect": 6,
-          "partial": 3,
-          "wrong": 1
+          "partial": 3
         },
         "reviewed": 47,
         "unreviewed": 0

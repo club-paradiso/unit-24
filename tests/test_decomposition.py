@@ -234,6 +234,65 @@ def test_a_section_number_is_not_part_of_the_actor():
     assert "dropped_leading_enumerator" in d.evidence
 
 
+# ---------------------------------------------------------------- found by reading every case
+#
+# The enumeration in decomposition_coverage.json is what turned these up. They are not refusals
+# the parser reported — they are sentences it answered, wrongly or untidily, which no coverage
+# rate could have shown.
+
+
+def test_a_recipient_followed_by_an_infinitive_is_never_the_message():
+    """"notify a Patrol Supervisor to take the location" does not transmit a supervisor.
+
+    This came back **complete** with the supervisor as the governed object: a confident false
+    statement, and the only one of its kind the real sample contained.
+    """
+    d = decompose("Police Radio will notify a Patrol Supervisor to take the officer's location.")
+    assert d.governed_object is None
+    assert d.recipient is not None and d.recipient.text == "a Patrol Supervisor"
+    assert any("to_infinitive_after_recipient" in e for e in d.evidence)
+
+
+def test_a_to_phrase_naming_a_recipient_leaves_the_object_alone():
+    """"transmit the location to Police Radio" states its object plainly; only a verb after
+    ``to`` makes the preceding phrase a recipient."""
+    d = decompose("Members shall transmit the location to Police Radio.")
+    assert d.governed_object is not None and d.governed_object.text == "the location"
+
+
+def test_a_furniture_label_is_not_part_of_the_actor():
+    """A rule printed under a NOTE heading directs officers, not "NOTE: If feasible, officers"."""
+    d = decompose("NOTE: If feasible, officers should inform Police Radio of their location.")
+    assert d.actor is not None and d.actor.text == "officers"
+    assert any("dropped_document_furniture_label" in e for e in d.evidence)
+
+
+def test_a_furniture_label_does_not_hide_the_clause_behind_it():
+    """The label blocked the leading-clause rule, and the whole condition landed in the subject.
+
+    That is what the 131-character subject in the CPD directive actually was — the cap reported
+    it, but the cap was never the cause.
+    """
+    d = decompose(
+        "NOTE: Once acknowledged by radio call identification number, a nondistrict supervisor "
+        "will identify himself or herself by rank and name."
+    )
+    assert d.actor is not None and d.actor.text == "a nondistrict supervisor"
+
+
+def test_a_clause_is_cut_at_a_word_boundary():
+    """A span is checked by reading the characters it addresses, so it has to be a quotation."""
+    tail = " and every other detail the dispatcher requires for the assignment record" * 4
+    sentence = f"Officers shall advise the dispatcher that they are stopping a vehicle{tail}."
+    d = decompose(sentence)
+    assert d.governed_object is not None
+    span = d.governed_object
+    assert span.rule.endswith("_truncated"), "a cut span must say it was cut"
+    assert sentence[span.start : span.end] == span.text
+    # The character after the span ends a word, so the span quotes whole words of the source.
+    assert span.end == len(sentence) or not sentence[span.end].isalnum()
+
+
 # ---------------------------------------------------------------- the coverage evidence itself
 #
 # A coverage figure whose cases are not in the repository cannot be checked and cannot be
