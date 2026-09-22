@@ -1,28 +1,122 @@
 {
   "documents": {
     "CHI_CPD_DIRECTIVE": {
-      "note": "gateway answered 403 to CONNECT for directives.chicagopolice.org:443",
-      "status": "MISSING"
+      "actual": "08263c400f7b75f80047bb4e680812c4aa13803d366aa0808e935b1b4c1d3354",
+      "expected": "4e7ce3040d05c8419eeda4302d4791bb127cc66deac0b02651634a5f2b4b831c",
+      "status": "HASH_MISMATCH"
     },
     "CHP_AURAL_BREVITY": {
-      "note": "gateway answered 403 to CONNECT for www.chp.ca.gov:443",
-      "status": "MISSING"
+      "alphabet": {
+        "coverage": 1.0,
+        "divergences": {},
+        "evidence": [
+          "multiple_words_for_A:['ADAM', 'ARMED']",
+          "multiple_words_for_F:['FELONY', 'FRANK']",
+          "multiple_words_for_M:['MARY', 'MISDEMEANOR']",
+          "multiple_words_for_P:['PAROLE', 'PAUL']",
+          "multiple_words_for_R:['RESIDENCE', 'ROBERT']",
+          "best_reference=APCO_1941 ratio=0.846 below 0.9"
+        ],
+        "label": "LOCAL",
+        "mappings": {
+          "A": "ADAM",
+          "B": "BOY",
+          "C": "CHARLES",
+          "D": "DAVID",
+          "E": "EDWARD",
+          "F": "FELONY",
+          "G": "GEORGE",
+          "H": "HENRY",
+          "I": "IDA",
+          "J": "JOHN",
+          "K": "KING",
+          "L": "LINCOLN",
+          "M": "MARY",
+          "N": "NORA",
+          "O": "OCEAN",
+          "P": "PAROLE",
+          "Q": "QUEEN",
+          "R": "RESIDENCE",
+          "S": "SAM",
+          "T": "TOM",
+          "U": "UNION",
+          "V": "VICTOR",
+          "W": "WILLIAM",
+          "X": "XRAY",
+          "Y": "YELLOW",
+          "Z": "ZEBRA"
+        }
+      },
+      "blocks_excluded": 0,
+      "blocks_kept": 124,
+      "code_candidates": 55,
+      "document_sha256": "eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064",
+      "expected_page_count": 2,
+      "max_columns": 4,
+      "page_count_matches": true,
+      "pages": 2,
+      "phonetic_candidates": 31,
+      "procedure_candidates": 0,
+      "procedure_context_complete": 0,
+      "procedure_decomposition_complete": 0,
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": [],
+      "yielded_no_text": false
     },
     "IN_ISP_COMMUNICATIONS": {
-      "note": "gateway answered 403 to CONNECT for www.in.gov:443",
-      "status": "MISSING"
+      "alphabet": null,
+      "blocks_excluded": 9,
+      "blocks_kept": 144,
+      "code_candidates": 0,
+      "document_sha256": "e6518853a9579c22bc22b069f526656b5003ec0ddfedf55277a03c214f4933be",
+      "expected_page_count": 9,
+      "max_columns": 1,
+      "page_count_matches": true,
+      "pages": 9,
+      "phonetic_candidates": 0,
+      "procedure_candidates": 1,
+      "procedure_context_complete": 1,
+      "procedure_decomposition_complete": 1,
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": [],
+      "yielded_no_text": false
     },
     "PHL_PPD_DIRECTIVE_7_1": {
-      "note": "gateway answered 403 to CONNECT for www.phillypolice.com:443",
-      "status": "MISSING"
+      "alphabet": null,
+      "blocks_excluded": 30,
+      "blocks_kept": 527,
+      "code_candidates": 0,
+      "document_sha256": "ec082d969a80a7e7d44290483a856da722cc0a13a2cebba645935825b2e42f96",
+      "expected_page_count": 31,
+      "max_columns": 2,
+      "page_count_matches": true,
+      "pages": 31,
+      "phonetic_candidates": 0,
+      "procedure_candidates": 7,
+      "procedure_context_complete": 7,
+      "procedure_decomposition_complete": 5,
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": [
+        "suppressed_repeated_furniture:1"
+      ],
+      "yielded_no_text": false
     }
   },
   "note": "Candidate counts are not precision. Adjudicate data/evaluation/real_document_candidates.jsonl against the source documents before quoting any precision figure.",
   "parser_versions": {
-    "code_parser_version": "3",
-    "layout_code_fingerprint": "5ad329afd1f575c0",
+    "code_parser_version": "4",
+    "layout_code_fingerprint": "c2182ffac80dc387",
     "layout_version": "layout-2",
-    "phonetic_parser_version": "3",
-    "procedure_parser_version": "3"
+    "phonetic_parser_version": "5",
+    "procedure_parser_version": "4"
   }
 }
