@@ -1,0 +1,1646 @@
+{
+  "completeness": "every sentence in both samples is recorded, not a sample of them",
+  "does_not_measure": "accuracy. Whether a located actor is the right actor is a judgement and lives in decomposition_refusal_review.json, joined into each record but never counted here.",
+  "measures": "coverage, and the reason each sentence was refused",
+  "question": "What fraction of real policy sentences yields an actor, a communication act and a governed object?",
+  "review_integrity": {
+    "review_file": "decomposition_refusal_review.json",
+    "stale_reviews": [],
+    "unreviewed_sentences": []
+  },
+  "samples": [
+    {
+      "by_source": {
+        "CHI_CPD_DIRECTIVE": {
+          "coverage": 0.375,
+          "fully_decomposed": 3,
+          "in_validation_set": true,
+          "sentences": 8
+        },
+        "IN_ISP_COMMUNICATIONS": {
+          "coverage": 0.5,
+          "fully_decomposed": 3,
+          "in_validation_set": true,
+          "sentences": 6
+        },
+        "PHL_PPD_DIRECTIVE_7_1": {
+          "coverage": 0.2,
+          "fully_decomposed": 2,
+          "in_validation_set": true,
+          "sentences": 10
+        },
+        "src_276a88deb386b0da": {
+          "coverage": 1.0,
+          "fully_decomposed": 1,
+          "in_validation_set": false,
+          "sentences": 1
+        },
+        "src_47153e6bcd095b90": {
+          "coverage": 0.0,
+          "fully_decomposed": 0,
+          "in_validation_set": false,
+          "sentences": 5
+        },
+        "src_5b4c1c3f38e564f1": {
+          "coverage": 0.0,
+          "fully_decomposed": 0,
+          "in_validation_set": false,
+          "sentences": 17
+        }
+      },
+      "coverage": 0.1915,
+      "elements_located": {
+        "actor": {
+          "n": 20,
+          "rate": 0.4255
+        },
+        "communication_action": {
+          "n": 13,
+          "rate": 0.2766
+        },
+        "governed_object": {
+          "n": 11,
+          "rate": 0.234
+        }
+      },
+      "fully_decomposed": 9,
+      "label": "real_corpus_rule_sentences",
+      "note": "verbatim rule_text the previous parser read out of the retrieved documents",
+      "reasons": {
+        "communication_verb_too_far_from_modal": 9,
+        "complete": 9,
+        "missing:actor": 1,
+        "missing:object": 1,
+        "nearer_non_communication_verb": 2,
+        "no_communication_verb_after_modal": 21,
+        "no_modal": 1,
+        "no_noun_phrase_after_verb": 1,
+        "subject_too_long": 2
+      },
+      "records": [
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate: which fields a code set may be used in. One of six near-identical lines differing only in heading."
+          },
+          "sentence": "2.1 - Canadian Provinces These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Make (MAK).",
+          "sha256": "f730bb6f9a0a0c0589e7367f3792e57ba53d0c5500334bfd101aee70c3a3ac31"
+        },
+        {
+          "actor": null,
+          "communication_action": {
+            "end": 32,
+            "rule": "comm_verb_after_modal",
+            "start": 23,
+            "text": "broadcast"
+          },
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_noun_phrase_after_verb"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "no_noun_phrase_after_verb",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "passive_patient_not_object",
+              "sentence_splitting_contamination"
+            ],
+            "classification": "defect",
+            "note": "A real transmission rule. The thing broadcast is 'The assignment', stated as the passive subject and never read; a footer date stamp is glued to the tail."
+          },
+          "sentence": "The assignment will be broadcast until acknowledged at least three (3) times using this format: Issued Date: 03-08-13 Effective Date: 03-08-13 Updated Date: 12-05-19",
+          "sha256": "0c2651abfa542bbb792d10b00394c434204d5cb17d9aabf052d366df635c596d"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "dropped_document_furniture_label:'NOTE:'",
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "records_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Retention of a paper copy."
+          },
+          "sentence": "NOTE: A copy will be retained in the unit files in accordance with existing records-retention requirements.",
+          "sha256": "f1fa4599be85a69be7e7af035f26575519b8a5fb85364b17f4866d22adeeb91e"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which code goes in an NCIC field."
+          },
+          "sentence": "In instances where a license plate has been issued, the code AT (for all-terrain vehicle) or SN (for snowmobile) should be entered in the LIT Field.",
+          "sha256": "39a021019f30783cd318996fd57198a38395294ba8f090f7b36d04d7cd322b78"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'If the employee sending the alarm cannot'",
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "personnel_movement"
+            ],
+            "classification": "correct_refusal",
+            "note": "Sending an employee to a location is not a communicative act."
+          },
+          "sentence": "If the employee sending the alarm cannot be contacted, a Department police employee (or other agency) shall be immediately sent to the location (if known) of the affected employee. 3.",
+          "sha256": "edaf0f5583075ee1cd158833f87d9addf8053c588e418c87a939965bf927c27e"
+        },
+        {
+          "actor": {
+            "end": 12,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Police Radio"
+          },
+          "communication_action": {
+            "end": 24,
+            "rule": "comm_verb_after_modal",
+            "start": 18,
+            "text": "notify"
+          },
+          "complete": false,
+          "evidence": [
+            "to_infinitive_after_recipient:'take'"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "missing:object",
+          "recipient": {
+            "end": 44,
+            "rule": "np_after_comm_verb",
+            "start": 25,
+            "text": "a Patrol Supervisor"
+          },
+          "review": {
+            "causes": [
+              "to_infinitive_message_not_read"
+            ],
+            "classification": "defect",
+            "note": "Was COMPLETE and wrong: the recipient was reported as the thing communicated. Now refused, with the recipient separated out. The instruction 'to take the officer's location' is most likely the message, so this is still a gap — but a gap traded for a false fact, which is the right way round."
+          },
+          "sentence": "Police Radio will notify a Patrol Supervisor to take the officer’s location.",
+          "sha256": "726b52149401cbbf7e868c6052111240f7e51c7a5f00365f49eaf0313fe70db4"
+        },
+        {
+          "actor": {
+            "end": 44,
+            "rule": "subject_before_modal",
+            "start": 18,
+            "text": "the employee (if possible)"
+          },
+          "communication_action": {
+            "end": 60,
+            "rule": "comm_verb_after_modal",
+            "start": 52,
+            "text": "indicate"
+          },
+          "complete": true,
+          "evidence": [
+            "stepped_over_leading_clause:'During this time,'",
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 75,
+            "rule": "np_after_comm_verb",
+            "start": 61,
+            "text": "their location"
+          },
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "complete",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "object_truncated_at_coordinator",
+              "actor_contaminated_by_parenthetical"
+            ],
+            "classification": "partial",
+            "note": "Object stops at 'and', losing 'status'. Actor carries the parenthetical condition '(if possible)'."
+          },
+          "sentence": "During this time, the employee (if possible) should indicate their location and status.",
+          "sha256": "94d02d57bad9dbd4a8878dd6cb42679d577654226cb35d943c7a6a4cc9da7de3"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_modal:imperative_or_narrative"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "table_fragment"
+            ],
+            "classification": "correct_refusal",
+            "note": "A country-code table read as running text."
+          },
+          "sentence": "2.2 - Country Codes Code Location TW TAIWAN TY TURKEY TZ TANZANIA, UNITED REPUBLIC OF UG UGANDA UK UKRAINE UM MAURITIUS UN UNITED KINGDOM (ENGLAND-EN, SCOTLAND-SS, WALES-WL, NORTH IRELAND-NI, GREAT BRITIAN FOR REFERENCE ONLY) UR TURKMENISTAN US USA - USED: 1.",
+          "sha256": "5a40bc31491f30df5282e3bf3ff152cd09798cb02eeec476df16532d5942ae9e"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "dropped_document_furniture_label:'NOTE'",
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "definition"
+            ],
+            "classification": "correct_refusal",
+            "note": "Defines what is not a pursuit."
+          },
+          "sentence": "NOTE A routine traffic stop or other instance in which an officer activates his or her emergency lights and/or siren and the citizen/vehicle operator complies by coming to a stop in a reasonably short distance will NOT be considered a motor vehicle pursuit. 4.",
+          "sha256": "d08e69e329f5119bc6f4b6fd40afbf33212ec059b9027fb6c108d6c9d9e57fe7"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate."
+          },
+          "sentence": "2.4 - Indian Nations These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Make (MAK).",
+          "sha256": "e92103b89493a21cf558344bc0bf79201877784f24b75a9d155b3376769b653a"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:90"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Fingerprint classification under the Henry System."
+          },
+          "sentence": "It is recognized that under the Henry System, if a finger is missing or amputated, it is given a classification identical to the opposite finger; however, THIS MUST NOT BE DONE in the NCIC FPC since the location of finger or fingers missing/amputated is not indicated. (3) When providing the 2-digit numeric code with the Radial Loop: Determine actual ridge count and add fifty (50).",
+          "sha256": "7ccac104e71b2d26a6224d6fcd2f4c8f8f3528c0c89e5b6c8113bfe9e4f6304b"
+        },
+        {
+          "actor": {
+            "end": 23,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "The assigned supervisor"
+          },
+          "communication_action": {
+            "end": 40,
+            "rule": "comm_verb_after_modal",
+            "start": 29,
+            "text": "acknowledge"
+          },
+          "complete": true,
+          "evidence": [
+            "to_recipient_then_content:'that'"
+          ],
+          "governed_object": {
+            "end": 118,
+            "rule": "after_to_that_clause",
+            "start": 69,
+            "text": "he or she is monitoring the motor vehicle pursuit"
+          },
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "complete",
+          "recipient": {
+            "end": 63,
+            "rule": "np_after_to",
+            "start": 44,
+            "text": "the OEMC dispatcher"
+          },
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Actor, act and the that-clause all correct."
+          },
+          "sentence": "The assigned supervisor must acknowledge to the OEMC dispatcher that he or she is monitoring the motor vehicle pursuit.",
+          "sha256": "c8e60ce99c62c25a9124558dd0d05ef18c9a684f70421a8308280cc3bc992585"
+        },
+        {
+          "actor": null,
+          "communication_action": {
+            "end": 251,
+            "rule": "comm_verb_after_modal",
+            "start": 245,
+            "text": "notify"
+          },
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'While on the scene of a regional rail in'",
+            "subject_too_long:139",
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 264,
+            "rule": "np_after_comm_verb",
+            "start": 252,
+            "text": "Police Radio"
+          },
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "subject_too_long",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "subject_length_cap"
+            ],
+            "classification": "defect",
+            "note": "A real transmission rule. Act 'notify' and object 'Police Radio' located correctly; the stated 139-character subject was discarded for length alone."
+          },
+          "sentence": "While on the scene of a regional rail incident involving the SEPTA underground system, or an oversize building or parking garage, personnel who are experiencing diminished broadcasting, severe static or “bonking” transmissions, will immediately notify Police Radio and request that the Digital Vehicular Repeating System (DVRS) be transported to their location.",
+          "sha256": "60727e159ae90d0db3bf7713c02d283bd9b2a2b5bcb17dbb05c750cc5ee94866"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which code goes in an NCIC field."
+          },
+          "sentence": "For all-terrain vehicles and snowmobiles displaying a registration number, the code ZZ should be entered in the LIT Field.",
+          "sha256": "618004ed4a317ebeedc533d521b0bc4b0f5606bdebde48e8a20ff55f752b9e07"
+        },
+        {
+          "actor": {
+            "end": 9,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Employees"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_47153e6bcd095b90",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "records_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Keeping and submitting a checklist."
+          },
+          "sentence": "Employees shall maintain a copy of their Department Equipment Surrender Checklist, the original shall be submitted to the Human Resources Division.",
+          "sha256": "6939cbce74a002872e33e96697691161d587196f5190565ee1c31cfed7a4f20b"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which fields a number goes in."
+          },
+          "sentence": "THIS NUMBER SHOULD BE ENTERED IN BOTH THE MNU AND SOC FIELDS.",
+          "sha256": "e65f4060e199cfa00a65f2c430253678c430a4788a5988f068227cd84c5b3d3b"
+        },
+        {
+          "actor": {
+            "end": 56,
+            "rule": "subject_before_modal",
+            "start": 3,
+            "text": "the members that were actively engaged in the pursuit"
+          },
+          "communication_action": {
+            "end": 72,
+            "rule": "comm_verb_after_modal",
+            "start": 66,
+            "text": "notify"
+          },
+          "complete": true,
+          "evidence": [
+            "dropped_leading_enumerator",
+            "recipient_then_content:'of'"
+          ],
+          "governed_object": {
+            "end": 95,
+            "rule": "after_of",
+            "start": 81,
+            "text": "their location"
+          },
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "complete",
+          "recipient": {
+            "end": 77,
+            "rule": "np_after_comm_verb",
+            "start": 73,
+            "text": "OEMC"
+          },
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Enumerator dropped, actor/act/object correct."
+          },
+          "sentence": "B. the members that were actively engaged in the pursuit will: 1. notify OEMC of their location and remain at that location until directed by the supervisor assigned to the pursuit;",
+          "sha256": "a3ac919cb2bdb5ca8a2ab126ddf1d7fe5ce28d37cdae87951b1d6cdd857398f6"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which digits go in a field."
+          },
+          "sentence": "Operator License Year of Expiration (OLY) Field Usage The four digits of the highest year in which the operator's license is valid (YYYY) should be entered.",
+          "sha256": "1b589a1b7ea202264d021fce72ce3d26233153be1608144deb3f431f07f73aa1"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "definition"
+            ],
+            "classification": "correct_refusal",
+            "note": "Defines a field's format."
+          },
+          "sentence": "1.5 - Number of Missing Person Found (NPF) Field Codes The 'nnn' will be a 3-digit number.",
+          "sha256": "bfc4c90963fce063b270a0e2752f7ea9eeb40fa7a5b21487b405daa3a5c96028"
+        },
+        {
+          "actor": {
+            "end": 27,
+            "rule": "subject_before_modal",
+            "start": 19,
+            "text": "officers"
+          },
+          "communication_action": {
+            "end": 41,
+            "rule": "comm_verb_after_modal",
+            "start": 35,
+            "text": "inform"
+          },
+          "complete": true,
+          "evidence": [
+            "dropped_document_furniture_label:'NOTE:'",
+            "stepped_over_leading_clause:'If feasible,'",
+            "recipient_then_content:'of'"
+          ],
+          "governed_object": {
+            "end": 72,
+            "rule": "after_of",
+            "start": 58,
+            "text": "their location"
+          },
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "complete",
+          "recipient": {
+            "end": 54,
+            "rule": "np_after_comm_verb",
+            "start": 42,
+            "text": "Police Radio"
+          },
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Was contaminated: the actor span read 'NOTE: If feasible, officers'. The furniture label and the condition are now stepped over and the actor is 'officers'."
+          },
+          "sentence": "NOTE: If feasible, officers should inform Police Radio of their location before going underground and conduct a radio check with Police Radio when underground to make sure the ASR is working properly. 2.",
+          "sha256": "e89fade626dbd455783d76140094690ebbbbc36dd3c63526d008a66a520d172c"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate."
+          },
+          "sentence": "2.5 - Mexican States These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Make (MAK).",
+          "sha256": "7168a524a564df4e5c1dc9d3e20471de8e356ee079a9c92ee9ef55ee4f5a17f2"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_47153e6bcd095b90",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "property_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Where equipment is stored."
+          },
+          "sentence": "If Department property is left in a motor vehicle it must be stored in the trunk or another secure location out of sight of passers by.",
+          "sha256": "29cb710214533d2835ca9b5fa858e3e7a305c20ffa740e43896c5bfbe98a2dde"
+        },
+        {
+          "actor": {
+            "end": 31,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Personnel making a traffic stop"
+          },
+          "communication_action": {
+            "end": 43,
+            "rule": "comm_verb_after_modal",
+            "start": 37,
+            "text": "inform"
+          },
+          "complete": true,
+          "evidence": [
+            "recipient_then_content:'that'"
+          ],
+          "governed_object": {
+            "end": 226,
+            "rule": "after_that_clause_truncated",
+            "start": 70,
+            "text": "they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on"
+          },
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "complete",
+          "recipient": {
+            "end": 64,
+            "rule": "np_after_comm_verb",
+            "start": 44,
+            "text": "the radio dispatcher"
+          },
+          "review": {
+            "causes": [
+              "clause_truncated_at_cap"
+            ],
+            "classification": "partial",
+            "note": "The clause is longer than the 160-character cap and is still cut short of what the sentence states. It is now cut at a word boundary and the span says it was cut, so it quotes the source rather than ending mid-word."
+          },
+          "sentence": "Personnel making a traffic stop will inform the radio dispatcher that they are stopping a vehicle, then transmit the location, reason for stop, number of occupants (with description when possible), and pertinent information on the vehicle stopped.",
+          "sha256": "72bb74932cd9640299b7b9c74a065edd266b3f351e831ba00cd56652ffe4a588"
+        },
+        {
+          "actor": {
+            "end": 131,
+            "rule": "subject_before_modal",
+            "start": 61,
+            "text": "a nondistrict supervisor not assigned by OEMC who terminates a pursuit"
+          },
+          "communication_action": {
+            "end": 145,
+            "rule": "comm_verb_after_modal",
+            "start": 137,
+            "text": "identify"
+          },
+          "complete": true,
+          "evidence": [
+            "dropped_document_furniture_label:'NOTE:'",
+            "stepped_over_leading_clause:'Once acknowledged by radio call identifi'",
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 153,
+            "rule": "np_after_comm_verb",
+            "start": 146,
+            "text": "himself"
+          },
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "complete",
+          "recipient": null,
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Was refused as subject_too_long:131. The cap was never the cause — a leading NOTE label hid the condition clause from the rule that steps over it, so the whole condition landed in the subject. Now decomposes with the full stated subject."
+          },
+          "sentence": "NOTE: Once acknowledged by radio call identification number, a nondistrict supervisor not assigned by OEMC who terminates a pursuit will identify himself or herself by rank and name.",
+          "sha256": "62c67949ccecb9046f03ccc224d2420d3991f8b8ccc8e41e1def326cd043101c"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which characters go in a field."
+          },
+          "sentence": "Any alphabetic characters which are part of the license number must be entered.",
+          "sha256": "5c1472de2635f5a4f2a82d914ce5c667016604f37e95380775eaa1076efb483e"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_47153e6bcd095b90",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "records_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Attaching a form to paperwork."
+          },
+          "sentence": "A copy of the completed form shall be attached to all retirement or termination of service paperwork being processed through the Department.",
+          "sha256": "b43ab637412d19e05b906c199f0347078e6ba4d2d36b9bf9ee75d3ba82a57c5d"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'If UNK,'",
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "data_entry_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Which value goes in a field."
+          },
+          "sentence": "If UNK, an FBI Number must be entered or the MIS field must begin with either: ‘PHOTO AND/OR PRINTS AVAILABLE WITH HIT CONFIRMATION WITHIN 10 MINS’ or ‘SVIN PHOTO AND/OR PRINTS AVAILABLE WITH HIT CONFIRMATION WITHIN 10 MINS’.",
+          "sha256": "0208ca7b7ee4e6bb259dba10599df7dcc40a665ca14e3753ee8674680612ce04"
+        },
+        {
+          "actor": {
+            "end": 55,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Sec. 13 The Human Resources Division of this Department"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_47153e6bcd095b90",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "personnel_rule",
+              "actor_contaminated_by_section_number"
+            ],
+            "classification": "correct_refusal",
+            "note": "Certification of an employee. Refusal is right; the actor span nonetheless carries the section number 'Sec. 13', which the enumerator rule does not match."
+          },
+          "sentence": "Sec. 13 The Human Resources Division of this Department shall not certify any employee for retirement or termination of service until the original copy of the Department Equipment Surrender Checklist has been received in the Human Resources Division.",
+          "sha256": "f8f91c9c206514c9ac9c118543290be13021de39841e53e8274ea003eeb06dc3"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate."
+          },
+          "sentence": "2.7 - United States Territories These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, Gun File Make (MAK), State (STA) Field, and State Identification Number (SID).",
+          "sha256": "56c5b7494e31837e0a3fc44dcc7d6093b29157231032c58f34ccba7744d1ee85"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "subject_too_long:277",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "subject_too_long",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "table_fragment"
+            ],
+            "classification": "correct_refusal",
+            "note": "A plate-code table read as running text; 277 characters of it sit just past the subject cap."
+          },
+          "sentence": "MY MILITARY%ANY TYPE OF MILITARY AIRCRAFT REGARDLESS OF DESIGN ORPRIMARY USE NG NATIONAL GUARD%MEMBER PERSONALLY OWNED VEHICLE PLATES NP CIVILIAN%NONPASSENGER INCLUDES ALL CIVILIAN AIRCRAFT DESIGNEDAND OR USED FOR PURPOSE OTHER THAN TRANSPORTING PASSENGERS OB OMNIBUS%\"OMNIBUS\"MUST APPEAR ON THE PLATE.",
+          "sha256": "6f5625f69a0b175b7f77d2d2834283a0cc59fc09b27056a47d023d6fffff9a7a"
+        },
+        {
+          "actor": {
+            "end": 54,
+            "rule": "passive_by_agent",
+            "start": 42,
+            "text": "Police Radio"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_named",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "administrative_provision"
+            ],
+            "classification": "borderline",
+            "note": "Release of a copy of a radio recording. 'Made available' is an administrative provision rather than a transmission; a reviewer could read it either way."
+          },
+          "sentence": "The copy will be made available to you by Police Radio upon receipt of a memorandum approved by your Commanding Officer.",
+          "sha256": "e4139647fea5062274acb61207b22ba3e4a6c1da9aee28777dd059195adf352b"
+        },
+        {
+          "actor": {
+            "end": 365,
+            "rule": "passive_by_agent",
+            "start": 335,
+            "text": "the highest ranking supervisor"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'Once the highest ranking supervisor on s'",
+            "passive_voice:agent_named",
+            "nearer_non_communication_verb:'dispatched to'"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "nearer_non_communication_verb",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "personnel_movement"
+            ],
+            "classification": "correct_refusal",
+            "note": "Units dispatched to a staging area."
+          },
+          "sentence": "Once the highest ranking supervisor on scene has resumed the Assist Officer Call and provided the location of a staging area, all units responding from the division of occurrence, bordering districts, and any Citywide Units shall be dispatched to respond to the staging area in Non-Emergency Driving Mode, unless otherwise upgraded by the highest ranking supervisor on location. c.",
+          "sha256": "0332bcfaaad5a89abeda1595f59d660a42df14ff98ddbb8467113056a0754e98"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'Once acknowledgement is given,'",
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:98"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "sentence_splitting_contamination"
+            ],
+            "classification": "defect",
+            "note": "Three fragments glued into one sentence ('... unless the pursuit is ordered to terminate. j. request air support if available. 2.'). The list item is itself a radio act and is unreachable while it sits inside another sentence."
+          },
+          "sentence": "Once acknowledgement is given, there will be tacit approval for continuation of the pursuit unless the pursuit is ordered to terminate. j. request air support if available. 2.",
+          "sha256": "529afc08b9d519a2e8d444fef8e844a1372d9e5a4ab14c52272146df27faf94a"
+        },
+        {
+          "actor": {
+            "end": 18,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Department members"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "nearer_non_communication_verb:'NOTE'"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "nearer_non_communication_verb",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_communication_act",
+              "reason_mislabelled_note_as_verb"
+            ],
+            "classification": "correct_refusal",
+            "note": "Following a directive is not a communicative act, so the refusal is right; the reason names 'NOTE' as the nearer verb, which is not a verb, so the failure taxonomy is wrong even though the outcome is not."
+          },
+          "sentence": "Department members will follow procedures consistent with the Department directive titled \"Impoundment of Vehicles for Municipal Code Violations.\" NOTE: Department members must have a license plate or VIN to complete the Request to Impound a Vehicle by Police (CPD-34.342). 6.",
+          "sha256": "46c797bc456dd4d4194c2acbec6b42b9d4ee3619384f6b67df3ab3f77b04c98a"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "CHI_CPD_DIRECTIVE",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "paper_routing"
+            ],
+            "classification": "borderline",
+            "note": "A report forwarded to a secretary. Transmission of a document, not a radio act."
+          },
+          "sentence": "The Eluding Vehicle Incident Report will be forwarded to the unit secretary, who will make one copy for the unit file and forward the original directly to the Commanding Officer, Traffic Section. 7.",
+          "sha256": "9376f4d588ceb54f33a54ab108860a3efcb18630e69c24da3d75fc9dfccb4689"
+        },
+        {
+          "actor": {
+            "end": 170,
+            "rule": "passive_by_agent",
+            "start": 140,
+            "text": "the highest ranking supervisor"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_named",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "personnel_movement"
+            ],
+            "classification": "correct_refusal",
+            "note": "Units directed to a staging area."
+          },
+          "sentence": "Any additional units or equipment requested will be directed to the staging area in Non-Emergency Driving Mode unless otherwise upgraded by the highest ranking supervisor on location.",
+          "sha256": "c57c63c84abc39d6d6fccd4d0b776e0771cbc26e23e372e4a1a48a0450f7d881"
+        },
+        {
+          "actor": {
+            "end": 83,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "An employee surrendering any department property in their possession to a Commander"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_47153e6bcd095b90",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "records_rule"
+            ],
+            "classification": "correct_refusal",
+            "note": "Receipt of a checklist copy."
+          },
+          "sentence": "An employee surrendering any department property in their possession to a Commander shall receive a copy of Department Equipment Surrender Checklist as a receipt for such property surrendered.",
+          "sha256": "d6d5139a29b3e7a5d278730421a4ab1395ffc830f147290ec18d84a586f78218"
+        },
+        {
+          "actor": {
+            "end": 17,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "A Victim Advocate"
+          },
+          "communication_action": {
+            "end": 30,
+            "rule": "comm_verb_after_modal",
+            "start": 23,
+            "text": "contact"
+          },
+          "complete": true,
+          "evidence": [
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 34,
+            "rule": "np_after_comm_verb",
+            "start": 31,
+            "text": "you"
+          },
+          "in_validation_set": false,
+          "origin": "src_276a88deb386b0da",
+          "reason": "complete",
+          "recipient": null,
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Well formed. Not a radio rule: a victim-services contact notice."
+          },
+          "sentence": "A Victim Advocate will contact you by your preferred method within three business days to address your concerns or updates.",
+          "sha256": "87f1e63dccf44b210b1f0ad62e3926251b367adf43c5c45bc119080d2b56d61b"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "no_named_act_or_actor"
+            ],
+            "classification": "borderline",
+            "note": "Radio-adjacent, but the sentence names no communicative act and its subject is the abstract noun 'Attempts'."
+          },
+          "sentence": "Attempts shall be made to determine last known location and have officers check the area. d.",
+          "sha256": "182c4a00ab203d6556d2043b2e429ce35d92daf0b1801faac1f3d017be322152"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate."
+          },
+          "sentence": "2.2 - Country Codes These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, State (STA) Field, and Gun File Make (MAK).",
+          "sha256": "3d4f8a045946c21a0f08591a5fad63742d30e2c4c76c5ab53e96b76c783dd256"
+        },
+        {
+          "actor": {
+            "end": 79,
+            "rule": "subject_before_modal",
+            "start": 5,
+            "text": "Address Type (ADD) Field Codes In a record response, the translation field"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "dropped_leading_enumerator",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary",
+              "actor_contaminated_by_heading"
+            ],
+            "classification": "correct_refusal",
+            "note": "A data-dictionary line. Refusal is right; the actor span swallowed the table heading."
+          },
+          "sentence": "21 - Address Type (ADD) Field Codes In a record response, the translation field will include the code with the literal translation.",
+          "sha256": "d90d3f20de302bcfbd573bc28fe2af7c54ffe3998cb020b066d6fbf4d5722671"
+        },
+        {
+          "actor": null,
+          "communication_action": {
+            "end": 212,
+            "rule": "comm_verb_after_modal",
+            "start": 205,
+            "text": "contact"
+          },
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'Upon completing the assignment,'",
+            "passive_voice:agent_unstated",
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 245,
+            "rule": "np_after_comm_verb",
+            "start": 213,
+            "text": "the Police Radio Operations desk"
+          },
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "missing:actor",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "imperative_names_no_actor",
+              "sentence_splitting_contamination"
+            ],
+            "classification": "correct_refusal",
+            "note": "An imperative states no actor, and refusing is the designed behaviour. Two sentences are glued together here."
+          },
+          "sentence": "Upon completing the assignment, return to service by responding with complete unit number, disposition code, and the words “Back in Service.” NOTE: If further notifications are to be made to Police Radio, contact the Police Radio Operations desk at (215) XXX-XXXX.",
+          "sha256": "a6dbd2f97b482db0dfe13220cb0eb3c0d52e8c5f5ea4d7820d3738032ac7da9b"
+        },
+        {
+          "actor": {
+            "end": 21,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "Enforcement personnel"
+          },
+          "communication_action": {
+            "end": 35,
+            "rule": "comm_verb_after_modal",
+            "start": 28,
+            "text": "monitor"
+          },
+          "complete": true,
+          "evidence": [
+            "object:np_after_comm_verb"
+          ],
+          "governed_object": {
+            "end": 53,
+            "rule": "np_after_comm_verb",
+            "start": 36,
+            "text": "Department radios"
+          },
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "complete",
+          "recipient": null,
+          "review": {
+            "causes": [],
+            "classification": "correct",
+            "note": "Actor, act and object all supported by the sentence."
+          },
+          "sentence": "Enforcement personnel shall monitor Department radios at all times when in the commission and shall answer the radio, if called, (either specifically by car number or by open call, e.g., any car in the vicinity, if it applies to their location), using their assigned car number and location.",
+          "sha256": "efbe9b943991008dfef186ed5daf01b2de9e81b12e70749a98222ad8d8ccec4a"
+        },
+        {
+          "actor": {
+            "end": 32,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "The Radio Room ORS or dispatcher"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "PHL_PPD_DIRECTIVE_7_1",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "communication_verb_missing",
+              "second_modal_clause_ignored"
+            ],
+            "classification": "defect",
+            "note": "A real radio-room rule. 'connect the caller to the respective district' is a communicative act and 'connect' is not in the verb set; it also sits in a second modal clause that is never examined."
+          },
+          "sentence": "The Radio Room ORS or dispatcher will determine the nature of the problem and location of occurrence, and will connect the caller to the respective district.",
+          "sha256": "b00a95210194c381a5c173d531394b7e23c5ef2c4bcc70b446078b7871505130"
+        },
+        {
+          "actor": {
+            "end": 12,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "The greeting"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "communication_verb_too_far_from_modal:70"
+          ],
+          "governed_object": null,
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "transmission_content_shape_unhandled"
+            ],
+            "classification": "defect",
+            "note": "A real rule about what a radio greeting must contain: 'The greeting will include the employee's name…'. The subject is the transmission and the verb states its contents. Adding 'include' to the communication verbs would be the wrong repair — 'the report will include the date' is not a transmission — so this needs a third sentence shape, not a longer verb list."
+          },
+          "sentence": "The greeting will include the employee’s name and a reference to the specific location answering, e.g.",
+          "sha256": "4b3c498fd72860c03393a6b8cacc0f8795d0b7986440f353455855a85e7cf391"
+        },
+        {
+          "actor": {
+            "end": 68,
+            "rule": "subject_before_modal",
+            "start": 59,
+            "text": "personnel"
+          },
+          "communication_action": {
+            "end": 81,
+            "rule": "comm_verb_after_modal",
+            "start": 75,
+            "text": "advise"
+          },
+          "complete": true,
+          "evidence": [
+            "stepped_over_leading_clause:'When communication cannot be maintained '",
+            "recipient_then_content:'of'"
+          ],
+          "governed_object": {
+            "end": 119,
+            "rule": "after_of",
+            "start": 105,
+            "text": "their location"
+          },
+          "in_validation_set": true,
+          "origin": "IN_ISP_COMMUNICATIONS",
+          "reason": "complete",
+          "recipient": {
+            "end": 101,
+            "rule": "np_after_comm_verb",
+            "start": 82,
+            "text": "the appropriate RDC"
+          },
+          "review": {
+            "causes": [
+              "object_truncated_at_coordinator"
+            ],
+            "classification": "partial",
+            "note": "Object stops at the comma, losing 'reason for the out-of-service status'."
+          },
+          "sentence": "When communication cannot be maintained by portable radio, personnel shall advise the appropriate RDC of their location, reason for the out-of-service status and shall maintain contact by cell phone, as per CIS-013.",
+          "sha256": "9027761f7067640cac69041c004ea616fe0d1431bd94f08dd95f4d6ae6613010"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "communication_verb_too_far_from_modal:43"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "src_5b4c1c3f38e564f1",
+          "reason": "communication_verb_too_far_from_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "NCIC boilerplate."
+          },
+          "sentence": "2.6 - United States These codes must be used in the Citizenship (CTZ), License State (LIS), Operator's License State (OLS), Place of Birth (POB), Place of Crime (PLC), Registration State (RES) Field, Gun File Make (MAK), State (STA) Field, and State Identification Number (SID).",
+          "sha256": "401c8567392efb5afb91afac536425aa33bb8d9d43d93b7e179d535a302e74cc"
+        }
+      ],
+      "review_rollup": {
+        "causes": {
+          "actor_contaminated_by_heading": 1,
+          "actor_contaminated_by_parenthetical": 1,
+          "actor_contaminated_by_section_number": 1,
+          "administrative_provision": 1,
+          "clause_truncated_at_cap": 1,
+          "communication_verb_missing": 1,
+          "data_entry_rule": 6,
+          "definition": 2,
+          "imperative_names_no_actor": 1,
+          "no_named_act_or_actor": 1,
+          "non_communication_act": 1,
+          "non_radio_data_dictionary": 8,
+          "object_truncated_at_coordinator": 2,
+          "paper_routing": 1,
+          "passive_patient_not_object": 1,
+          "personnel_movement": 3,
+          "personnel_rule": 1,
+          "property_rule": 1,
+          "reason_mislabelled_note_as_verb": 1,
+          "records_rule": 4,
+          "second_modal_clause_ignored": 1,
+          "sentence_splitting_contamination": 3,
+          "subject_length_cap": 1,
+          "table_fragment": 2,
+          "to_infinitive_message_not_read": 1,
+          "transmission_content_shape_unhandled": 1
+        },
+        "classifications": {
+          "borderline": 3,
+          "correct": 6,
+          "correct_refusal": 29,
+          "defect": 6,
+          "partial": 3
+        },
+        "reviewed": 47,
+        "unreviewed": 0
+      },
+      "sentences": 47,
+      "validation_documents_only": {
+        "coverage": 0.3333,
+        "fully_decomposed": 8,
+        "sentences": 24
+      }
+    },
+    {
+      "by_source": {
+        "NIBRS_DataDictionary.pdf": {
+          "coverage": 0.0,
+          "fully_decomposed": 0,
+          "in_validation_set": false,
+          "sentences": 6
+        }
+      },
+      "coverage": 0.0,
+      "elements_located": {
+        "actor": {
+          "n": 3,
+          "rate": 0.5
+        }
+      },
+      "fully_decomposed": 0,
+      "label": "real_third_party_document",
+      "note": "every modal-bearing sentence in the committed FBI NIBRS data dictionary; out of domain by design",
+      "reasons": {
+        "no_communication_verb_after_modal": 6
+      },
+      "records": [
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "The arrest transaction number may be the incident number of the incident",
+          "sha256": "d1a0603c7c51e531e6dcef86f46a8c88a226894380d06177c037d39aed8e07ff"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "C = The arrestee was involved in more than one incident and should be counted for",
+          "sha256": "03a05b27ab825d1ef23c6d450db7e3da8f97c5dbfa4eac9b8b430e52f20f9fb2"
+        },
+        {
+          "actor": null,
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "passive_voice:agent_unstated",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "arrestee, and should not be counted;",
+          "sha256": "d536f3931e7ff04cbb40f3384707c1dd02dce4cfa8ca99b2c669d1b5af0292c6"
+        },
+        {
+          "actor": {
+            "end": 39,
+            "rule": "subject_before_modal",
+            "start": 29,
+            "text": "the system"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "stepped_over_leading_clause:'When age range is populated,'",
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "When age range is populated, the system will store the",
+          "sha256": "2a488f21d089868abdd830c6937132b2cf2e836e11074610ad9440047c67f121"
+        },
+        {
+          "actor": {
+            "end": 10,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "the system"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "the system will store the average age here, decimal value truncated. (For data before",
+          "sha256": "7190b7501469cad4cd977d62edf455f2fcdae1374ed59cb675aa10baa2e2cf6c"
+        },
+        {
+          "actor": {
+            "end": 21,
+            "rule": "subject_before_modal",
+            "start": 0,
+            "text": "populated, the system"
+          },
+          "communication_action": null,
+          "complete": false,
+          "evidence": [
+            "no_communication_verb_after_modal"
+          ],
+          "governed_object": null,
+          "in_validation_set": false,
+          "origin": "NIBRS_DataDictionary.pdf",
+          "reason": "no_communication_verb_after_modal",
+          "recipient": null,
+          "review": {
+            "causes": [
+              "non_radio_data_dictionary"
+            ],
+            "classification": "correct_refusal",
+            "note": "Modal-bearing line from the FBI NIBRS data dictionary; out of domain by design."
+          },
+          "sentence": "populated, the system will store the average age here, decimal value truncated. (For",
+          "sha256": "57f6571201e7f342b6573ee4ee220a940792927a05d263a3d65c8bab10bd64f7"
+        }
+      ],
+      "review_rollup": {
+        "causes": {
+          "non_radio_data_dictionary": 6
+        },
+        "classifications": {
+          "correct_refusal": 6
+        },
+        "reviewed": 6,
+        "unreviewed": 0
+      },
+      "sentences": 6,
+      "validation_documents_only": {
+        "coverage": null,
+        "fully_decomposed": 0,
+        "sentences": 0
+      }
+    }
+  ],
+  "selection_bias": "The corpus sample is sentences an earlier parser chose to emit, not a random sample of the documents, so coverage on a full document may differ in either direction. Two of its six sources are not radio-communication documents at all, which the per-source rollup shows."
+}

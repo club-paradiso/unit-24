@@ -1,0 +1,24 @@
+{
+  "how_to_complete": [
+    "From a network where government hosts are reachable, obtain one scanned agency communications document (a photocopied policy manual page is the common case).",
+    "Record its canonical URL, SHA-256, retrieval timestamp and issuing authority in data/fixtures/real/MANIFEST.json, keeping host identity and issuer separate.",
+    "Run: uv run python scripts/probe_real_documents.py",
+    "Expect OCRRequired with no OCR backend supplied; then re-run with a backend and adjudicate the emitted candidates through scripts/build_adjudication_worksheet.py."
+  ],
+  "requirement": "Run the OCR-required path against at least one lawfully accessible real scanned or image-based government document.",
+  "status": "UNRESOLVED",
+  "what_was_established": {
+    "real_document_with_no_extractable_text": "PASS - a real FBI PDF whose text is drawn as vectors yields no blocks. It cannot trigger the OCR gate because it carries no image, and it previously returned empty in silence. It now warns (no_text_extracted). This is adjacent to the OCR case but is NOT an OCR validation.",
+    "synthetic_image_only_page": "PASS - layout_for raises OCRRequired; no parser emits anything; a supplied OCR backend yields one geometry-free block with no invented table structure; blank OCR output refuses again; an image page carrying enough native text is correctly not refused."
+  },
+  "what_was_not_established": [
+    "Behaviour of the OCR path on a genuine raster scan: skew, noise, multi-column scans, and OCR confidence are all unexercised.",
+    "Whether locators survive OCR with any useful precision on a real page.",
+    "Whether OCR provenance survives the full ingestion pipeline on a real scanned source."
+  ],
+  "why_unresolved": {
+    "no_egress": "The organisation egress policy answers 403 at CONNECT for every government host and for archive.org. Only pypi.org and github.com are reachable.",
+    "no_local_candidate": "Every PDF present in the execution environment was examined; none has a page with image content and fewer than MIN_NATIVE_CHARS native characters.",
+    "not_routed_around": "No alternative fetch path was used to circumvent the policy. The policy is a technical restriction set by the environment owner, and the project's own source rules forbid bypassing technical restrictions."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "lx01_multicolumn_code_table.pdf": {
+    "code_meaning": {
+      "10-2": "Reception good",
+      "10-36A": "Confidential information subject possibly armed",
+      "10-36F": "Confidential information possible felony wants",
+      "10-37": "What time is it",
+      "10-4": "Message received",
+      "10-5": "Relay message",
+      "10-6": "Busy stand by",
+      "10-7": "Out of service",
+      "10-8": "In service",
+      "11-84": "Direct traffic",
+      "11-85": "Tow truck",
+      "11-86": "Bomb threat",
+      "11-87": "Bomb found",
+      "11-98": "Meet"
+    },
+    "must_not_emit_codes": [
+      "23152",
+      "23153",
+      "187",
+      "211"
+    ],
+    "note": "Four independent columns. Column 2 entries wrap, so their remainder lands beside the next code.",
+    "phonetic_letter": {},
+    "procedure_rule": []
+  },
+  "lx02_revision_date_table.pdf": {
+    "code_meaning": {},
+    "must_not_emit_codes": [
+      "11-18",
+      "11-13",
+      "12-05",
+      "10-17",
+      "09-11"
+    ],
+    "note": "Revision history whose dates are shaped like eleven-codes.",
+    "phonetic_letter": {},
+    "procedure_rule": []
+  },
+  "lx03_enumerated_headings.pdf": {
+    "code_meaning": {},
+    "must_not_emit_letters": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "note": "Enumerated section headings shaped like phonetic pairs.",
+    "phonetic_letter": {},
+    "procedure_rule": []
+  },
+  "lx04_local_alphabet_divergence.pdf": {
+    "code_meaning": {},
+    "note": "Local alphabet matching APCO on 25 letters, diverging on Z.",
+    "phonetic_letter": {
+      "A": "ADAM",
+      "B": "BOY",
+      "C": "CHARLES",
+      "D": "DAVID",
+      "E": "EDWARD",
+      "F": "FRANK",
+      "G": "GEORGE",
+      "H": "HENRY",
+      "I": "IDA",
+      "J": "JOHN",
+      "K": "KING",
+      "L": "LINCOLN",
+      "M": "MARY",
+      "N": "NORA",
+      "O": "OCEAN",
+      "P": "PAUL",
+      "Q": "QUEEN",
+      "R": "ROBERT",
+      "S": "SAM",
+      "T": "TOM",
+      "U": "UNION",
+      "V": "VICTOR",
+      "W": "WILLIAM",
+      "X": "XRAY",
+      "Y": "YOUNG",
+      "Z": "ZULU"
+    },
+    "procedure_rule": [],
+    "required_divergence": {
+      "Z": "ZULU"
+    }
+  },
+  "lx05_footer_code_token.pdf": {
+    "code_meaning": {},
+    "must_not_emit_codes": [
+      "10-42"
+    ],
+    "note": "Repeated footer carrying a code-shaped token.",
+    "phonetic_letter": {},
+    "procedure_rule": []
+  },
+  "lx06_page_boundary_rule.pdf": {
+    "code_meaning": {},
+    "note": "Rule whose qualifying exception is on the following page.",
+    "phonetic_letter": {},
+    "procedure_rule": [
+      "acknowledgement"
+    ],
+    "required_context_after_contains": "need not repeat"
+  },
+  "lx07_non_radio_copy_and_plate.pdf": {
+    "code_meaning": {},
+    "note": "'copy' as a document and 'plate' as impounded property.",
+    "phonetic_letter": {},
+    "procedure_rule": []
+  },
+  "lx08_repeated_header.pdf": {
+    "code_meaning": {},
+    "note": "Banner repeated on every page is furniture; the body rule is content.",
+    "phonetic_letter": {},
+    "procedure_rule": [
+      "location_address"
+    ]
+  },
+  "lx09_single_column_narrative.pdf": {
+    "code_meaning": {},
+    "note": "Ordinary one-column policy page; column detection must not fire.",
+    "phonetic_letter": {},
+    "procedure_rule": [
+      "location_address"
+    ],
+    "required_column_count": 1
+  }
+}

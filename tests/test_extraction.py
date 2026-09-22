@@ -30,12 +30,20 @@ def test_signal_codes():
 
 
 def test_code_parser_edge_cases():
-    blocks = [
-        TextBlock("p.2", "See Section 10-4 for details\n10-4\n10-4:Acknowledged\n10 - 8   In service   10-97 Arrived on scene\nRev 10-2019 Policy")
-    ]
-    got = {c.code: c.meaning for c in parse_code_blocks(blocks)}
-    assert got.get("10-4") == "Acknowledged"  # bare "10-4" and "Section 10-4" produce nothing
-    assert got.get("10-8") == "In service" and got.get("10-97") == "Arrived on scene"
+    """Parser v3 contract: a run of sibling records is evidence; a lone resemblance is not.
+
+    The v2 contract accepted any code-shaped line. That is precisely what turned a revision
+    date into an eleven-code on a real document, so the isolated cases below must now be
+    refused while the genuine list is still read.
+    """
+    listed = [TextBlock("p.2", "10-4 Acknowledged\n10-8 In service\n10-97 Arrived on scene")]
+    got = {c.code: c.meaning for c in parse_code_blocks(listed)}
+    assert got == {"10-4": "Acknowledged", "10-8": "In service", "10-97": "Arrived on scene"}
+    assert all(c.structural_reason == "COLUMN_SERIES" for c in parse_code_blocks(listed))
+
+    isolated = [TextBlock("p.2", "See Section 10-4 for details\n10-4\nRev 10-2019 Policy")]
+    assert parse_code_blocks(isolated) == []
+
     assert normalize_code("10 - 8") == ("TEN_CODE", "10-8")
     assert normalize_code("signal-7") == ("SIGNAL", "SIGNAL 7")
 
@@ -52,9 +60,23 @@ def test_phonetic_apco_and_nato_labels():
 
 
 def test_phonetic_noise_rejected():
+    """Stricter than v2: a lone valid-looking pair is no longer enough on its own.
+
+    v2 accepted ("A", "ALFA") from this noise because the word began with its letter. On real
+    documents that same leniency turned enumerated section headings into an alphabet, so an
+    alphabet must now be evident in the surrounding structure.
+    """
     blocks = [TextBlock("p.1", "B Adam\nQ Section\nA Alpha")]
-    got = {(c.letter, c.word) for c in parse_phonetic_blocks(blocks)}
-    assert got == {("A", "ALFA")}  # word must start with its letter; 'Alpha' normalised to NATO spelling
+    assert parse_phonetic_blocks(blocks) == []
+
+    real = [TextBlock("p.1", "A Alpha\nB Bravo\nC Charlie\nD Delta\nE Echo")]
+    assert {(c.letter, c.word) for c in parse_phonetic_blocks(real)} == {
+        ("A", "ALFA"),  # 'Alpha' normalised to the NATO spelling
+        ("B", "BRAVO"),
+        ("C", "CHARLIE"),
+        ("D", "DELTA"),
+        ("E", "ECHO"),
+    }
 
 
 def test_procedure_spotter_is_prescriptive_only():

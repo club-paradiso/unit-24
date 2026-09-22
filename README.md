@@ -25,6 +25,16 @@ This was agent source review, not human acceptance. See [the audit](docs/hardeni
 and [generated metrics](docs/real-source-metrics.md) for limitations and remaining gates.
 The 2018 registry remains a historical snapshot; it was not silently replaced.
 
+Extraction was then rebuilt around a position-aware layout representation, because the
+audited failures were structural: a revision date read as an eleven-code, section headings
+read as a phonetic alphabet, and adjacent table columns bleeding into each other. Code,
+phonetic and procedure parsers now require structural evidence before emitting anything.
+Parser status is **EXTRACTION_NOT_READY**: all four real validation documents are refused by
+the network egress policy, so precision on real documents is unmeasured and none was
+substituted. See [layout extraction](docs/layout-extraction.md),
+[extraction metrics](docs/extraction-metrics.md) and the
+[audit handoff](docs/handoff-astra.md).
+
 ## Quick start
 
 ```bash

@@ -1,0 +1,20 @@
+{
+  "_licence_note": "Works of the United States government, published in the FBI Crime Data Explorer repositories under a CC0 1.0 public-domain dedication, and therefore redistributable. The four agency validation documents in data/raw/layout-validation/ are NOT committed: their licensing is not established and only their identity belongs in this repository.",
+  "_not_a_protocol_source": "These documents are crime-reporting documentation, not radio protocol. They are never ingested as evidence about any agency's radio communications; they exist only to exercise the layout and parser gates against real-world PDF structure.",
+  "_purpose": "Real third-party PDFs used as extraction regression fixtures. Unlike the nine synthetic layout fixtures these were produced by someone else's tooling, which is the only way to test behaviour this repository's own PDF writer cannot reproduce.",
+  "documents": [
+    {
+      "byte_length": 88388,
+      "filename": "NIBRS_DataDictionary.pdf",
+      "host_is_the_issuer": true,
+      "host_repository": "https://github.com/fbi-cde/crime-data-frontend",
+      "issuing_authority": "Federal Bureau of Investigation, Uniform Crime Reporting Program",
+      "licence": "CC0 1.0 Universal / US government work",
+      "path_in_repository": "public/pdf/NIBRS_DataDictionary.pdf",
+      "repository_commit": "ddbd3077f8b546491c2f2f6b36e7e82f21a0bcbe",
+      "retrieved_at": "2026-09-20T04:33:00Z",
+      "sha256": "0cdbfd2b4ae2974bdee41db0fba59a32601759d0fe3ff81db56a08bbef2814f6",
+      "why_committed": "Its letter-keyed code tables (M = Male; F = Female; A = Attempted; C = Completed) were emitted as phonetic alphabet mappings by phonetic parser v4. Ten false candidates, from a document no synthetic fixture had anticipated."
+    }
+  ]
+}

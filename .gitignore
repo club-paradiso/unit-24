@@ -11,3 +11,8 @@ dist/
 
 data/raw/audit-text/
 *.transfer
+
+data/intermediate/layout_cache/
+data/raw/layout-validation/*
+!data/raw/layout-validation/MANIFEST.json
+!data/raw/layout-validation/README.md

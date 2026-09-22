@@ -175,8 +175,16 @@ def test_mirror_sources_each_extract_and_malformed_document_isolated(store, tmp_
             discovered_via="test",
             retrieved_at="2026-09-20T00:00:00Z",
         )
+        # The readable document must satisfy the v3 structural contract (a run of sibling
+        # records); a single code-shaped line no longer yields a fact, and the isolation
+        # assertion below would then pass for the wrong reason.
+        readable = b"10-4 Acknowledged\n10-8 In service\n10-97 Arrived on scene"
         register_document(
-            store, lead, b"%PDF-broken" if index == 0 else b"10-4 Acknowledged", "application/pdf" if index == 0 else "text/plain", doc_dir=tmp_path
+            store,
+            lead,
+            b"%PDF-broken" if index == 0 else readable,
+            "application/pdf" if index == 0 else "text/plain",
+            doc_dir=tmp_path,
         )
     run = extract_all(store)
     assert run.stats["parser_failures"] == 1

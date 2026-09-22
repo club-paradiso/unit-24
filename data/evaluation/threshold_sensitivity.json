@@ -1,0 +1,336 @@
+{
+  "best_usable_setting": "gutter=3pt,tolerance=0.15,rows=2",
+  "documents": 120,
+  "in_use": "gutter=6pt,tolerance=0.15,rows=3",
+  "note": "A setting is unusable if it invents a column on any document, however high its exact-match rate: a merged column loses facts, an invented one corrupts them. Synthetic geometry only. Recall is meaningful here solely because this corpus was generated from a plan that is its own ground truth. It is not evidence about any real document: the four real validation documents remain unretrieved.",
+  "parser_versions": {
+    "code_parser_version": "4",
+    "layout_code_fingerprint": "c2182ffac80dc387",
+    "layout_version": "layout-2",
+    "phonetic_parser_version": "5",
+    "procedure_parser_version": "4"
+  },
+  "settings": {
+    "gutter=12pt,tolerance=0,rows=2": {
+      "conservative_merge": 37,
+      "exact": 83,
+      "exact_rate": 0.6917,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0,rows=3": {
+      "conservative_merge": 37,
+      "exact": 83,
+      "exact_rate": 0.6917,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0,rows=5": {
+      "conservative_merge": 40,
+      "exact": 80,
+      "exact_rate": 0.6667,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.15,rows=2": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.15,rows=3": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.15,rows=5": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.3,rows=2": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.3,rows=3": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=12pt,tolerance=0.3,rows=5": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0,rows=2": {
+      "conservative_merge": 42,
+      "exact": 78,
+      "exact_rate": 0.65,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0,rows=3": {
+      "conservative_merge": 42,
+      "exact": 78,
+      "exact_rate": 0.65,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0,rows=5": {
+      "conservative_merge": 45,
+      "exact": 75,
+      "exact_rate": 0.625,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.15,rows=2": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.15,rows=3": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.15,rows=5": {
+      "conservative_merge": 37,
+      "exact": 83,
+      "exact_rate": 0.6917,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.3,rows=2": {
+      "conservative_merge": 33,
+      "exact": 87,
+      "exact_rate": 0.725,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.3,rows=3": {
+      "conservative_merge": 33,
+      "exact": 87,
+      "exact_rate": 0.725,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=18pt,tolerance=0.3,rows=5": {
+      "conservative_merge": 36,
+      "exact": 84,
+      "exact_rate": 0.7,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0,rows=2": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0,rows=3": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0,rows=5": {
+      "conservative_merge": 38,
+      "exact": 82,
+      "exact_rate": 0.6833,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0.15,rows=2": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0.15,rows=3": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0.15,rows=5": {
+      "conservative_merge": 32,
+      "exact": 88,
+      "exact_rate": 0.7333,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=3pt,tolerance=0.3,rows=2": {
+      "conservative_merge": 31,
+      "exact": 87,
+      "exact_rate": 0.725,
+      "invented_columns": 2,
+      "usable": false
+    },
+    "gutter=3pt,tolerance=0.3,rows=3": {
+      "conservative_merge": 31,
+      "exact": 88,
+      "exact_rate": 0.7333,
+      "invented_columns": 1,
+      "usable": false
+    },
+    "gutter=3pt,tolerance=0.3,rows=5": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0,rows=2": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0,rows=3": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0,rows=5": {
+      "conservative_merge": 38,
+      "exact": 82,
+      "exact_rate": 0.6833,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0.15,rows=2": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0.15,rows=3": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0.15,rows=5": {
+      "conservative_merge": 32,
+      "exact": 88,
+      "exact_rate": 0.7333,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=6pt,tolerance=0.3,rows=2": {
+      "conservative_merge": 31,
+      "exact": 87,
+      "exact_rate": 0.725,
+      "invented_columns": 2,
+      "usable": false
+    },
+    "gutter=6pt,tolerance=0.3,rows=3": {
+      "conservative_merge": 31,
+      "exact": 88,
+      "exact_rate": 0.7333,
+      "invented_columns": 1,
+      "usable": false
+    },
+    "gutter=6pt,tolerance=0.3,rows=5": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0,rows=2": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0,rows=3": {
+      "conservative_merge": 35,
+      "exact": 85,
+      "exact_rate": 0.7083,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0,rows=5": {
+      "conservative_merge": 38,
+      "exact": 82,
+      "exact_rate": 0.6833,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.15,rows=2": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.15,rows=3": {
+      "conservative_merge": 29,
+      "exact": 91,
+      "exact_rate": 0.7583,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.15,rows=5": {
+      "conservative_merge": 32,
+      "exact": 88,
+      "exact_rate": 0.7333,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.3,rows=2": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.3,rows=3": {
+      "conservative_merge": 31,
+      "exact": 89,
+      "exact_rate": 0.7417,
+      "invented_columns": 0,
+      "usable": true
+    },
+    "gutter=9pt,tolerance=0.3,rows=5": {
+      "conservative_merge": 34,
+      "exact": 86,
+      "exact_rate": 0.7167,
+      "invented_columns": 0,
+      "usable": true
+    }
+  },
+  "settings_that_invent_columns": [
+    "gutter=3pt,tolerance=0.3,rows=2",
+    "gutter=3pt,tolerance=0.3,rows=3",
+    "gutter=6pt,tolerance=0.3,rows=2",
+    "gutter=6pt,tolerance=0.3,rows=3"
+  ]
+}

@@ -1,9 +1,8 @@
 {
   "agencies_by_research_status": {
     "blocked": 31,
-    "discovery_started": 6,
-    "documents_discovered": 40,
-    "domain_discovered": 23
+    "discovery_started": 29,
+    "documents_discovered": 40
   },
   "agencies_by_state": {
     "AK": 2,
@@ -85,14 +84,25 @@
   "corroborated_fact_count": 0,
   "current_official_documents": 0,
   "documents_acquired": 0,
-  "documents_discovered": 0,
+  "documents_discovered": 139,
   "historical_documents": 0,
-  "leads_by_acquisition_status": {},
-  "leads_by_class": {},
-  "leads_total": 0,
+  "leads_by_acquisition_status": {
+    "pending": 1423,
+    "skipped_not_candidate": 363
+  },
+  "leads_by_class": {
+    "enthusiast_lead": 256,
+    "official_document_candidate": 53,
+    "official_homepage_candidate": 515,
+    "official_radio_policy_candidate": 85,
+    "secondary_lead": 513,
+    "standards_body_document": 1,
+    "unrelated": 363
+  },
+  "leads_total": 1786,
   "no_public_source_count": 0,
   "official_domains_discovered": 0,
-  "radio_policy_candidates_discovered": 0,
+  "radio_policy_candidates_discovered": 85,
   "rejected_fact_count": 0,
   "sources_by_quality": {},
   "total_agencies": 100,

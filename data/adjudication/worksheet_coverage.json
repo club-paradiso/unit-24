@@ -1,0 +1,97 @@
+{
+  "decided_by_absence": {
+    "communication_action": 27,
+    "communication_medium": 27,
+    "condition_correct": 27,
+    "context_complete": 27,
+    "exception_correct": 27,
+    "governed_object": 27,
+    "issuing_authority_correct": 116,
+    "procedure_actor": 27
+  },
+  "fully_adjudicated": 116,
+  "never_asked_by_the_previous_instrument": [
+    "issuing_authority_correct",
+    "procedure_actor",
+    "communication_medium",
+    "communication_action",
+    "governed_object",
+    "condition_correct",
+    "exception_correct",
+    "context_complete"
+  ],
+  "origin": "previous independent review, restated from data/audit/fact_audit.jsonl",
+  "per_field": {
+    "agency_correct": {
+      "applicable": 116,
+      "decided": 116,
+      "unadjudicated": 0
+    },
+    "code_exact": {
+      "applicable": 88,
+      "decided": 88,
+      "unadjudicated": 0
+    },
+    "communication_action": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "communication_medium": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "condition_correct": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "context_complete": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "exception_correct": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "governed_object": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "issuing_authority_correct": {
+      "applicable": 116,
+      "decided": 116,
+      "unadjudicated": 0
+    },
+    "learner_safe_in_principle": {
+      "applicable": 116,
+      "decided": 116,
+      "unadjudicated": 0
+    },
+    "meaning_supported": {
+      "applicable": 116,
+      "decided": 116,
+      "unadjudicated": 0
+    },
+    "procedure_actor": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    },
+    "region_correct": {
+      "applicable": 116,
+      "decided": 116,
+      "unadjudicated": 0
+    },
+    "section_scope_correct": {
+      "applicable": 27,
+      "decided": 27,
+      "unadjudicated": 0
+    }
+  },
+  "records": 116
+}

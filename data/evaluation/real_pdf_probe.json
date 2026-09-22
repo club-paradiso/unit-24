@@ -1,0 +1,37 @@
+{
+  "documents": {
+    "NIBRS_DataDictionary.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 511,
+      "candidates": {
+        "code_meaning": 0,
+        "phonetic_letter": 0,
+        "procedure_rule": 0
+      },
+      "columns_per_page": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "issuing_authority": "Federal Bureau of Investigation, Uniform Crime Reporting Program",
+      "licence": "CC0 1.0 Universal / US government work",
+      "pages": 7,
+      "sha256": "0cdbfd2b4ae2974bdee41db0fba59a32601759d0fe3ff81db56a08bbef2814f6",
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": []
+    }
+  },
+  "expected_radio_facts": 0,
+  "note": "Robustness probe over real third-party PDFs. No ground truth exists for these documents and no precision is claimed. They are not radio-protocol sources and are never ingested as evidence about any agency.",
+  "parser_versions": {
+    "layout_code_fingerprint": "c2182ffac80dc387",
+    "layout_version": "layout-2"
+  }
+}

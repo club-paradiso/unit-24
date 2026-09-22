@@ -1,0 +1,28 @@
+{
+  "documents": {
+    "CHI_CPD_DIRECTIVE": {
+      "note": "gateway answered 403 to CONNECT for directives.chicagopolice.org:443",
+      "status": "MISSING"
+    },
+    "CHP_AURAL_BREVITY": {
+      "note": "gateway answered 403 to CONNECT for www.chp.ca.gov:443",
+      "status": "MISSING"
+    },
+    "IN_ISP_COMMUNICATIONS": {
+      "note": "gateway answered 403 to CONNECT for www.in.gov:443",
+      "status": "MISSING"
+    },
+    "PHL_PPD_DIRECTIVE_7_1": {
+      "note": "gateway answered 403 to CONNECT for www.phillypolice.com:443",
+      "status": "MISSING"
+    }
+  },
+  "note": "Candidate counts are not precision. Adjudicate data/evaluation/real_document_candidates.jsonl against the source documents before quoting any precision figure.",
+  "parser_versions": {
+    "code_parser_version": "3",
+    "layout_code_fingerprint": "5ad329afd1f575c0",
+    "layout_version": "layout-2",
+    "phonetic_parser_version": "3",
+    "procedure_parser_version": "3"
+  }
+}

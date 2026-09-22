@@ -1,0 +1,738 @@
+{
+  "any_human_reviewer": false,
+  "candidate_provenance": {
+    "candidate_parser_versions": [
+      "2"
+    ],
+    "current_parser_versions": {
+      "code_meaning": "4",
+      "phonetic_letter": "5",
+      "procedure_rule": "4"
+    },
+    "measures_current_parsers": false,
+    "seeded_from": [
+      "data/audit/fact_audit.jsonl"
+    ],
+    "warning": "These candidates were emitted by parser version(s) ['2']; the tree now runs ['4', '5']. Every figure below is a measurement of the older parser on real documents, not of the current one."
+  },
+  "candidates": 116,
+  "claims_decided_by": {
+    "absence_from_the_candidate": 305,
+    "note": "A claim decided by its own absence was never judged against a document. 'Fully adjudicated' therefore does not mean 'reviewed'.",
+    "reviewer": 579,
+    "still_open": 0
+  },
+  "documents": [
+    "CHI_CPD_DIRECTIVE",
+    "CHP_AURAL_BREVITY",
+    "IN_ISP_COMMUNICATIONS",
+    "PHL_PPD_DIRECTIVE_7_1"
+  ],
+  "fully_adjudicated": 116,
+  "human_adjudicated_candidates": 0,
+  "note": "Real-document metrics only. Never combine with the synthetic stress corpus: a figure from generated geometry is not evidence about a published document.",
+  "per_document": {
+    "CHI_CPD_DIRECTIVE": {
+      "code_meaning": {
+        "emitted": 0
+      },
+      "phonetic_letter": {
+        "emitted": 0
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "blocking_claims": {
+          "communication_action": 8,
+          "communication_medium": 8,
+          "condition_correct": 8,
+          "context_complete": 8,
+          "exception_correct": 8,
+          "governed_object": 8,
+          "issuing_authority_correct": 8,
+          "learner_safe_in_principle": 8,
+          "meaning_supported": 6,
+          "procedure_actor": 8,
+          "section_scope_correct": 8
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 6,
+          "precision": 0.25,
+          "tp": 2,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 8,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_scope": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 8,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 8,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 2
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 8,
+          "emitted": 8,
+          "fp": 8,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "structural_failures": {
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 2,
+          "SEMANTIC_MISCLASSIFICATION": 4
+        }
+      }
+    },
+    "CHP_AURAL_BREVITY": {
+      "code_meaning": {
+        "blocking_claims": {
+          "code_exact": 29,
+          "issuing_authority_correct": 53,
+          "learner_safe_in_principle": 53,
+          "meaning_supported": 29
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 53,
+          "emitted": 53,
+          "fp": 29,
+          "precision": 0.4528,
+          "tp": 24,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 53,
+          "emitted": 53,
+          "fp": 53,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 53,
+          "emitted": 53,
+          "fp": 29,
+          "precision": 0.4528,
+          "tp": 24,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 24
+        },
+        "structural_failures": {
+          "ADJACENT_COLUMN_BLEED": 22,
+          "LOST_WRAPPED_CONTINUATION": 7
+        }
+      },
+      "phonetic_letter": {
+        "blocking_claims": {
+          "code_exact": 31,
+          "issuing_authority_correct": 31,
+          "learner_safe_in_principle": 31,
+          "meaning_supported": 5
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 31,
+          "emitted": 31,
+          "fp": 5,
+          "precision": 0.8387,
+          "tp": 26,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 31,
+          "emitted": 31,
+          "fp": 31,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 31,
+          "emitted": 31,
+          "fp": 31,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 26
+        },
+        "structural_failures": {
+          "LOST_WRAPPED_CONTINUATION": 1,
+          "OTHER": 4
+        }
+      },
+      "phonetic_system": {
+        "blocking_claims": {
+          "issuing_authority_correct": 1,
+          "learner_safe_in_principle": 1,
+          "meaning_supported": 1
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "OTHER": 1
+        }
+      },
+      "procedure_rule": {
+        "emitted": 0
+      }
+    },
+    "IN_ISP_COMMUNICATIONS": {
+      "code_meaning": {
+        "emitted": 0
+      },
+      "phonetic_letter": {
+        "blocking_claims": {
+          "code_exact": 2,
+          "issuing_authority_correct": 2,
+          "learner_safe_in_principle": 2,
+          "meaning_supported": 2
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 2,
+          "emitted": 2,
+          "fp": 2,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 2,
+          "emitted": 2,
+          "fp": 2,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 2,
+          "emitted": 2,
+          "fp": 2,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "HEADING_MISCLASSIFICATION": 2
+        }
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "blocking_claims": {
+          "communication_action": 6,
+          "communication_medium": 6,
+          "condition_correct": 6,
+          "context_complete": 6,
+          "exception_correct": 6,
+          "governed_object": 6,
+          "issuing_authority_correct": 6,
+          "learner_safe_in_principle": 6,
+          "meaning_supported": 4,
+          "procedure_actor": 6,
+          "section_scope_correct": 6
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 4,
+          "precision": 0.3333,
+          "tp": 2,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 6,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_scope": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 6,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 6,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 2
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 6,
+          "emitted": 6,
+          "fp": 6,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "structural_failures": {
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 1,
+          "OTHER": 2,
+          "SEMANTIC_MISCLASSIFICATION": 1
+        }
+      }
+    },
+    "PHL_PPD_DIRECTIVE_7_1": {
+      "code_meaning": {
+        "blocking_claims": {
+          "code_exact": 1,
+          "issuing_authority_correct": 1,
+          "learner_safe_in_principle": 1,
+          "meaning_supported": 1
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "DATE_OR_REVISION_MISREAD": 1
+        }
+      },
+      "phonetic_letter": {
+        "blocking_claims": {
+          "code_exact": 1,
+          "issuing_authority_correct": 1,
+          "learner_safe_in_principle": 1,
+          "meaning_supported": 1
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 1,
+          "emitted": 1,
+          "fp": 1,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 0
+        },
+        "structural_failures": {
+          "HEADING_MISCLASSIFICATION": 1
+        }
+      },
+      "phonetic_system": {
+        "emitted": 0
+      },
+      "procedure_rule": {
+        "blocking_claims": {
+          "communication_action": 13,
+          "communication_medium": 13,
+          "condition_correct": 13,
+          "context_complete": 13,
+          "exception_correct": 13,
+          "governed_object": 13,
+          "issuing_authority_correct": 13,
+          "learner_safe_in_principle": 13,
+          "meaning_supported": 6,
+          "procedure_actor": 13,
+          "section_scope_correct": 13
+        },
+        "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+        "candidate_meaning": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 6,
+          "precision": 0.5385,
+          "tp": 7,
+          "unadjudicated": 0
+        },
+        "complete_fact": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 13,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "complete_scope": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 13,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "extraction_complete": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 13,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "parser_context_complete_subset": {
+          "emitted": 0,
+          "note": "the parser marked no candidate context_complete"
+        },
+        "recall": {
+          "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+          "fn": null,
+          "recall": null,
+          "tp": 7
+        },
+        "reviewer_context_complete": {
+          "adjudicated": 13,
+          "emitted": 13,
+          "fp": 13,
+          "precision": 0.0,
+          "tp": 0,
+          "unadjudicated": 0
+        },
+        "structural_failures": {
+          "HEADER_FOOTER_CONTAMINATION": 1,
+          "INCORRECT_CONDITION_EXCEPTION_SCOPE": 1,
+          "SEMANTIC_MISCLASSIFICATION": 4
+        }
+      }
+    }
+  },
+  "per_family": {
+    "code_meaning": {
+      "blocking_claims": {
+        "code_exact": 30,
+        "issuing_authority_correct": 54,
+        "learner_safe_in_principle": 54,
+        "meaning_supported": 30
+      },
+      "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+      "candidate_meaning": {
+        "adjudicated": 54,
+        "emitted": 54,
+        "fp": 30,
+        "precision": 0.4444,
+        "tp": 24,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 54,
+        "emitted": 54,
+        "fp": 54,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "extraction_complete": {
+        "adjudicated": 54,
+        "emitted": 54,
+        "fp": 30,
+        "precision": 0.4444,
+        "tp": 24,
+        "unadjudicated": 0
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 24
+      },
+      "structural_failures": {
+        "ADJACENT_COLUMN_BLEED": 22,
+        "DATE_OR_REVISION_MISREAD": 1,
+        "LOST_WRAPPED_CONTINUATION": 7
+      }
+    },
+    "phonetic_letter": {
+      "blocking_claims": {
+        "code_exact": 34,
+        "issuing_authority_correct": 34,
+        "learner_safe_in_principle": 34,
+        "meaning_supported": 8
+      },
+      "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+      "candidate_meaning": {
+        "adjudicated": 34,
+        "emitted": 34,
+        "fp": 8,
+        "precision": 0.7647,
+        "tp": 26,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 34,
+        "emitted": 34,
+        "fp": 34,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "extraction_complete": {
+        "adjudicated": 34,
+        "emitted": 34,
+        "fp": 34,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 26
+      },
+      "structural_failures": {
+        "HEADING_MISCLASSIFICATION": 3,
+        "LOST_WRAPPED_CONTINUATION": 1,
+        "OTHER": 4
+      }
+    },
+    "phonetic_system": {
+      "blocking_claims": {
+        "issuing_authority_correct": 1,
+        "learner_safe_in_principle": 1,
+        "meaning_supported": 1
+      },
+      "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+      "candidate_meaning": {
+        "adjudicated": 1,
+        "emitted": 1,
+        "fp": 1,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 1,
+        "emitted": 1,
+        "fp": 1,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "extraction_complete": {
+        "adjudicated": 1,
+        "emitted": 1,
+        "fp": 1,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 0
+      },
+      "structural_failures": {
+        "OTHER": 1
+      }
+    },
+    "procedure_rule": {
+      "blocking_claims": {
+        "communication_action": 27,
+        "communication_medium": 27,
+        "condition_correct": 27,
+        "context_complete": 27,
+        "exception_correct": 27,
+        "governed_object": 27,
+        "issuing_authority_correct": 27,
+        "learner_safe_in_principle": 27,
+        "meaning_supported": 16,
+        "procedure_actor": 27,
+        "section_scope_correct": 27
+      },
+      "blocking_claims_note": "Counts overlap: one candidate can be blocked by several claims. A claim blocking every candidate is a systemic gap, not a per-candidate error.",
+      "candidate_meaning": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 16,
+        "precision": 0.4074,
+        "tp": 11,
+        "unadjudicated": 0
+      },
+      "complete_fact": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 27,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "complete_scope": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 27,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "extraction_complete": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 27,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "parser_context_complete_subset": {
+        "emitted": 0,
+        "note": "the parser marked no candidate context_complete"
+      },
+      "recall": {
+        "blocked_reason": "no reviewer-supplied inventory of facts the document contains; candidates cannot evidence what was missed",
+        "fn": null,
+        "recall": null,
+        "tp": 11
+      },
+      "reviewer_context_complete": {
+        "adjudicated": 27,
+        "emitted": 27,
+        "fp": 27,
+        "precision": 0.0,
+        "tp": 0,
+        "unadjudicated": 0
+      },
+      "structural_failures": {
+        "HEADER_FOOTER_CONTAMINATION": 1,
+        "INCORRECT_CONDITION_EXCEPTION_SCOPE": 4,
+        "OTHER": 2,
+        "SEMANTIC_MISCLASSIFICATION": 9
+      }
+    }
+  },
+  "reviewers": [
+    "GPT-6 Astra independent source review"
+  ],
+  "schema_version": "adjudication-1",
+  "unadjudicated": 0
+}

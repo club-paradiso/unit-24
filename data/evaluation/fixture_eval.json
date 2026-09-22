@@ -1,0 +1,300 @@
+{
+  "code_meaning": {
+    "fn": 0,
+    "fp": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "tp": 14
+  },
+  "failed_structural_checks": 0,
+  "ground_truth": "exhaustive_by_construction",
+  "parser_versions": {
+    "code_parser_version": "4",
+    "layout_version": "layout-2",
+    "phonetic_parser_version": "5",
+    "procedure_parser_version": "4"
+  },
+  "per_fixture": {
+    "lx01_multicolumn_code_table.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 22,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 14,
+        "wrong_meaning": {}
+      },
+      "columns": 4,
+      "failed_checks": [],
+      "note": "Four independent columns. Column 2 entries wrap, so their remainder lands beside the next code.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {
+        "must_not_emit_code:187": true,
+        "must_not_emit_code:211": true,
+        "must_not_emit_code:23152": true,
+        "must_not_emit_code:23153": true
+      }
+    },
+    "lx02_revision_date_table.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 11,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 2,
+      "failed_checks": [],
+      "note": "Revision history whose dates are shaped like eleven-codes.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {
+        "must_not_emit_code:09-11": true,
+        "must_not_emit_code:10-17": true,
+        "must_not_emit_code:11-13": true,
+        "must_not_emit_code:11-18": true,
+        "must_not_emit_code:12-05": true
+      }
+    },
+    "lx03_enumerated_headings.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 6,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "Enumerated section headings shaped like phonetic pairs.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {
+        "must_not_emit_letter:A": true,
+        "must_not_emit_letter:B": true,
+        "must_not_emit_letter:C": true,
+        "must_not_emit_letter:D": true
+      }
+    },
+    "lx04_local_alphabet_divergence.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 28,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 2,
+      "failed_checks": [],
+      "note": "Local alphabet matching APCO on 25 letters, diverging on Z.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 26
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {
+        "divergence_preserved": true,
+        "divergence_reported": true,
+        "label_is_descriptive": "APCO_1941"
+      }
+    },
+    "lx05_footer_code_token.pdf": {
+      "blocks_excluded": 9,
+      "blocks_kept": 6,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "Repeated footer carrying a code-shaped token.",
+      "pages": 3,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {
+        "must_not_emit_code:10-42": true
+      }
+    },
+    "lx06_page_boundary_rule.pdf": {
+      "blocks_excluded": 2,
+      "blocks_kept": 4,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "Rule whose qualifying exception is on the following page.",
+      "pages": 2,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [
+          "acknowledgement"
+        ],
+        "fn": 0,
+        "fp": 0,
+        "tp": 1
+      },
+      "structural_checks": {
+        "context_after_carries_exception": true
+      }
+    },
+    "lx07_non_radio_copy_and_plate.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 5,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "'copy' as a document and 'plate' as impounded property.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [],
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "structural_checks": {}
+    },
+    "lx08_repeated_header.pdf": {
+      "blocks_excluded": 6,
+      "blocks_kept": 6,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "Banner repeated on every page is furniture; the body rule is content.",
+      "pages": 3,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [
+          "location_address"
+        ],
+        "fn": 0,
+        "fp": 0,
+        "tp": 1
+      },
+      "structural_checks": {}
+    },
+    "lx09_single_column_narrative.pdf": {
+      "blocks_excluded": 0,
+      "blocks_kept": 3,
+      "code": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0,
+        "wrong_meaning": {}
+      },
+      "columns": 1,
+      "failed_checks": [],
+      "note": "Ordinary one-column policy page; column detection must not fire.",
+      "pages": 1,
+      "phonetic": {
+        "fn": 0,
+        "fp": 0,
+        "tp": 0
+      },
+      "procedure": {
+        "emitted": [
+          "location_address"
+        ],
+        "fn": 0,
+        "fp": 0,
+        "tp": 1
+      },
+      "structural_checks": {
+        "column_count": true
+      }
+    }
+  },
+  "phonetic_letter": {
+    "fn": 0,
+    "fp": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "tp": 26
+  },
+  "procedure_rule": {
+    "fn": 0,
+    "fp": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "tp": 3
+  },
+  "recall_valid": true
+}

@@ -1,0 +1,184 @@
+{
+  "folds": {
+    "CHI_CPD_DIRECTIVE": {
+      "development": {
+        "audited_candidates": 108,
+        "baseline_complete_fact_precision": 0.2222,
+        "baseline_complete_facts": 24,
+        "baseline_emitted": 108,
+        "baseline_meaning_precision": 0.5463,
+        "baseline_meaning_supported": 59,
+        "context_complete_emitted": 7,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 49,
+        "false_positives_total_in_gold": 49,
+        "replay_emitted": 7,
+        "replay_meaning_precision": 1.0,
+        "replay_meaning_supported": 7,
+        "replay_unsupported_still_emitted": 0,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 24
+      },
+      "development_documents": [
+        "CHP_AURAL_BREVITY",
+        "IN_ISP_COMMUNICATIONS",
+        "PHL_PPD_DIRECTIVE_7_1"
+      ],
+      "held_out": {
+        "audited_candidates": 8,
+        "baseline_complete_fact_precision": 0.0,
+        "baseline_complete_facts": 0,
+        "baseline_emitted": 8,
+        "baseline_meaning_precision": 0.25,
+        "baseline_meaning_supported": 2,
+        "context_complete_emitted": 2,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 5,
+        "false_positives_total_in_gold": 6,
+        "replay_emitted": 3,
+        "replay_meaning_precision": 0.6667,
+        "replay_meaning_supported": 2,
+        "replay_unsupported_still_emitted": 1,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 0
+      }
+    },
+    "CHP_AURAL_BREVITY": {
+      "development": {
+        "audited_candidates": 31,
+        "baseline_complete_fact_precision": 0.0,
+        "baseline_complete_facts": 0,
+        "baseline_emitted": 31,
+        "baseline_meaning_precision": 0.3548,
+        "baseline_meaning_supported": 11,
+        "context_complete_emitted": 9,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 19,
+        "false_positives_total_in_gold": 20,
+        "replay_emitted": 10,
+        "replay_meaning_precision": 0.9,
+        "replay_meaning_supported": 9,
+        "replay_unsupported_still_emitted": 1,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 0
+      },
+      "development_documents": [
+        "CHI_CPD_DIRECTIVE",
+        "IN_ISP_COMMUNICATIONS",
+        "PHL_PPD_DIRECTIVE_7_1"
+      ],
+      "held_out": {
+        "audited_candidates": 85,
+        "baseline_complete_fact_precision": 0.2824,
+        "baseline_complete_facts": 24,
+        "baseline_emitted": 85,
+        "baseline_meaning_precision": 0.5882,
+        "baseline_meaning_supported": 50,
+        "context_complete_emitted": 0,
+        "context_complete_meaning_precision": null,
+        "false_positives_eliminated": 35,
+        "false_positives_total_in_gold": 35,
+        "replay_emitted": 0,
+        "replay_meaning_precision": null,
+        "replay_meaning_supported": 0,
+        "replay_unsupported_still_emitted": 0,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 24
+      }
+    },
+    "IN_ISP_COMMUNICATIONS": {
+      "development": {
+        "audited_candidates": 108,
+        "baseline_complete_fact_precision": 0.2222,
+        "baseline_complete_facts": 24,
+        "baseline_emitted": 108,
+        "baseline_meaning_precision": 0.5463,
+        "baseline_meaning_supported": 59,
+        "context_complete_emitted": 8,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 48,
+        "false_positives_total_in_gold": 49,
+        "replay_emitted": 9,
+        "replay_meaning_precision": 0.8889,
+        "replay_meaning_supported": 8,
+        "replay_unsupported_still_emitted": 1,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 24
+      },
+      "development_documents": [
+        "CHI_CPD_DIRECTIVE",
+        "CHP_AURAL_BREVITY",
+        "PHL_PPD_DIRECTIVE_7_1"
+      ],
+      "held_out": {
+        "audited_candidates": 8,
+        "baseline_complete_fact_precision": 0.0,
+        "baseline_complete_facts": 0,
+        "baseline_emitted": 8,
+        "baseline_meaning_precision": 0.25,
+        "baseline_meaning_supported": 2,
+        "context_complete_emitted": 1,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 6,
+        "false_positives_total_in_gold": 6,
+        "replay_emitted": 1,
+        "replay_meaning_precision": 1.0,
+        "replay_meaning_supported": 1,
+        "replay_unsupported_still_emitted": 0,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 0
+      }
+    },
+    "PHL_PPD_DIRECTIVE_7_1": {
+      "development": {
+        "audited_candidates": 101,
+        "baseline_complete_fact_precision": 0.2376,
+        "baseline_complete_facts": 24,
+        "baseline_emitted": 101,
+        "baseline_meaning_precision": 0.5347,
+        "baseline_meaning_supported": 54,
+        "context_complete_emitted": 3,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 46,
+        "false_positives_total_in_gold": 47,
+        "replay_emitted": 4,
+        "replay_meaning_precision": 0.75,
+        "replay_meaning_supported": 3,
+        "replay_unsupported_still_emitted": 1,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 24
+      },
+      "development_documents": [
+        "CHI_CPD_DIRECTIVE",
+        "CHP_AURAL_BREVITY",
+        "IN_ISP_COMMUNICATIONS"
+      ],
+      "held_out": {
+        "audited_candidates": 15,
+        "baseline_complete_fact_precision": 0.0,
+        "baseline_complete_facts": 0,
+        "baseline_emitted": 15,
+        "baseline_meaning_precision": 0.4667,
+        "baseline_meaning_supported": 7,
+        "context_complete_emitted": 6,
+        "context_complete_meaning_precision": 1.0,
+        "false_positives_eliminated": 8,
+        "false_positives_total_in_gold": 8,
+        "replay_emitted": 6,
+        "replay_meaning_precision": 1.0,
+        "replay_meaning_supported": 6,
+        "replay_unsupported_still_emitted": 0,
+        "true_facts_retained_text_only": 0,
+        "true_facts_total_in_gold": 0
+      }
+    }
+  },
+  "method": "leave_one_document_out",
+  "note": "Parsers contain no agency-specific or document-specific branches, enforced by tests/test_layout_extraction.py::test_no_agency_specific_parser_branches. Each fold therefore reports held-out behaviour of rules developed against the other documents.",
+  "parser_versions": {
+    "code_parser_version": "4",
+    "layout_version": "layout-2",
+    "phonetic_parser_version": "5",
+    "procedure_parser_version": "4"
+  }
+}
