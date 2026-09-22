@@ -1,9 +1,10 @@
 {
-  "_purpose": "Identity manifest for the four real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
-  "_status": "NOT PRESENT in the build environment. Every host below was refused by the organisation egress policy (HTTP 403 at CONNECT). No document was fetched, and none was substituted.",
+  "_purpose": "Identity manifest for the three real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
+  "_status": "PRESENT as of 2026-09-22. Every host is still refused by the organisation egress policy (HTTP 403 at CONNECT), so the files were downloaded outside the build environment and placed by hand. Nothing was substituted: each came from its canonical_url. All three match expected_sha256 and expected_byte_length exactly.",
   "_directory": "data/raw/layout-validation/ (git-ignored except this manifest and README)",
   "_identity_rule": "Before a document is used, its SHA-256 must equal expected_sha256 below. A file that does not match is a different document and must not be used, however similar its name.",
-  "_hash_provenance": "expected_sha256 values are the document hashes recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z). They were not recomputed here because the bytes are unavailable.",
+  "_hash_provenance": "expected_sha256 values are the document hashes recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z), and each was reproduced byte-for-byte on 2026-09-22 by the copy now in this directory.",
+  "_excluded_documents_note": "excluded_documents lists a document that was in this set and no longer is. It is kept rather than deleted so the set cannot be silently restored to four without reading why it became three. Nothing reads it: the scripts iterate documents only. Removal from this set is scoped to layout validation and changes no historical measurement — CHI_CPD_DIRECTIVE remains in DOCUMENT_KEYS and in the audit, replay, coverage and adjudication artifacts, which record what a previous sprint measured when the document was retrievable.",
   "documents": [
     {
       "key": "CHP_AURAL_BREVITY",
@@ -35,21 +36,6 @@
       "retrieval_error": "gateway answered 403 to CONNECT for www.in.gov:443"
     },
     {
-      "key": "CHI_CPD_DIRECTIVE",
-      "agency": "Chicago Police Department",
-      "agency_id": "CAN-M03",
-      "source_id": "src_b2f7f6d601d0512c",
-      "filename": "chi_cpd_directive_6607.pdf",
-      "canonical_url": "https://directives.chicagopolice.org/api/publicDirective/6607",
-      "expected_sha256": "4e7ce3040d05c8419eeda4302d4791bb127cc66deac0b02651634a5f2b4b831c",
-      "expected_byte_length": 104504,
-      "expected_page_count": 11,
-      "recorded_effective_date": "2020-08-15",
-      "layout_character": "single-column directive with nested lettered and numbered clauses",
-      "retrieval_status": "BLOCKED_EGRESS",
-      "retrieval_error": "gateway answered 403 to CONNECT for directives.chicagopolice.org:443"
-    },
-    {
       "key": "PHL_PPD_DIRECTIVE_7_1",
       "agency": "Philadelphia Police Department",
       "agency_id": "CAN-M05",
@@ -62,6 +48,31 @@
       "layout_character": "long directive with a revision-history table, margin change-bars and rules that continue across page breaks",
       "retrieval_status": "BLOCKED_EGRESS",
       "retrieval_error": "gateway answered 403 to CONNECT for www.phillypolice.com:443"
+    }
+  ],
+  "excluded_documents": [
+    {
+      "key": "CHI_CPD_DIRECTIVE",
+      "agency": "Chicago Police Department",
+      "agency_id": "CAN-M03",
+      "source_id": "src_b2f7f6d601d0512c",
+      "filename": "chi_cpd_directive_6607.pdf",
+      "canonical_url": "https://directives.chicagopolice.org/api/publicDirective/6607",
+      "expected_sha256": "4e7ce3040d05c8419eeda4302d4791bb127cc66deac0b02651634a5f2b4b831c",
+      "expected_byte_length": 104504,
+      "expected_page_count": 11,
+      "recorded_effective_date": "2020-08-15",
+      "layout_character": "single-column directive with nested lettered and numbered clauses",
+      "excluded_at": "2026-09-22",
+      "excluded_because": "The source cannot supply a document matching expected_sha256, and no substitute may be used in its place. https://directives.chicagopolice.org/api/publicDirective/6607 builds the PDF per request instead of serving a stored file: the footer of all eleven pages carries the download time to the minute, and the trailer /ID and CreationDate are fresh each time, so four downloads on 2026-09-22 produced four different whole-file hashes (30638b53..., 7aa0f6e5..., 30638b53..., 08263c40...) at 104500 and 104508 bytes. The audited copy from 2026-09-20T06:59:36Z carried that minute's stamp; data/raw/documents/4e7ce304....pdf is absent from the working tree, from every branch and from this machine, so expected_sha256 can never be reproduced by anyone.",
+      "identity_evidence_not_acted_on": {
+        "_note": "Recorded because it is what a future decision would rest on, not because it was accepted. The document that arrives is almost certainly the right one; a whole-file hash is simply the wrong identity test for a per-request-generated source. Re-admitting this document requires deciding on an identity rule for such sources, not editing expected_sha256 to match whatever arrived.",
+        "ledger_fingerprint_reproduced": "radiocorpus.extraction.text.blocks_for on a 2026-09-22 download yields block_count=11 and text_characters=33009, equal to the values recorded for this source in data/audit/retrieval/CAN-M03.json at acquisition time",
+        "stable_content_sha256": "f97cecabebb0d9acbbf903c5915b22333de8ea3edf3fdab633ae74630dd3559e",
+        "stable_content_method": "sha256 of `pdftotext -layout` output with the volatile footer 'Current as of <D> <Month> <YYYY>:<HHMM> hrs' removed; identical across all four downloads",
+        "document_self_identification": "Chicago Police Department General Order G03-03-01, 'Emergency Vehicle Operations - Eluding and Pursuing', issue date 10 August 2020, effective date 15 August 2020, matching recorded_effective_date",
+        "page_count_matches": true
+      }
     }
   ]
 }

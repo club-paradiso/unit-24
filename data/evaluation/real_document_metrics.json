@@ -1,10 +1,5 @@
 {
   "documents": {
-    "CHI_CPD_DIRECTIVE": {
-      "actual": "08263c400f7b75f80047bb4e680812c4aa13803d366aa0808e935b1b4c1d3354",
-      "expected": "4e7ce3040d05c8419eeda4302d4791bb127cc66deac0b02651634a5f2b4b831c",
-      "status": "HASH_MISMATCH"
-    },
     "CHP_AURAL_BREVITY": {
       "alphabet": {
         "coverage": 1.0,
