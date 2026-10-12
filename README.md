@@ -1,9 +1,24 @@
 # US Public Safety Radio Protocol Corpus
 
 Research and data infrastructure for an English-learning product that trains listeners to
-understand and respond to U.S. public-safety radio traffic. This repository is the **data
-layer only**: a canonical agency registry, a provenance-first radio-protocol knowledge model,
-and a reproducible research pipeline. There is no learner-facing application here.
+understand and respond to U.S. public-safety radio traffic: a canonical agency registry, a
+provenance-first radio-protocol knowledge model, a reproducible research pipeline, and — since
+October 2026 — a learner web app (`web/`) for the first jurisdiction, the California Highway
+Patrol.
+
+## Learner app
+
+`web/` teaches the 24 radio codes and 26-letter spelling alphabet that an independent source
+review matched on the CHP 254 Aural Brevity Card. It has lessons, flashcards, practice
+sessions with spaced repetition, mistake review, saved and resumable progress, and a source
+record for every entry. Every entry is labelled honestly: source-matched by automated review,
+**not human-verified**, currentness unknown. The 35 entries the review rejected are listed, not
+taught. See [the learning app](docs/learning-app.md) and [ADR 0010](docs/decisions/0010-static-learning-app.md).
+
+```bash
+uv run radiocorpus export-learning   # rebuild web/src/content/chp.json from audit evidence
+cd web && npm ci && npm run dev      # http://localhost:5173
+```
 
 ## Core principle
 
@@ -42,6 +57,7 @@ uv sync                       # Python 3.12, all dependencies
 uv run pytest                 # offline regression suite
 uv run radiocorpus check-invariants # checks database, committed JSONL and generated reports
 uv run radiocorpus explain <fact_id>   # "why is this the expected answer?" from evidence only
+cd web && npm ci && npm test && npm run build && npx playwright test   # learner app
 ```
 
 Individual stages (`ingest-registry`, `resolve`, `discover`, `acquire`, `extract`,
@@ -63,6 +79,7 @@ src/radiocorpus/
   provenance/    source quality + temporal classification
   conflicts/     cross-source conflict detection and evidence-based resolution
   eligibility/   verification + training-eligibility policy, explain()
+  learning/      learner content bundle projected from audited evidence
   stats.py invariants.py report.py export.py cli.py
 schemas/         JSON Schema per persisted model
 tests/           pytest suite
@@ -72,7 +89,9 @@ data/
   fixtures/      synthetic documents (state ZZ, fictional agencies)
   intermediate/  corpus.sqlite (git-ignored)
   normalized/    JSONL exports + stats
-docs/            architecture, methodology, source policy, schema, canary, expansion plan, decisions/
+  learning/      editorial lesson groupings for the learner app
+docs/            architecture, methodology, source policy, schema, canary, expansion plan, learning app, decisions/
+web/             learner app (Vite + React + TypeScript), unit and Playwright tests
 ```
 
 ## Scope and ethics

@@ -1,5 +1,7 @@
 # ADR 0007 — this repository is not a Vercel deployment target
 
+> Revisited by [ADR 0010](0010-static-learning-app.md): the learner app is a separate static surface in `web/`. Git deployments remain disabled.
+
 **Status:** accepted (2026-09-21)
 
 ## Context
