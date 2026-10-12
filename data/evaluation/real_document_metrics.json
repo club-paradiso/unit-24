@@ -61,6 +61,27 @@
       "warnings": [],
       "yielded_no_text": false
     },
+    "FL_FHP_POLICY_14_01": {
+      "alphabet": null,
+      "blocks_excluded": 0,
+      "blocks_kept": 967,
+      "code_candidates": 0,
+      "document_sha256": "4a083d9292fb945cec1d835df29b13a141f53e145728411723b6bef749d94f2d",
+      "expected_page_count": 42,
+      "max_columns": 2,
+      "page_count_matches": true,
+      "pages": 42,
+      "phonetic_candidates": 0,
+      "procedure_candidates": 2,
+      "procedure_context_complete": 2,
+      "procedure_decomposition_complete": 0,
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": [],
+      "yielded_no_text": false
+    },
     "IN_ISP_COMMUNICATIONS": {
       "alphabet": null,
       "blocks_excluded": 9,

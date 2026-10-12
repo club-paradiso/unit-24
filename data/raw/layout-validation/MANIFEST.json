@@ -1,9 +1,9 @@
 {
-  "_purpose": "Identity manifest for the three real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
-  "_status": "PRESENT as of 2026-09-22. Every host is still refused by the organisation egress policy (HTTP 403 at CONNECT), so the files were downloaded outside the build environment and placed by hand. Nothing was substituted: each came from its canonical_url. All three match expected_sha256 and expected_byte_length exactly.",
+  "_purpose": "Identity manifest for the four real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
+  "_status": "All four documents PRESENT and verified on 2026-10-13. CHP_AURAL_BREVITY and IN_ISP_COMMUNICATIONS were downloaded inside the build environment by scripts/fetch_layout_validation.py on 2026-10-12 (UTC) and matched expected_sha256 and expected_byte_length exactly. PHL_PPD_DIRECTIVE_7_1: CONNECT to www.phillypolice.com succeeded, but its origin (Cloudflare) answered the script with HTTP 403 twice, so the file was downloaded by hand in a browser from its canonical_url and placed here; it matches expected_sha256 and expected_byte_length exactly. FL_FHP_POLICY_14_01 was fetched once from its canonical_url with no redirect and content-type application/pdf; its expected_sha256 is the hash of those bytes (see hash_provenance on that entry). Nothing was substituted for any document.",
   "_directory": "data/raw/layout-validation/ (git-ignored except this manifest and README)",
   "_identity_rule": "Before a document is used, its SHA-256 must equal expected_sha256 below. A file that does not match is a different document and must not be used, however similar its name.",
-  "_hash_provenance": "expected_sha256 values are the document hashes recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z), and each was reproduced byte-for-byte on 2026-09-22 by the copy now in this directory.",
+  "_hash_provenance": "For CHP_AURAL_BREVITY, IN_ISP_COMMUNICATIONS and PHL_PPD_DIRECTIVE_7_1, expected_sha256 is the document hash recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z), reproduced byte-for-byte on 2026-09-22 by a copy placed by hand. For FL_FHP_POLICY_14_01 there was no prior audit: expected_sha256 is the hash of the bytes received on first acquisition (2026-10-12) and has not been independently audited. These two kinds of hash are not equally attested.",
   "_excluded_documents_note": "excluded_documents lists a document that was in this set and no longer is. It is kept rather than deleted so the set cannot be silently restored to four without reading why it became three. Nothing reads it: the scripts iterate documents only. Removal from this set is scoped to layout validation and changes no historical measurement — CHI_CPD_DIRECTIVE remains in DOCUMENT_KEYS and in the audit, replay, coverage and adjudication artifacts, which record what a previous sprint measured when the document was retrievable.",
   "documents": [
     {
@@ -17,8 +17,8 @@
       "expected_byte_length": 60110,
       "expected_page_count": 2,
       "layout_character": "multi-column brevity card; adjacent columns and wrapped cells are the primary adversarial case",
-      "retrieval_status": "BLOCKED_EGRESS",
-      "retrieval_error": "gateway answered 403 to CONNECT for www.chp.ca.gov:443"
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "downloaded from canonical_url by scripts/fetch_layout_validation.py on 2026-10-12; SHA-256 matched expected_sha256"
     },
     {
       "key": "IN_ISP_COMMUNICATIONS",
@@ -32,8 +32,8 @@
       "expected_page_count": 9,
       "recorded_effective_date": "2015-01-15",
       "layout_character": "single-column narrative policy with enumerated section headings",
-      "retrieval_status": "BLOCKED_EGRESS",
-      "retrieval_error": "gateway answered 403 to CONNECT for www.in.gov:443"
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "downloaded from canonical_url by scripts/fetch_layout_validation.py on 2026-10-12; SHA-256 matched expected_sha256"
     },
     {
       "key": "PHL_PPD_DIRECTIVE_7_1",
@@ -46,8 +46,30 @@
       "expected_byte_length": 251659,
       "expected_page_count": 31,
       "layout_character": "long directive with a revision-history table, margin change-bars and rules that continue across page breaks",
-      "retrieval_status": "BLOCKED_EGRESS",
-      "retrieval_error": "gateway answered 403 to CONNECT for www.phillypolice.com:443"
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "2026-10-12: origin answered scripts/fetch_layout_validation.py with HTTP 403 twice (CONNECT succeeded; not an egress block). 2026-10-13: downloaded by hand in a browser from canonical_url and placed here; SHA-256, byte length and page count matched expected values exactly"
+    },
+    {
+      "key": "FL_FHP_POLICY_14_01",
+      "agency": "Florida Highway Patrol",
+      "agency_id": "agy_b48fc26c61f35ef3",
+      "canary_id": "CAN-S09",
+      "source_id": null,
+      "discovery_lead_id": "lead_58e822da138cdbb6",
+      "filename": "fl_fhp_policy_14_01_communications.pdf",
+      "canonical_url": "https://www.flhsmv.gov/pdf/fhp/policies/1401.pdf",
+      "expected_sha256": "4a083d9292fb945cec1d835df29b13a141f53e145728411723b6bef749d94f2d",
+      "expected_byte_length": 274835,
+      "expected_page_count": 42,
+      "recorded_issue_date": "1996-02-01",
+      "recorded_revision_date": "2024-06-18",
+      "layout_character": "single-column directive with nested lettered and numbered clauses (A. > 1. > a. > 1)), four levels deep, under numbered sections 14.01.01-14.01.07; radio, telephone and CAD procedures for regional communications centers",
+      "retrieval_status": "FIRST_ACQUISITION",
+      "retrieved_at": "2026-10-12",
+      "retrieval_note": "fetched from canonical_url: HTTP 200, zero redirects, final host www.flhsmv.gov, content-type application/pdf, Last-Modified Wed, 19 Jun 2024 13:22:26 GMT",
+      "hash_provenance": "recorded on receipt and has not been independently audited",
+      "document_self_identification": "cover block reads 'Florida Highway Patrol Policy Manual', SUBJECT COMMUNICATIONS, POLICY NUMBER 14.01, ISSUE DATE 02/01/1996, REVISION DATE 06/18/2024, TOTAL PAGES 42; section 14.01.07.C is RADIO PROCEDURES. The document states no separate effective date.",
+      "metadata_discrepancy": "The PDF's embedded Info Subject is 'Identification Cards' with keywords 'ID Cards, identification, cards', which does not match the body. The body text, not the metadata, was used to establish subject and layout."
     }
   ],
   "excluded_documents": [
