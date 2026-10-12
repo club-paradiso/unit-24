@@ -8,9 +8,10 @@ On 2026-09-22 every host was refused by the organisation's egress policy (HTTP 4
 CONNECT), so the three original files were downloaded outside the build environment and placed
 here by hand. On 2026-10-12 the hosts were reachable from the build environment:
 `fetch_layout_validation.py` re-downloaded the California and Indiana documents and both matched
-`expected_sha256` exactly. The Philadelphia directive was not re-verified that day — the
-connection was allowed, but its origin answered the script with HTTP 403. Nothing was
-substituted for any document.
+`expected_sha256` exactly. The Philadelphia directive's origin answered the script with HTTP
+403 (the connection itself was allowed), so on 2026-10-13 it was downloaded by hand in a browser
+from its `canonical_url` and placed here; it matches its `expected_sha256` and byte length
+exactly. Nothing was substituted for any document.
 
 ## The set is four again — with a different fourth document
 

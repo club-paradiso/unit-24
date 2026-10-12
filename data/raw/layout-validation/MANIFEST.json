@@ -1,6 +1,6 @@
 {
   "_purpose": "Identity manifest for the four real documents used to validate layout-aware extraction. The PDFs themselves are NOT committed: they are third-party documents and only their identity and provenance belong in this repository.",
-  "_status": "Re-fetched from canonical_url inside the build environment on 2026-10-12 (UTC); the egress policy no longer refused these hosts at CONNECT. CHP_AURAL_BREVITY and IN_ISP_COMMUNICATIONS were downloaded by scripts/fetch_layout_validation.py and matched expected_sha256 and expected_byte_length exactly. PHL_PPD_DIRECTIVE_7_1 was NOT obtained in that run: CONNECT to www.phillypolice.com succeeded, but the origin (Cloudflare) answered the script's request with HTTP 403, so its bytes were not re-verified on 2026-10-12. FL_FHP_POLICY_14_01 was fetched once from its canonical_url with no redirect and content-type application/pdf; its expected_sha256 is the hash of those bytes (see hash_provenance on that entry). Nothing was substituted for any document.",
+  "_status": "All four documents PRESENT and verified on 2026-10-13. CHP_AURAL_BREVITY and IN_ISP_COMMUNICATIONS were downloaded inside the build environment by scripts/fetch_layout_validation.py on 2026-10-12 (UTC) and matched expected_sha256 and expected_byte_length exactly. PHL_PPD_DIRECTIVE_7_1: CONNECT to www.phillypolice.com succeeded, but its origin (Cloudflare) answered the script with HTTP 403 twice, so the file was downloaded by hand in a browser from its canonical_url and placed here; it matches expected_sha256 and expected_byte_length exactly. FL_FHP_POLICY_14_01 was fetched once from its canonical_url with no redirect and content-type application/pdf; its expected_sha256 is the hash of those bytes (see hash_provenance on that entry). Nothing was substituted for any document.",
   "_directory": "data/raw/layout-validation/ (git-ignored except this manifest and README)",
   "_identity_rule": "Before a document is used, its SHA-256 must equal expected_sha256 below. A file that does not match is a different document and must not be used, however similar its name.",
   "_hash_provenance": "For CHP_AURAL_BREVITY, IN_ISP_COMMUNICATIONS and PHL_PPD_DIRECTIVE_7_1, expected_sha256 is the document hash recorded by the previous sprint in data/audit/real_documents.jsonl and data/audit/real_sources.jsonl at acquisition time (2026-09-20T07:02Z), reproduced byte-for-byte on 2026-09-22 by a copy placed by hand. For FL_FHP_POLICY_14_01 there was no prior audit: expected_sha256 is the hash of the bytes received on first acquisition (2026-10-12) and has not been independently audited. These two kinds of hash are not equally attested.",
@@ -46,8 +46,8 @@
       "expected_byte_length": 251659,
       "expected_page_count": 31,
       "layout_character": "long directive with a revision-history table, margin change-bars and rules that continue across page breaks",
-      "retrieval_status": "ORIGIN_403",
-      "retrieval_error": "2026-10-12: CONNECT to www.phillypolice.com:443 succeeded (not an egress block); the origin, served via Cloudflare, answered scripts/fetch_layout_validation.py with HTTP 403. Not re-verified in this run; expected_sha256 unchanged."
+      "retrieval_status": "VERIFIED",
+      "retrieval_note": "2026-10-12: origin answered scripts/fetch_layout_validation.py with HTTP 403 twice (CONNECT succeeded; not an egress block). 2026-10-13: downloaded by hand in a browser from canonical_url and placed here; SHA-256, byte length and page count matched expected values exactly"
     },
     {
       "key": "FL_FHP_POLICY_14_01",
