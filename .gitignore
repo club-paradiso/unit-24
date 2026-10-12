@@ -16,3 +16,9 @@ data/intermediate/layout_cache/
 data/raw/layout-validation/*
 !data/raw/layout-validation/MANIFEST.json
 !data/raw/layout-validation/README.md
+
+web/node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
+web/blob-report/

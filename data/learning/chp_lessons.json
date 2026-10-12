@@ -1,0 +1,35 @@
+{
+  "_purpose": "Editorial lesson groupings for the CHP learning slice. Groupings are a teaching choice, not a factual claim: every entry must name a term that the exporter (radiocorpus.learning.content) classifies as teachable, or export fails.",
+  "lessons": [
+    {
+      "id": "radio-traffic",
+      "title": "Radio reception & message handling",
+      "summary": "Codes for signal quality, relaying, repeating and controlling radio traffic.",
+      "terms": ["10-1", "10-2", "10-5", "10-9", "10-17", "10-22", "10-23", "10-30", "10-36"]
+    },
+    {
+      "id": "status-requests",
+      "title": "Status, requests & assignments",
+      "summary": "Codes for unit status, locations, checks and meeting other units.",
+      "terms": ["10-7", "10-13", "10-14", "10-15", "10-20", "10-21", "10-28", "11-27", "11-98"]
+    },
+    {
+      "id": "incidents",
+      "title": "Incidents, crashes & resources",
+      "summary": "Codes for subjects, backup, ambulances, crash severity and bomb threats.",
+      "terms": ["10-31", "10-35", "11-41", "11-82", "11-83", "11-86"]
+    },
+    {
+      "id": "alphabet-a-m",
+      "title": "Card alphabet: A to M",
+      "summary": "The spelling words printed on page 2 of the card, first half.",
+      "terms": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]
+    },
+    {
+      "id": "alphabet-n-z",
+      "title": "Card alphabet: N to Z",
+      "summary": "The spelling words printed on page 2 of the card, second half.",
+      "terms": ["N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    }
+  ]
+}

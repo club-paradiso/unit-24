@@ -146,6 +146,9 @@ def check_invariants(db: Path | None = None) -> None:
     res["fixture_snapshot"] = check_snapshot(PATHS.root / "data/normalized/fixtures")
     res["report_consistency"] = check_report(PATHS.root)
     res["audit_metrics_consistency"] = check_audit_metrics(PATHS.root)
+    from radiocorpus.learning import check as check_learning
+
+    res["learning_content"] = check_learning(PATHS.root)
     bad = {k: v for k, v in res.items() if v}
     for k, v in res.items():
         rprint(f"[{'red' if v else 'green'}]{k}: {len(v)} violation(s)")
@@ -170,6 +173,14 @@ def explain(fact_id: str, db: Path | None = None) -> None:
     from radiocorpus.eligibility.policy import explain as _explain
 
     rprint(json.dumps(_explain(_store(db), fact_id), indent=2, default=str))
+
+
+@app.command()
+def export_learning() -> None:
+    """Write the CHP learner content bundle (web/src/content/chp.json) from committed audit evidence."""
+    from radiocorpus.learning import export
+
+    rprint(f"wrote {export(PATHS.root)}")
 
 
 @app.command()
