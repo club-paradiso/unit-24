@@ -12,8 +12,8 @@ has asked for a live website on Vercel.
 
 ## Decision
 
-* The Vercel project `unit-24-3o8p` in the Club Paradiso team, live at
-  https://unit-24-3o8p.vercel.app, is connected to this repository with **root directory
+* The Vercel project `unit-24` in the Club Paradiso team, live at
+  https://unit-24.vercel.app, is connected to this repository with **root directory
   `web/`** and the Vite framework preset. Vercel only reads `web/` and
   `web/vercel.json`; nothing outside `web/` is built or served, so the Python pipeline and its
   CLI stay off the network.
