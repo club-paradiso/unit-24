@@ -1,6 +1,6 @@
 # ADR 0010 — the learner app is a static, client-only web app fed by a generated bundle
 
-**Status:** accepted (2026-10-12)
+**Status:** accepted (2026-10-12). Cross-device progress is added by [ADR 0012](0012-firebase-accounts-and-sync.md).
 
 ## Context
 

@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
-import { content } from "./helpers";
+import { expect } from "@playwright/test";
+import { content, test } from "./helpers";
 
-const ROUTES = ["/", "/chp", "/review", `/chp/lessons/${content.lessons[0]!.id}`, "/chp/practice", "/chp/flashcards", "/chp/reference", `/chp/items/${content.items[0]!.id}`, "/progress", "/about"];
+const ROUTES = ["/", "/chp", "/review", `/chp/lessons/${content.lessons[0]!.id}`, "/chp/practice", "/chp/flashcards", "/chp/reference", `/chp/items/${content.items[0]!.id}`, "/progress", "/settings", "/about"];
 
 for (const route of ROUTES) {
   test(`no serious accessibility violations on ${route}`, async ({ page }) => {
@@ -35,6 +35,8 @@ test("every route renders under the production security headers without console 
     await expect(page.locator("h1")).toBeVisible();
   }
   const csp = (await page.request.get("/")).headers()["content-security-policy"];
-  expect(csp).toContain("script-src 'self'");
+  expect(csp).toContain("script-src 'self' https://apis.google.com");
+  expect(csp).toContain("connect-src 'self' https://firestore.googleapis.com");
+  expect(csp).toContain("frame-ancestors 'none'");
   expect(problems).toEqual([]);
 });

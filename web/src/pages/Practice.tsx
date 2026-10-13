@@ -2,19 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { content, getItem } from "../content";
 import { QuestionView } from "../components/QuestionView";
+import { useT } from "../i18n";
 import { percent } from "../lib/format";
 import type { SessionSummary } from "../lib/progress";
-import { buildQuestions, itemsForMode, MODE_LABEL, type PracticeMode } from "../lib/quiz";
+import { buildQuestions, itemsForMode, type PracticeMode } from "../lib/quiz";
 import { newId } from "../lib/random";
 import { useProgress, useStore, useTitle } from "../state";
+import { firebaseConfig } from "../sync/config";
+import { sendStats, sessionStats } from "../sync/stats";
 
-const MODES: { mode: PracticeMode; detail: string }[] = [
-  { mode: "mixed", detail: "Codes and alphabet together, weakest and due items first." },
-  { mode: "codes", detail: "Code → meaning and meaning → code." },
-  { mode: "alphabet", detail: "Card words for letters, and spelling letter groups out." },
-  { mode: "due", detail: "Only items whose next review date has arrived." },
-  { mode: "mistakes", detail: "Items you answered wrongly last time." },
-];
+const MODES: PracticeMode[] = ["mixed", "codes", "alphabet", "due", "mistakes"];
 
 export const SESSION_SIZE = 10;
 
@@ -41,7 +38,8 @@ export function useStartSession() {
 }
 
 export function PracticeHome() {
-  useTitle("Practice");
+  const t = useT();
+  useTitle(t("practice.title"));
   const progress = useProgress();
   const store = useStore();
   const start = useStartSession();
@@ -52,34 +50,29 @@ export function PracticeHome() {
   return (
     <div className="stack-lg">
       <header className="stack-sm">
-        <p className="eyebrow">
-          <Link to="/chp">CHP</Link>
-        </p>
-        <h1>Practice</h1>
-        <p className="lead">Sessions of up to {SESSION_SIZE} questions. Each answer updates when the item comes back for review.</p>
+        <h1>{t("practice.title")}</h1>
+        <p className="lead">{t("practice.lead", { n: SESSION_SIZE })}</p>
       </header>
 
       {active && (
-        <section className="card card-accent" aria-labelledby="active-h">
-          <h2 id="active-h">Session in progress</h2>
-          <p>
-            {MODE_LABEL[active.mode]} — {active.answers.length} of {active.questions.length} answered.
-          </p>
+        <section className="card card-accent stack-sm" aria-labelledby="active-h">
+          <h2 id="active-h">{t("practice.inProgress")}</h2>
+          <p>{t("practice.inProgressText", { mode: t(`mode.${active.mode}`), done: active.answers.length, total: active.questions.length })}</p>
           <div className="actions">
             <Link className="btn btn-primary" to="/chp/practice/session">
-              Resume session
+              {t("practice.resume")}
             </Link>
             <button type="button" className="btn btn-quiet" onClick={() => store.abandonSession()}>
-              Discard it
+              {t("practice.discard")}
             </button>
           </div>
         </section>
       )}
 
       <section aria-labelledby="modes-h" className="stack">
-        <h2 id="modes-h">{active ? "Or start a new session" : "Start a session"}</h2>
+        <h2 id="modes-h">{active ? t("practice.orNew") : t("practice.start")}</h2>
         <ul className="mode-list">
-          {MODES.map(({ mode, detail }) => {
+          {MODES.map((mode) => {
             const count = itemsForMode(mode, content.items, progress.items, now).length;
             return (
               <li key={mode}>
@@ -90,9 +83,9 @@ export function PracticeHome() {
                   aria-describedby={`mode-${mode}`}
                   disabled={count === 0}
                 >
-                  <span className="mode-title">{MODE_LABEL[mode]}</span>
-                  <span id={`mode-${mode}`} className="muted">
-                    {detail} {count === 0 ? "Nothing to practise here yet." : `${count} item${count === 1 ? "" : "s"} available.`}
+                  <span className="mode-title">{t(`mode.${mode}`)}</span>
+                  <span id={`mode-${mode}`} className="muted small">
+                    {t(`modeDetail.${mode}`)} {count === 0 ? t("practice.nothing") : t("practice.available", { n: count })}
                   </span>
                 </button>
               </li>
@@ -101,7 +94,7 @@ export function PracticeHome() {
         </ul>
         {empty && (
           <p role="status" className="muted">
-            Nothing to practise in “{MODE_LABEL[empty]}” right now.
+            {t("practice.emptyMode", { mode: t(`mode.${empty}`) })}
           </p>
         )}
       </section>
@@ -110,7 +103,8 @@ export function PracticeHome() {
 }
 
 export function PracticeSession() {
-  useTitle("Practice session");
+  const t = useT();
+  useTitle(t("practice.sessionTitle"));
   const progress = useProgress();
   const store = useStore();
   const [summary, setSummary] = useState<SessionSummary | null>(null);
@@ -120,9 +114,9 @@ export function PracticeSession() {
   if (!active) {
     return (
       <div className="stack">
-        <h1>No session in progress</h1>
+        <h1>{t("practice.noSession")}</h1>
         <p>
-          <Link to="/chp/practice">Start a practice session</Link>
+          <Link to="/chp/practice">{t("practice.startLink")}</Link>
         </p>
       </div>
     );
@@ -134,13 +128,18 @@ export function PracticeSession() {
   const isLast = viewingIndex === active.questions.length - 1;
 
   return (
-    <div className="stack-lg">
+    <div className="stack">
       <header className="stack-sm">
-        <p className="eyebrow">
-          <Link to="/chp/practice">Practice</Link> · {MODE_LABEL[active.mode]}
-        </p>
-        <h1 className="visually-hidden">Practice session</h1>
-        <div className="session-bar" role="progressbar" aria-label="Session progress" aria-valuemin={0} aria-valuemax={active.questions.length} aria-valuenow={active.answers.length}>
+        <p className="eyebrow">{t(`mode.${active.mode}`)}</p>
+        <h1 className="visually-hidden">{t("practice.sessionTitle")}</h1>
+        <div
+          className="session-bar"
+          role="progressbar"
+          aria-label={t("practice.sessionProgress")}
+          aria-valuemin={0}
+          aria-valuemax={active.questions.length}
+          aria-valuenow={active.answers.length}
+        >
           <div style={{ width: `${(active.answers.length / active.questions.length) * 100}%` }} />
         </div>
       </header>
@@ -149,57 +148,58 @@ export function PracticeSession() {
         question={question}
         answered={record ? { response: record.response, correct: record.correct } : null}
         position={{ index: viewingIndex, total: active.questions.length }}
-        nextLabel={isLast ? "Finish session" : "Next question"}
+        nextLabel={isLast ? t("practice.finish") : t("question.next")}
         onAnswer={(response, correct, itemResults) => {
           store.answer({ questionId: question.id, response, correct, itemResults, at: Date.now() });
         }}
         onNext={() => {
           if (!isLast) return store.advance();
+          const answers = store.getState().activeSession?.answers.map((a) => a.itemResults) ?? [];
+          void sendStats(firebaseConfig, content.content_version, sessionStats(active.mode, answers));
           const s = store.finishSession(Date.now());
           if (s) setSummary(s);
         }}
       />
-      <p className="muted small">Your answers are saved as you go — you can leave and resume this session later.</p>
+      <p className="muted small">{t("practice.savedAsYouGo")}</p>
     </div>
   );
 }
 
 function Summary({ summary, onRestart }: { summary: SessionSummary; onRestart: () => void }) {
+  const t = useT();
   const start = useStartSession();
   const missed = summary.missedItemIds.map(getItem).filter((i) => i !== undefined);
   const mastered = summary.masteredItemIds.map(getItem).filter((i) => i !== undefined);
   return (
     <div className="stack-lg">
       <header className="stack-sm">
-        <p className="eyebrow">
-          <Link to="/chp/practice">Practice</Link> · {MODE_LABEL[summary.mode]}
-        </p>
-        <h1>Session summary</h1>
+        <p className="eyebrow">{t(`mode.${summary.mode}`)}</p>
+        <h1>{t("summary.title")}</h1>
       </header>
-      <section className="card stats" aria-label="Results">
+      <section className="card stats" aria-label={t("summary.results")}>
         <div>
           <span className="stat-value">{percent(summary.correct, summary.total)}</span>
-          <span className="stat-label">accuracy</span>
+          <span className="stat-label">{t("summary.accuracy")}</span>
         </div>
         <div>
           <span className="stat-value">
             {summary.correct}/{summary.total}
           </span>
-          <span className="stat-label">questions correct</span>
+          <span className="stat-label">{t("summary.correct")}</span>
         </div>
         <div>
           <span className="stat-value">{mastered.length}</span>
-          <span className="stat-label">newly mastered</span>
+          <span className="stat-label">{t("summary.newlyMastered")}</span>
         </div>
       </section>
 
       {missed.length > 0 ? (
         <section className="stack" aria-labelledby="missed-h">
-          <h2 id="missed-h">Review these</h2>
+          <h2 id="missed-h">{t("summary.reviewThese")}</h2>
           <ul className="review-list">
             {missed.map((item) => (
               <li key={item.id}>
-                <Link to={`/chp/items/${item.id}`}>
+                <Link to={`/chp/items/${item.id}`} lang="en">
                   <strong>{item.term}</strong> — {item.answer}
                 </Link>
               </li>
@@ -207,10 +207,10 @@ function Summary({ summary, onRestart }: { summary: SessionSummary; onRestart: (
           </ul>
         </section>
       ) : (
-        <p className="card card-success">No mistakes in this session.</p>
+        <p className="card card-success">{t("summary.noMistakes")}</p>
       )}
 
-      <div className="actions">
+      <div className="actions actions-stack">
         {missed.length > 0 && (
           <button
             type="button"
@@ -223,7 +223,7 @@ function Summary({ summary, onRestart }: { summary: SessionSummary; onRestart: (
               );
             }}
           >
-            Practise these {missed.length} again
+            {t("summary.practiseAgain", { n: missed.length })}
           </button>
         )}
         <button
@@ -234,10 +234,10 @@ function Summary({ summary, onRestart }: { summary: SessionSummary; onRestart: (
             start(summary.mode === "mistakes" || summary.mode === "due" ? "mixed" : summary.mode);
           }}
         >
-          New session
+          {t("summary.newSession")}
         </button>
         <Link className="btn btn-quiet" to="/progress">
-          View progress
+          {t("summary.viewProgress")}
         </Link>
       </div>
     </div>

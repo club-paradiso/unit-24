@@ -1,14 +1,16 @@
 import { Link } from "react-router";
+import { useT } from "../i18n";
 import { useTitle } from "../state";
 
-export function NotFound({ what = "page" }: { what?: string }) {
-  useTitle("Not found");
+export function NotFound({ what = "page" }: { what?: "page" | "lesson" | "entry" }) {
+  const t = useT();
+  useTitle(t("notFound.short"));
   return (
     <div className="stack">
-      <h1>That {what} does not exist</h1>
-      <p>The link may be out of date, or the content may have been withdrawn after review.</p>
+      <h1>{t(`notFound.${what}`)}</h1>
+      <p>{t("notFound.text")}</p>
       <p>
-        <Link to="/">Go to the start page</Link> or <Link to="/chp/reference">search the reference</Link>.
+        <Link to="/">{t("notFound.home")}</Link> · <Link to="/chp/reference">{t("notFound.search")}</Link>
       </p>
     </div>
   );

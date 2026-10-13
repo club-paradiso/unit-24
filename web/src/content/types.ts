@@ -73,6 +73,8 @@ export interface Lesson {
   id: string;
   title: string;
   summary: string;
+  title_ko: string;
+  summary_ko: string;
   item_ids: string[];
 }
 

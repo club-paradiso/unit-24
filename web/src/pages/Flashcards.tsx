@@ -1,18 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router";
-import { content, SYSTEM_LABEL, type LearningItem } from "../content";
+import { content, type LearningItem } from "../content";
 import { Excerpt } from "../components/SourceDetails";
 import { LearnState, TrustBadges } from "../components/Status";
+import { useT } from "../i18n";
+import { haptic } from "../lib/haptics";
 import { prioritize } from "../lib/quiz";
 import { isDue } from "../lib/srs";
 import { useProgress, useStore, useTitle } from "../state";
+import { systemLabel } from "./labels";
 
 type Deck = "all" | "codes" | "alphabet";
-const DECK_LABEL: Record<Deck, string> = { all: "Everything", codes: "Codes", alphabet: "Card alphabet" };
+const DECKS: Deck[] = ["all", "codes", "alphabet"];
 const DECK_SIZE = 15;
+/** How far (px) a card must be dragged to count as a swipe. */
+export const SWIPE_THRESHOLD = 90;
 
 export function Flashcards() {
-  useTitle("Flashcards");
+  const t = useT();
+  useTitle(t("flash.title"));
   const store = useStore();
   const progress = useProgress();
   const [deckKind, setDeckKind] = useState<Deck>("all");
@@ -24,8 +30,10 @@ export function Flashcards() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [tally, setTally] = useState({ known: 0, again: 0 });
+  const [dx, setDx] = useState(0);
+  const drag = useRef<{ x: number; id: number } | null>(null);
   const flipRef = useRef<HTMLButtonElement>(null);
-  const gradeRef = useRef<HTMLButtonElement>(null);
+  const knewRef = useRef<HTMLButtonElement>(null);
 
   const restart = (kind: Deck = deckKind) => {
     setDeckKind(kind);
@@ -38,96 +46,153 @@ export function Flashcards() {
   const item = deck[index];
   const finished = index >= deck.length;
 
-  useEffect(() => {
-    if (flipped) gradeRef.current?.focus();
-  }, [flipped]);
+  const flip = () => {
+    if (!flipped) haptic("tap");
+    setFlipped(true);
+  };
 
   const grade = (known: boolean) => {
-    if (!item) return;
+    if (!item || !flipped) return;
     store.recordResults({ [item.id]: known }, Date.now());
-    setTally((t) => (known ? { ...t, known: t.known + 1 } : { ...t, again: t.again + 1 }));
+    haptic(known ? "success" : "tap");
+    setTally((v) => (known ? { ...v, known: v.known + 1 } : { ...v, again: v.again + 1 }));
     setFlipped(false);
+    setDx(0);
     setIndex((i) => i + 1);
-    requestAnimationFrame(() => flipRef.current?.focus());
+    requestAnimationFrame(() => flipRef.current?.focus({ preventScroll: true }));
+  };
+
+  useEffect(() => {
+    if (flipped) knewRef.current?.focus({ preventScroll: true });
+  }, [flipped]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && ["INPUT", "TEXTAREA"].includes(target.tagName)) return;
+      if (flipped && e.key === "ArrowRight") grade(true);
+      else if (flipped && e.key === "ArrowLeft") grade(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  const onPointerDown = (e: ReactPointerEvent<HTMLElement>) => {
+    if ((e.target as HTMLElement).closest("a, button")) return;
+    drag.current = { x: e.clientX, id: e.pointerId };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onPointerMove = (e: ReactPointerEvent<HTMLElement>) => {
+    if (!drag.current || drag.current.id !== e.pointerId || !flipped) return;
+    setDx(e.clientX - drag.current.x);
+  };
+  const onPointerUp = (e: ReactPointerEvent<HTMLElement>) => {
+    if (!drag.current || drag.current.id !== e.pointerId) return;
+    const moved = e.clientX - drag.current.x;
+    drag.current = null;
+    if (flipped && Math.abs(moved) >= SWIPE_THRESHOLD) grade(moved > 0);
+    else if (Math.abs(moved) < 8) flip();
+    setDx(0);
   };
 
   const now = Date.now();
   const due = content.items.filter((i) => isDue(progress.items[i.id], now)).length;
+  const swipe = dx >= SWIPE_THRESHOLD ? "knew" : dx <= -SWIPE_THRESHOLD ? "again" : null;
 
   return (
-    <div className="stack-lg">
+    <div className="stack">
       <header className="stack-sm">
-        <p className="eyebrow">
-          <Link to="/chp">CHP</Link>
-        </p>
-        <h1>Flashcards</h1>
-        <p className="lead">Recall the answer, then flip the card and say honestly whether you knew it. Due and weak items come first.</p>
+        <h1 className="h-compact">{t("flash.title")}</h1>
+        <div className="segmented" role="group" aria-label={t("flash.deck")}>
+          {DECKS.map((k) => (
+            <button key={k} type="button" aria-pressed={deckKind === k} onClick={() => restart(k)}>
+              {t(`deck.${k}`)}
+            </button>
+          ))}
+        </div>
       </header>
 
-      <div className="segmented" role="group" aria-label="Deck">
-        {(Object.keys(DECK_LABEL) as Deck[]).map((k) => (
-          <button key={k} type="button" aria-pressed={deckKind === k} onClick={() => restart(k)}>
-            {DECK_LABEL[k]}
-          </button>
-        ))}
-      </div>
-
       {finished ? (
-        <section className="card card-success" aria-labelledby="deck-done">
-          <h2 id="deck-done">Deck finished</h2>
-          <p>
-            You knew {tally.known} of {deck.length}. {tally.again > 0 ? `${tally.again} will come back sooner for review.` : ""}
-          </p>
-          <p className="muted">{due} items are due for review now.</p>
+        <section className="card card-success stack-sm" aria-labelledby="deck-done">
+          <h2 id="deck-done">{t("flash.done")}</h2>
+          <p>{t("flash.doneText", { known: tally.known, total: deck.length })}</p>
+          {tally.again > 0 && <p>{t("flash.againText", { n: tally.again })}</p>}
+          <p className="muted">{t("flash.dueNow", { n: due })}</p>
           <div className="actions">
             <button type="button" className="btn btn-primary" onClick={() => restart()}>
-              Another deck
+              {t("flash.another")}
             </button>
             <Link className="btn" to="/chp/practice">
-              Practice with questions
+              {t("flash.toPractice")}
             </Link>
           </div>
         </section>
       ) : (
         item && (
           <>
-            <p className="muted" aria-live="polite">
-              Card {index + 1} of {deck.length} · knew {tally.known} · again {tally.again}
+            <div className="session-bar" role="progressbar" aria-label={t("flash.progress")} aria-valuemin={0} aria-valuemax={deck.length} aria-valuenow={index}>
+              <div style={{ width: `${(index / deck.length) * 100}%` }} />
+            </div>
+            <p className="muted small" aria-live="polite">
+              {t("flash.counter", { n: index + 1, total: deck.length, known: tally.known, again: tally.again })}
             </p>
-            <article className={`card flashcard ${flipped ? "is-flipped" : ""}`} aria-label={`Flashcard ${index + 1}`}>
+            <article
+              className={`card flashcard ${flipped ? "is-flipped" : ""} ${swipe ? `swipe-${swipe}` : ""} ${dx ? "is-dragging" : ""}`}
+              aria-label={t("flash.cardLabel", { n: index + 1 })}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={() => {
+                drag.current = null;
+                setDx(0);
+              }}
+              style={dx ? { transform: `translateX(${dx}px) rotate(${dx / 25}deg)` } : undefined}
+            >
+              {swipe && (
+                <span className={`swipe-label swipe-label-${swipe}`} aria-hidden="true">
+                  {swipe === "knew" ? t("flash.knew") : t("flash.again")}
+                </span>
+              )}
               <div className="flashcard-top">
-                <span className="chip">{SYSTEM_LABEL[item.code_system]}</span>
+                <span className="chip">{systemLabel(item.code_system, t)}</span>
                 <LearnState progress={progress.items[item.id]} />
               </div>
-              <p className="study-term">{item.term}</p>
+              <p className="study-term" lang="en">
+                {item.term}
+              </p>
               <div aria-live="polite">
                 {flipped ? (
                   <div className="stack-sm">
-                    <p className="study-answer">{item.answer}</p>
+                    <p className="study-answer" lang="en">
+                      {item.answer}
+                    </p>
                     <TrustBadges item={item} compact />
                     <Excerpt item={item} />
                   </div>
                 ) : (
-                  <p className="muted">{item.kind === "letter" ? "Which word does the card use for this letter?" : "What does this code mean?"}</p>
+                  <p className="muted">{item.kind === "letter" ? t("flash.askLetter") : t("flash.askCode")}</p>
                 )}
               </div>
+              <p className="flash-hint muted small" aria-hidden="true">
+                {flipped ? t("flash.swipeHint") : t("flash.tapHint")}
+              </p>
             </article>
-            {flipped ? (
-              <div className="actions grade">
-                <button type="button" className="btn btn-bad" onClick={() => grade(false)}>
-                  Again
+            <div className="sticky-actions">
+              {flipped ? (
+                <>
+                  <button type="button" className="btn btn-bad btn-grow" onClick={() => grade(false)}>
+                    ← {t("flash.again")}
+                  </button>
+                  <button ref={knewRef} type="button" className="btn btn-good btn-grow" onClick={() => grade(true)}>
+                    {t("flash.knew")} →
+                  </button>
+                </>
+              ) : (
+                <button ref={flipRef} type="button" className="btn btn-primary btn-block" onClick={flip}>
+                  {t("flash.show")}
                 </button>
-                <button ref={gradeRef} type="button" className="btn btn-good" onClick={() => grade(true)}>
-                  I knew it
-                </button>
-              </div>
-            ) : (
-              <div className="actions">
-                <button ref={flipRef} type="button" className="btn btn-primary" onClick={() => setFlipped(true)}>
-                  Show answer
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </>
         )
       )}

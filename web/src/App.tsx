@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, useRouteError } from "react-router";
 import { Layout } from "./components/Layout";
 import { About } from "./pages/About";
+import { AuthFinish } from "./pages/AuthFinish";
 import { Flashcards } from "./pages/Flashcards";
 import { Home } from "./pages/Home";
 import { Hub } from "./pages/Hub";
@@ -11,17 +12,18 @@ import { PracticeHome, PracticeSession } from "./pages/Practice";
 import { ProgressPage } from "./pages/ProgressPage";
 import { Reference } from "./pages/Reference";
 import { ReviewPage } from "./pages/ReviewPage";
+import { Settings } from "./pages/Settings";
 
 function RouteError() {
   const error = useRouteError();
   console.error(error);
   return (
     <main id="main" className="main stack" role="alert">
-      <h1>Something went wrong</h1>
-      <p>The page could not be displayed. Your saved progress has not been changed.</p>
+      <h1>문제가 생겼습니다 · Something went wrong</h1>
+      <p>화면을 표시하지 못했습니다. 저장된 학습 기록은 그대로입니다. · The page could not be displayed. Your saved progress has not been changed.</p>
       <p>
         <a className="btn btn-primary" href="/">
-          Go to the start page
+          처음 화면으로 · Start page
         </a>
       </p>
     </main>
@@ -45,6 +47,8 @@ export const routes = [
       { path: "progress", element: <ProgressPage /> },
       { path: "about", element: <About /> },
       { path: "review", element: <ReviewPage /> },
+      { path: "settings", element: <Settings /> },
+      { path: "auth/finish", element: <AuthFinish /> },
       { path: "*", element: <NotFound /> },
     ],
   },

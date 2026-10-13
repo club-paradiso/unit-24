@@ -1,13 +1,18 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
-import { content, getLesson, lessonItems, SYSTEM_LABEL } from "../content";
+import { content, getLesson, lessonItems } from "../content";
 import { QuestionView, type Answered } from "../components/QuestionView";
 import { Excerpt } from "../components/SourceDetails";
 import { TrustBadges } from "../components/Status";
+import { useI18n } from "../i18n";
 import { PASS_RATIO, type LessonResult } from "../lib/progress";
 import { lessonCheck } from "../lib/quiz";
 import { useStore, useTitle } from "../state";
+import { firebaseConfig } from "../sync/config";
+import { sendStats, sessionStats } from "../sync/stats";
+import { lessonTitle } from "./Home";
 import { NotFound } from "./NotFound";
+import { systemLabel } from "./labels";
 
 type Phase = { kind: "study"; index: number } | { kind: "check"; index: number } | { kind: "done"; result: LessonResult; score: number };
 
@@ -19,23 +24,29 @@ export function LessonPage() {
 }
 
 function LessonFlow({ lessonId }: { lessonId: string }) {
+  const { t, lang } = useI18n();
   const lesson = getLesson(lessonId)!;
-  useTitle(lesson.title);
+  const title = lessonTitle(lesson, lang);
+  useTitle(title);
   const store = useStore();
   const items = useMemo(() => lessonItems(lesson), [lesson]);
   const [attempt, setAttempt] = useState(0);
   const questions = useMemo(() => lessonCheck(items, content.items, Math.random), [items, attempt]);
   const [phase, setPhase] = useState<Phase>({ kind: "study", index: 0 });
   const [answers, setAnswers] = useState<Record<string, Answered>>({});
+  const [results, setResults] = useState<Record<string, boolean>[]>([]);
   const lessonIndex = content.lessons.findIndex((l) => l.id === lesson.id);
   const nextLesson = content.lessons[lessonIndex + 1];
+  const steps = items.length + questions.length;
+  const step = phase.kind === "study" ? phase.index : phase.kind === "check" ? items.length + phase.index : steps;
 
   const header = (
     <header className="stack-sm">
-      <p className="eyebrow">
-        <Link to="/chp">CHP</Link> · Lesson {lessonIndex + 1} of {content.lessons.length}
-      </p>
-      <h1>{lesson.title}</h1>
+      <p className="eyebrow">{t("lesson.eyebrow", { n: lessonIndex + 1, total: content.lessons.length })}</p>
+      <h1 className="h-compact">{title}</h1>
+      <div className="session-bar" role="progressbar" aria-label={t("lesson.progress")} aria-valuemin={0} aria-valuemax={steps} aria-valuenow={step}>
+        <div style={{ width: `${(step / steps) * 100}%` }} />
+      </div>
     </header>
   );
 
@@ -43,39 +54,38 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
     const item = items[phase.index]!;
     const last = phase.index === items.length - 1;
     return (
-      <div className="stack-lg">
+      <div className="stack">
         {header}
         <p className="muted" aria-live="polite">
-          Card {phase.index + 1} of {items.length} · read each entry, then take a {questions.length}-question check.
+          {t("lesson.cardOf", { n: phase.index + 1, total: items.length, check: questions.length })}
         </p>
         <article className="card study-card" aria-label={`${item.term}: ${item.answer}`}>
-          <p className="chip">{SYSTEM_LABEL[item.code_system]}</p>
-          <p className="study-term">{item.term}</p>
-          <p className="study-answer">{item.answer}</p>
+          <p className="chip">{systemLabel(item.code_system, t)}</p>
+          <p className="study-term" lang="en">
+            {item.term}
+          </p>
+          <p className="study-answer" lang="en">
+            {item.answer}
+          </p>
           <TrustBadges item={item} compact />
           <Excerpt item={item} />
-          {item.notes.map((n) => (
-            <p key={n} className="muted small">
-              {n}
-            </p>
-          ))}
           <Link to={`/chp/items/${item.id}`} className="small">
-            Full source details for {item.term}
+            {t("lesson.sourceDetails", { term: item.term })}
           </Link>
         </article>
-        <div className="actions">
+        <div className="sticky-actions">
           <button type="button" className="btn" disabled={phase.index === 0} onClick={() => setPhase({ kind: "study", index: phase.index - 1 })}>
-            Previous
+            {t("common.previous")}
           </button>
-          <button type="button" className="btn btn-primary" onClick={() => setPhase(last ? { kind: "check", index: 0 } : { kind: "study", index: phase.index + 1 })}>
-            {last ? "Start the check" : "Next"}
+          <button type="button" className="btn btn-primary btn-grow" onClick={() => setPhase(last ? { kind: "check", index: 0 } : { kind: "study", index: phase.index + 1 })}>
+            {last ? t("lesson.startCheck") : t("common.next")}
           </button>
-          {!last && (
-            <button type="button" className="btn btn-quiet" onClick={() => setPhase({ kind: "check", index: 0 })}>
-              Skip to check
-            </button>
-          )}
         </div>
+        {!last && (
+          <button type="button" className="btn btn-quiet" onClick={() => setPhase({ kind: "check", index: 0 })}>
+            {t("lesson.skipToCheck")}
+          </button>
+        )}
       </div>
     );
   }
@@ -84,21 +94,23 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
     const q = questions[phase.index]!;
     const last = phase.index === questions.length - 1;
     return (
-      <div className="stack-lg">
+      <div className="stack">
         {header}
         <QuestionView
           question={q}
           answered={answers[q.id] ?? null}
           position={{ index: phase.index, total: questions.length }}
-          nextLabel={last ? "See result" : "Next question"}
+          nextLabel={last ? t("lesson.seeResult") : t("question.next")}
           onAnswer={(response, correct, itemResults) => {
             setAnswers((a) => ({ ...a, [q.id]: { response, correct } }));
+            setResults((r) => [...r, itemResults]);
             store.recordResults(itemResults, Date.now());
           }}
           onNext={() => {
             if (!last) return setPhase({ kind: "check", index: phase.index + 1 });
             const score = questions.filter((x) => answers[x.id]?.correct).length;
             const result = store.recordLessonCheck(lesson.id, score, questions.length, Date.now());
+            void sendStats(firebaseConfig, content.content_version, sessionStats("lesson", results));
             setPhase({ kind: "done", result, score });
           }}
         />
@@ -112,24 +124,18 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
     <div className="stack-lg">
       {header}
       <section className={`card ${passed ? "card-success" : "card-accent"}`} aria-labelledby="result-h">
-        <h2 id="result-h">{passed ? "Lesson complete" : "Not passed yet"}</h2>
-        <p className="score">
-          {phase.score} / {questions.length} correct
-        </p>
-        <p>
-          {passed
-            ? "Your result is saved. These items will come back in practice when they are due for review."
-            : `You need ${Math.ceil(PASS_RATIO * questions.length)} of ${questions.length} to complete the lesson. Your answers still count towards practice.`}
-        </p>
+        <h2 id="result-h">{passed ? t("lesson.passed") : t("lesson.notPassed")}</h2>
+        <p className="score">{t("lesson.score", { score: phase.score, total: questions.length })}</p>
+        <p>{passed ? t("lesson.passedText") : t("lesson.notPassedText", { need: Math.ceil(PASS_RATIO * questions.length), total: questions.length })}</p>
         {missed.length > 0 && (
           <>
-            <h3>To review</h3>
+            <h3>{t("lesson.toReview")}</h3>
             <ul className="review-list">
               {missed.map((q) => {
                 const item = content.items.find((i) => i.id === q.itemIds[0])!;
                 return (
                   <li key={q.id}>
-                    <Link to={`/chp/items/${item.id}`}>
+                    <Link to={`/chp/items/${item.id}`} lang="en">
                       <strong>{item.term}</strong> — {item.answer}
                     </Link>
                   </li>
@@ -146,20 +152,21 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
             className="btn btn-primary"
             onClick={() => {
               setAnswers({});
+              setResults([]);
               setAttempt((n) => n + 1);
               setPhase({ kind: "study", index: 0 });
             }}
           >
-            Study again
+            {t("lesson.studyAgain")}
           </button>
         )}
         {passed && nextLesson && (
           <Link className="btn btn-primary" to={`/chp/lessons/${nextLesson.id}`}>
-            Next lesson: {nextLesson.title}
+            {t("lesson.nextLesson", { title: lessonTitle(nextLesson, lang) })}
           </Link>
         )}
         <Link className="btn" to="/chp">
-          Back to lessons
+          {t("lesson.backToLessons")}
         </Link>
       </div>
     </div>

@@ -17,7 +17,7 @@ class MemoryStorage implements KeyValueStorage {
 }
 
 const NOW = Date.UTC(2026, 9, 1);
-const q: Question = { id: "q1", type: "code-to-meaning", itemIds: ["a"], prompt: "", subject: "10-1", options: ["x", "y"], answer: "x" };
+const q: Question = { id: "q1", type: "code-to-meaning", itemIds: ["a"], subject: "10-1", options: ["x", "y"], answer: "x" };
 
 describe("ProgressStore", () => {
   it("persists and reloads item progress", () => {

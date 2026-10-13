@@ -6,20 +6,59 @@ status of every entry. Architecture decision: [ADR 0010](decisions/0010-static-l
 
 ## What a learner can do
 
+The interface is Korean by default (English in Settings); codes, meanings and card excerpts are
+always shown in the original English. The app is designed for phones first.
+
 | Journey | Where |
 |---|---|
-| Choose a jurisdiction (CHP is the only one with reviewed content) | `/` |
-| See how far the content has been checked, open lessons | `/chp` |
+| Today: streak, answers today, mastered, one primary action (resume / review what is due / next lesson) | `/` |
+| See how far the content has been checked (collapsible), open lessons | `/chp` |
 | Study a lesson card by card, then pass a 5-question check (4/5 needed) | `/chp/lessons/:id` |
-| Flashcards with self-grading ("Again" / "I knew it") | `/chp/flashcards` |
+| Flashcards: tap to flip, swipe right "I knew it", swipe left "again" | `/chp/flashcards` |
 | Practice sessions of 10: mixed, codes, card alphabet, due items, mistakes | `/chp/practice` |
-| Immediate feedback with the correct answer and a link to its source | during practice |
+| Immediate feedback, the answer button pinned in the thumb zone, optional vibration | during practice |
 | Session summary: accuracy, missed items, newly mastered, "practise these again" | end of a session |
 | Resume an unfinished session at the same question after leaving or reloading | `/`, `/chp/practice` |
-| Search the reference; see the 35 entries that are not taught and why | `/chp/reference` |
+| Search the reference (sticky search, filter chips); see the entries that are not taught and why | `/chp/reference` |
 | Inspect an entry: excerpt, page, document hash, review record, limitations | `/chp/items/:id` |
-| Progress: accuracy, mastered, due, needs review, lessons, history, export/import/reset | `/progress` |
-| Methodology and status definitions | `/about` |
+| Progress: streak, accuracy, mastered, due, needs review, lessons, history | `/progress` |
+| Settings: language, account & sync, anonymous statistics, vibration, install, backup/restore/reset | `/settings` |
+| Methodology, status definitions, privacy | `/about` |
+| Reviewers check entries against the card and export their decisions | `/review` |
+
+Lessons, practice and flashcards open in a focus mode: the tab bar is hidden and a close button
+leads back.
+
+## Mobile and offline
+
+* **Installable.** A web app manifest (Korean name, standalone, portrait) and icons let learners
+  add Unit-24 to the home screen. Home offers it once (the browser's prompt, or Share → Add to
+  Home Screen on iOS); Settings always shows it.
+* **Offline.** A Workbox service worker (`vite-plugin-pwa`) precaches the app and its content
+  bundle, so everything except sign-in works offline after the first visit. It registers from an
+  external script, so the CSP is unchanged; `sw.js` and the manifest are served `no-cache`, and a
+  new deployment replaces the cached app automatically.
+* **Lean.** The Firebase SDK is a separate chunk excluded from the precache and loaded only when a
+  learner signs in.
+
+## Accounts, sync and statistics ([ADR 0012](decisions/0012-firebase-accounts-and-sync.md))
+
+* **Device first.** Progress is always saved on the device. Signing in (Google, or a link sent
+  by email) is optional and adds sync between devices.
+* **Sync** (`web/src/sync/engine.ts`, `merge.ts`): on sign-in and whenever the app returns to the
+  foreground the account copy is pulled and merged; local changes are pushed after 2.5 s of
+  quiet and when the app goes to the background. The merge keeps the latest answer per entry,
+  the best lesson result, the union of session history and the larger daily count, and
+  validates everything it imports.
+* **Statistics** (`web/src/sync/stats.ts`): after a finished session or lesson check, the
+  per-entry right/wrong counts are sent anonymously with one HTTPS request — no account, device
+  or personal data. Learners can turn this off in Settings.
+* **Security** (`web/firestore.rules`): a learner can read and write only `users/{their uid}`;
+  `session_stats` is create-only with a validated shape and unreadable through the API;
+  everything else is denied. `npm run test:rules` runs the rules tests on the Firestore emulator
+  (also a CI job), including the exact statistics request the app sends.
+* **Setup.** Until `web/src/sync/config.ts` holds the Firebase web config, the app is device-only
+  and says so. Steps: [Firebase setup](firebase-setup.md).
 
 ## Content rules
 
@@ -106,14 +145,15 @@ npm run typecheck
 npm test             # Vitest unit and component tests
 npm run build        # type-checks, then writes dist/
 npx playwright test  # end-to-end journeys + axe accessibility scans, desktop and mobile
+npm run test:rules   # Firestore security rules on the emulator (needs Java; firebase-tools via npx)
 ```
 
 Playwright uses Chromium; in CI it is installed with `npx playwright install --with-deps chromium`.
 
 ## Deploying
 
-The app is live at **https://unit-24-3o8p.vercel.app**, served by the Vercel project
-`unit-24-3o8p` in the Club Paradiso team ([ADR 0011](decisions/0011-vercel-production-hosting.md)).
+The app is live at **https://unit-24.vercel.app**, served by the Vercel project
+`unit-24` in the Club Paradiso team ([ADR 0011](decisions/0011-vercel-production-hosting.md)).
 
 | Setting | Value |
 |---|---|
@@ -122,7 +162,7 @@ The app is live at **https://unit-24-3o8p.vercel.app**, served by the Vercel pro
 | Production branch | `main` — every merge that touches `web/` goes live |
 | Other branches | preview deployments, behind Vercel Authentication |
 | Skipped builds | pushes with no change under `web/` since the branch's last successful deployment (`ignoreCommand`) |
-| Headers | strict CSP, `frame-ancestors 'none'`, nosniff, referrer and permissions policies, HSTS; hashed assets cached for a year |
+| Headers | strict CSP (`'self'` plus only the Google endpoints Firebase Auth and Firestore need), `frame-ancestors 'none'`, nosniff, referrer and permissions policies, HSTS; hashed assets cached for a year |
 
 `vite preview` serves the same headers as production, so the Playwright suite in CI runs under
 the production Content-Security-Policy. After each successful production deployment,
@@ -144,7 +184,10 @@ repository root (ADR 0007). It does not affect the `web/` project.
 * 35 card entries, the card's "Code" status list and its statute column are not taught: the
   layout-aware candidates in `data/evaluation/real_document_candidates.jsonl` have not been
   adjudicated.
-* Progress is per browser; there are no accounts or sync.
+* Sync needs the Firebase project to be set up ([Firebase setup](firebase-setup.md)); until then
+  progress is per device. Sign-in and sync have been tested against fakes and the Firestore
+  emulator, not yet against the live Firebase project.
 * Verified in automated Chromium only (desktop 1280×800 and Pixel 7 emulation), locally and
-  against production. Not yet tested on physical devices, Safari or Firefox, or with a screen
+  against production. Not yet tested on physical phones (iOS Safari in particular, where
+  vibration is unavailable and install works through the Share menu), Firefox, or with a screen
   reader by a person.

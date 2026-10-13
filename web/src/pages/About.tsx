@@ -1,94 +1,83 @@
 import { Link } from "react-router";
 import { content } from "../content";
+import { useT } from "../i18n";
 import { useTitle } from "../state";
 
 export function About() {
-  useTitle("Sources & verification");
+  const t = useT();
+  useTitle(t("about.title"));
   const src = content.source;
   const c = content.counts;
   return (
     <div className="stack-lg prose">
       <header className="stack-sm">
-        <h1>Sources & verification</h1>
-        <p className="lead">What Unit-24 teaches, where it comes from, and how far it has been checked.</p>
+        <h1>{t("about.title")}</h1>
+        <p className="lead">{t("about.lead")}</p>
       </header>
 
       <section aria-labelledby="src-h">
-        <h2 id="src-h">The source</h2>
-        <p>
-          All current content comes from one document: <strong>{src.title}</strong>, published by the {src.issuing_agency}. The file name gives the version as{" "}
-          <strong>{src.version}</strong>; the card's printed revision and effective date have not been confirmed.
-        </p>
+        <h2 id="src-h">{t("about.sourceH")}</h2>
+        <p>{t("about.sourceText", { title: src.title, agency: src.issuing_agency, version: src.version })}</p>
         <ul>
           <li>
-            Original: <a href={src.url}>{src.url}</a>
+            {t("about.original")}{" "}
+            <a href={src.url} lang="en">
+              {src.url}
+            </a>
           </li>
           <li>
-            Fingerprint: <code className="hash">sha256:{src.sha256}</code> ({src.byte_length.toLocaleString()} bytes, {src.page_count} pages), retrieved{" "}
-            {src.retrieved_at.slice(0, 10)}.
+            {t("about.fingerprint")} <code className="hash">sha256:{src.sha256}</code>
           </li>
-          <li>{src.document_note}</li>
+          <li>{t("about.notCommitted")}</li>
         </ul>
       </section>
 
       <section aria-labelledby="how-h">
-        <h2 id="how-h">How entries were checked</h2>
-        <p>
-          Text was extracted from the card automatically, then an automated (AI agent) review compared each of the {c.reviewed} extracted entries with the
-          rendered card. Unit-24 teaches only the entries that review found to match the card exactly:
-        </p>
+        <h2 id="how-h">{t("about.howH")}</h2>
+        <p>{t("about.howText", { n: c.reviewed })}</p>
         <ul>
-          <li>
-            <strong>{c.teachable_codes} radio codes</strong> (10-codes and 11-codes) whose meaning matched word for word;
-          </li>
-          <li>
-            <strong>the {c.teachable_letters}-letter spelling alphabet</strong> printed on page 2. It is the card's own alphabet — it uses “Yellow” for Y, so it
-            is neither the APCO 1941 alphabet (“Young”) nor the NATO alphabet.
-          </li>
+          <li>{t("about.howCodes", { n: c.teachable_codes })}</li>
+          <li>{t("about.howAlphabet", { n: c.teachable_letters })}</li>
         </ul>
         <p>
-          The other <strong>{c.excluded} entries</strong> were read wrongly — usually because text from a neighbouring column ran into them or a
-          continuation line was lost. They are listed in the <Link to="/chp/reference">reference</Link> without their (wrong) extracted meaning.
+          {t("about.howExcluded", { n: c.excluded })} <Link to="/chp/reference">{t("ref.title")}</Link>
         </p>
       </section>
 
       <section aria-labelledby="status-h">
-        <h2 id="status-h">What the labels mean</h2>
+        <h2 id="status-h">{t("about.labelsH")}</h2>
         <dl className="facts">
-          <dt>Source-matched</dt>
-          <dd>An automated review found the entry exactly as shown on the card. It does not mean the entry is correct for current operations.</dd>
-          <dt>Not human-verified</dt>
-          <dd>
-            No human reviewer has accepted the entry yet. The research corpus requires that before anything is approved as a training answer, so every entry
-            is still marked <code>RESEARCH_ONLY</code> in the research corpus.
-          </dd>
-          <dt>Human-verified</dt>
-          <dd>
-            A named person compared the entry with the card itself and accepted it. Human decisions are recorded in the repository with the reviewer's name and
-            date. {c.human_verified} of {c.teachable} entries are human-verified so far.
-          </dd>
-          <dt>Read from the card by a person</dt>
-          <dd>The extractor misread this entry; a human reviewer typed the meaning as printed on the card. These entries are human-verified.</dd>
-          <dt>Current use unknown</dt>
-          <dd>Nothing confirms that CHP still uses this card or that it has not been revised since.</dd>
+          <dt>{t("trust.sourceMatched")}</dt>
+          <dd>{t("about.labelSourceMatched")}</dd>
+          <dt>{t("trust.notVerified")}</dt>
+          <dd>{t("about.labelNotVerified")}</dd>
+          <dt>{t("trust.humanVerified")}</dt>
+          <dd>{t("about.labelVerified", { n: c.human_verified, total: c.teachable })}</dd>
+          <dt>{t("trust.humanReading")}</dt>
+          <dd>{t("about.labelHumanReading")}</dd>
+          <dt>{t("trust.currentUnknown")}</dt>
+          <dd>{t("about.labelCurrentUnknown")}</dd>
         </dl>
       </section>
 
       <section aria-labelledby="rev-h">
-        <h2 id="rev-h">For reviewers</h2>
+        <h2 id="rev-h">{t("about.reviewersH")}</h2>
         <p>
-          Anyone with the card can help verify this content. The <Link to="/review">review page</Link> lists all {c.reviewed} extracted entries, including the
-          ones not taught, and turns your decisions into a file for the repository. Nothing becomes human-verified until those decisions are merged.
+          {t("about.reviewersText", { n: c.reviewed })} <Link to="/review">{t("about.reviewLink")}</Link>
         </p>
       </section>
 
+      <section aria-labelledby="privacy-h">
+        <h2 id="privacy-h">{t("about.privacyH")}</h2>
+        <p>{t("about.privacyText")}</p>
+      </section>
+
       <section aria-labelledby="lim-h">
-        <h2 id="lim-h">Limitations</h2>
+        <h2 id="lim-h">{t("about.limitsH")}</h2>
         <ul>
-          <li>The card lists meanings only. Unit-24 does not add usage examples, because the source gives none and inventing them would not be sourced.</li>
-          <li>Codes are agency-specific. The same code can mean something different at another agency; nothing here is borrowed from other agencies.</li>
-          <li>This is a study aid. It is not an operational reference and must not be used to communicate in a real emergency.</li>
-          <li>Progress is stored only in this browser.</li>
+          <li>{t("about.limit1")}</li>
+          <li>{t("about.limit2")}</li>
+          <li>{t("about.limit3")}</li>
         </ul>
       </section>
     </div>

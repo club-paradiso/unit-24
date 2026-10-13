@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
-import { answerQuestion, content, expectFeedback } from "./helpers";
+import { expect } from "@playwright/test";
+import { answerQuestion, content, expectFeedback, test } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -10,6 +10,7 @@ test("choose CHP, study and pass lesson 1; completion survives a reload", async 
   await page.goto("/");
   await page.getByRole("link", { name: /California Highway Patrol/ }).click();
   await expect(page.getByRole("heading", { level: 1, name: "California Highway Patrol" })).toBeVisible();
+  await page.getByRole("button", { name: /How far has this been checked/ }).click();
   await expect(page.getByText("No human has verified them yet.")).toBeVisible();
 
   await page.getByRole("link", { name: /Radio reception & message handling/ }).click();
@@ -38,7 +39,7 @@ test("a wrong answer shows the right one, the summary lists it, and mistakes can
   await page.getByRole("button", { name: /Codes only/ }).click();
   const expected = await answerQuestion(page, false);
   await expectFeedback(page, false);
-  await expect(page.locator(".feedback")).toContainText(`The card gives ${expected}`);
+  await expect(page.locator(".feedback")).toContainText(`The card gives: ${expected}`);
   await expect(page.locator(".feedback")).toContainText("not human-verified");
   await page.getByRole("button", { name: "Next question" }).click();
   for (let i = 1; i < 10; i++) {
@@ -71,8 +72,7 @@ test("leaving mid-session and coming back resumes at the same question", async (
   const subject = await page.locator(".question-subject").innerText();
 
   await page.goto("/");
-  await expect(page.getByText("4 of 10 questions answered")).toBeVisible();
-  await page.getByRole("link", { name: "Resume session" }).click();
+  await page.getByRole("link", { name: "Resume (4/10)" }).click();
   await expect(page.getByText("Question 4 of 10")).toBeVisible();
   await expect(page.locator(".question-subject")).toHaveText(subject);
   await expect(page.locator(".feedback-title")).toBeVisible();
@@ -131,10 +131,12 @@ test("progress can be reset after confirmation", async ({ page }) => {
   await page.getByRole("button", { name: "Show answer" }).click();
   await page.getByRole("button", { name: "I knew it" }).click();
   await page.goto("/progress");
-  await expect(page.getByRole("progressbar", { name: "Not started" })).toHaveAttribute("aria-valuenow", "49");
+  await expect(page.getByRole("progressbar", { name: "New", exact: true })).toHaveAttribute("aria-valuenow", "49");
+  await page.goto("/settings");
   await page.getByRole("button", { name: "Reset progress…" }).click();
   await page.getByRole("button", { name: "Yes, erase everything" }).click();
-  await expect(page.getByRole("progressbar", { name: "Not started" })).toHaveAttribute("aria-valuenow", "50");
+  await page.goto("/progress");
+  await expect(page.getByRole("progressbar", { name: "New", exact: true })).toHaveAttribute("aria-valuenow", "50");
 });
 
 test("unknown pages and items show a helpful not-found page", async ({ page }) => {

@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// Unit-24 Firestore security rules. Tested by rules/firestore.rules.test.ts against the emulator.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // One document per signed-in learner: their progress, as a JSON string. Only they can see it.
+    match /users/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['schema', 'progress', 'updatedAt'])
+        && request.resource.data.schema == 1
+        && request.resource.data.progress is string
+        && request.resource.data.progress.size() <= 400000
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // Anonymous study statistics: create-only, no identifiers, nobody can read them through the API.
+    match /session_stats/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['schema', 'contentVersion', 'mode', 'n', 'results', 'at'])
+        && request.resource.data.schema == 1
+        && request.resource.data.contentVersion is string
+        && request.resource.data.contentVersion.size() <= 32
+        && request.resource.data.mode in ['mixed', 'codes', 'alphabet', 'mistakes', 'due', 'lesson']
+        && request.resource.data.n is int
+        && request.resource.data.n >= 1
+        && request.resource.data.n <= 30
+        && request.resource.data.results is map
+        && request.resource.data.results.size() >= 1
+        && request.resource.data.results.size() <= 30
+        && request.resource.data.at == request.time;
+      allow read, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

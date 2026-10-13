@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
-import { content } from "./helpers";
+import { content, test } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");

@@ -1,5 +1,5 @@
 {
-  "content_version": "dcab1a0f9eaf3565",
+  "content_version": "eb94e816d3e4f261",
   "schema_version": 2,
   "jurisdiction": {
     "id": "chp",
@@ -53,6 +53,8 @@
       "id": "radio-traffic",
       "title": "Radio reception & message handling",
       "summary": "Codes for signal quality, relaying, repeating and controlling radio traffic.",
+      "title_ko": "무선 수신과 메시지 처리",
+      "summary_ko": "신호 상태, 메시지 중계·반복, 무선 교신 통제에 쓰는 코드",
       "item_ids": [
         "fct_1782e9995e6858f5",
         "fct_972f37fdfe43efa0",
@@ -69,6 +71,8 @@
       "id": "status-requests",
       "title": "Status, requests & assignments",
       "summary": "Codes for unit status, locations, checks and meeting other units.",
+      "title_ko": "상태 보고·요청·임무",
+      "summary_ko": "근무 상태, 위치, 조회 요청, 다른 차량과의 합류에 쓰는 코드",
       "item_ids": [
         "fct_b19a58d0a56231fe",
         "fct_ba456f1a20a32db4",
@@ -85,6 +89,8 @@
       "id": "incidents",
       "title": "Incidents, crashes & resources",
       "summary": "Codes for subjects, backup, ambulances, crash severity and bomb threats.",
+      "title_ko": "사건·사고·지원 요청",
+      "summary_ko": "대상자, 지원 요청, 구급차, 교통사고 부상 정도, 폭발물 위협에 쓰는 코드",
       "item_ids": [
         "fct_1de0602001ee9c82",
         "fct_2a2a004996468801",
@@ -98,6 +104,8 @@
       "id": "alphabet-a-m",
       "title": "Card alphabet: A to M",
       "summary": "The spelling words printed on page 2 of the card, first half.",
+      "title_ko": "카드 알파벳: A~M",
+      "summary_ko": "카드 2쪽에 인쇄된 철자 단어, 앞쪽 절반",
       "item_ids": [
         "fct_6506cc6c5663c7a3",
         "fct_55940c08f7a7967c",
@@ -118,6 +126,8 @@
       "id": "alphabet-n-z",
       "title": "Card alphabet: N to Z",
       "summary": "The spelling words printed on page 2 of the card, second half.",
+      "title_ko": "카드 알파벳: N~Z",
+      "summary_ko": "카드 2쪽에 인쇄된 철자 단어, 뒤쪽 절반",
       "item_ids": [
         "fct_755d63c705a81658",
         "fct_b03f223afd50923a",
