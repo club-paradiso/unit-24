@@ -60,11 +60,26 @@ export function About() {
           <dt>Not human-verified</dt>
           <dd>
             No human reviewer has accepted the entry yet. The research corpus requires that before anything is approved as a training answer, so every entry
-            is still marked <code>RESEARCH_ONLY</code>. {c.human_verified} of {c.teachable} entries are human-verified.
+            is still marked <code>RESEARCH_ONLY</code> in the research corpus.
           </dd>
+          <dt>Human-verified</dt>
+          <dd>
+            A named person compared the entry with the card itself and accepted it. Human decisions are recorded in the repository with the reviewer's name and
+            date. {c.human_verified} of {c.teachable} entries are human-verified so far.
+          </dd>
+          <dt>Read from the card by a person</dt>
+          <dd>The extractor misread this entry; a human reviewer typed the meaning as printed on the card. These entries are human-verified.</dd>
           <dt>Current use unknown</dt>
           <dd>Nothing confirms that CHP still uses this card or that it has not been revised since.</dd>
         </dl>
+      </section>
+
+      <section aria-labelledby="rev-h">
+        <h2 id="rev-h">For reviewers</h2>
+        <p>
+          Anyone with the card can help verify this content. The <Link to="/review">review page</Link> lists all {c.reviewed} extracted entries, including the
+          ones not taught, and turns your decisions into a file for the repository. Nothing becomes human-verified until those decisions are merged.
+        </p>
       </section>
 
       <section aria-labelledby="lim-h">

@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { content } from "./helpers";
 
-const ROUTES = ["/", "/chp", `/chp/lessons/${content.lessons[0]!.id}`, "/chp/practice", "/chp/flashcards", "/chp/reference", `/chp/items/${content.items[0]!.id}`, "/progress", "/about"];
+const ROUTES = ["/", "/chp", "/review", `/chp/lessons/${content.lessons[0]!.id}`, "/chp/practice", "/chp/flashcards", "/chp/reference", `/chp/items/${content.items[0]!.id}`, "/progress", "/about"];
 
 for (const route of ROUTES) {
   test(`no serious accessibility violations on ${route}`, async ({ page }) => {

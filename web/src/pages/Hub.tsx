@@ -29,11 +29,19 @@ export function Hub() {
         </h2>
         <ul>
           <li>
-            Each of the {content.counts.teachable} entries was matched word-for-word to the card by an automated review. <strong>No human has verified them yet.</strong>
+            Entries were matched word-for-word to the card by an automated review.{" "}
+            {content.counts.human_verified === 0 ? (
+              <strong>No human has verified them yet.</strong>
+            ) : (
+              <strong>
+                {content.counts.human_verified} of {content.counts.teachable} have been verified against the card by a human reviewer.
+              </strong>
+            )}
           </li>
           <li>The card has no confirmed revision date, so whether CHP still uses it is unknown.</li>
           <li>
-            {content.counts.excluded} other entries were read incorrectly from the card and are left out until they are re-checked.{" "}
+            {content.counts.excluded} other entries are left out: the extractor misread them{content.counts.human_rejected ? " or a reviewer rejected them" : ""}, and they
+            are taught only once a person reads them from the card.{" "}
             <Link to="/about">Details</Link>
           </li>
         </ul>

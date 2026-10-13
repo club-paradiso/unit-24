@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
+import { content } from "../content";
 import { StorageNotice } from "./StorageNotice";
 
 const NAV = [
@@ -66,8 +67,11 @@ export function Layout() {
       </main>
       <footer className="footer">
         <p>
-          Study aid only — not an operational reference. Content comes from one California Highway Patrol card; no entry has been verified by a human
-          reviewer. <Link to="/about">How we source content</Link>
+          Study aid only — not an operational reference. Content comes from one California Highway Patrol card;{" "}
+          {content.counts.human_verified === 0
+            ? "no entry has been verified by a human reviewer yet."
+            : `${content.counts.human_verified} of ${content.counts.teachable} entries have been verified by a human reviewer.`}{" "}
+          <Link to="/about">How we source content</Link>
         </p>
       </footer>
       <nav aria-label="Main (mobile)" className="nav-bottom">

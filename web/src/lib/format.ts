@@ -25,6 +25,7 @@ export const LABEL_TEXT: Record<string, string> = {
   INSUFFICIENT_CONTEXT: "Extracted meaning was incomplete",
   WRONG_NORMALIZATION: "Meaning matched; label was wrong",
   TRUE_FACT: "Meaning matched",
+  HUMAN_REJECTED: "Rejected by a human reviewer",
 };
 
 export const FAILURE_TEXT: Record<string, string> = {
@@ -32,4 +33,5 @@ export const FAILURE_TEXT: Record<string, string> = {
   LAYOUT_CONTINUATION_LOST: "the rest of the entry, on the next line, was lost",
   UNCLASSIFIED: "the entry is not what the extractor took it for",
   NOT_A_FAILURE: "",
+  HUMAN_REVIEW: "",
 };

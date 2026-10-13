@@ -20,12 +20,15 @@ export function Excerpt({ item }: { item: LearningItem }) {
         </p>
       </blockquote>
       <figcaption>
-        Text recorded from page {item.page ?? "?"} of the card{match ? "; this entry is highlighted" : ""}. Neighbouring columns of the card appear in the
+        {item.status.answer_basis === "human_reading" ? "Extraction text" : "Text recorded"} from page {item.page ?? "?"} of the card
+        {match ? "; this entry is highlighted" : ""}. Neighbouring columns of the card appear in the
         same line of text.
       </figcaption>
     </figure>
   );
 }
+
+const HUMAN_DECISION = { ACCEPT: "Accepted", REJECT: "Rejected", CORRECT: "Corrected" } as const;
 
 export function SourceDetails({ item }: { item: LearningItem }) {
   const src = content.source;
@@ -59,14 +62,28 @@ export function SourceDetails({ item }: { item: LearningItem }) {
           {src.byte_length.toLocaleString()} bytes, {src.page_count} pages, retrieved {src.retrieved_at.slice(0, 10)}. {src.document_note}
         </span>
       </dd>
-      <dt>Review</dt>
+      <dt>Automated review</dt>
       <dd>
         {item.review.reviewer_is_human ? "Human review" : "Automated (AI agent) review"} on {item.review.reviewed_at}: “{item.review.finding}”
       </dd>
-      <dt>Human verified</dt>
-      <dd>{item.status.human_verified ? "Yes" : "No — no human reviewer has accepted this entry yet."}</dd>
+      <dt>Human review</dt>
+      <dd>
+        {item.review.human.length === 0 ? (
+          "None yet — no human reviewer has checked this entry against the card."
+        ) : (
+          <ul className="plain-list">
+            {item.review.human.map((h) => (
+              <li key={`${h.reviewer}-${h.reviewed_at}`}>
+                {HUMAN_DECISION[h.decision]} by {h.reviewer} on {h.reviewed_at}
+                {h.notes ? <span className="muted"> — “{h.notes}”</span> : null}
+              </li>
+            ))}
+          </ul>
+        )}
+        {item.status.human_review === "disputed" && <p className="muted">Reviewers disagree, so this entry is not marked human-verified.</p>}
+      </dd>
       <dt>Currentness</dt>
-      <dd>{item.status.currentness === "UNKNOWN" ? "Unknown — the card has no confirmed revision or effective date." : item.status.currentness}</dd>
+      <dd>{item.limitations[1]}</dd>
       <dt>Corpus status</dt>
       <dd>
         <code>{item.status.eligibility}</code> — the research corpus has not approved this as a training answer.

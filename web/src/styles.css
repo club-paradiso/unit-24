@@ -1046,3 +1046,72 @@ td {
   border-radius: 3px;
   padding: 0 2px;
 }
+
+/* ---------- reviewer page ---------- */
+.steps {
+  padding-left: 1.25rem;
+}
+.steps li + li {
+  margin-top: 0.35rem;
+}
+.review-entries {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.review-card.is-decided {
+  border-left: 5px solid var(--ok);
+}
+.review-card.has-problem {
+  border-left-color: var(--bad);
+}
+.review-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.review-head > * + * {
+  margin-top: 0;
+}
+.review-term {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+}
+.review-decision {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+.review-decision legend {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+.radio input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--brand);
+}
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.review-problem {
+  color: var(--bad);
+  font-weight: 600;
+}
