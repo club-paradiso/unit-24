@@ -7,6 +7,15 @@
 export type CodeSystem = "TEN_CODE" | "ELEVEN_CODE" | "CHP_CARD_ALPHABET";
 export type ItemKind = "code" | "letter";
 
+export interface HumanReview {
+  reviewer: string;
+  reviewed_at: string;
+  decision: "ACCEPT" | "REJECT" | "CORRECT";
+  notes: string;
+}
+
+export type HumanReviewState = "none" | "accepted" | "corrected" | "rejected" | "disputed";
+
 export interface Review {
   method: string;
   reviewer: string;
@@ -14,11 +23,14 @@ export interface Review {
   reviewed_at: string;
   inspection: string | null;
   finding: string;
+  human: HumanReview[];
 }
 
 export interface ItemStatus {
   source_matched: boolean;
   human_verified: boolean;
+  human_review: HumanReviewState;
+  answer_basis: "automated_review" | "human_reading";
   eligibility: string;
   currentness: string;
   learner_safe: boolean;
@@ -50,6 +62,11 @@ export interface ExcludedEntry {
   failure_class: string;
   reason: string;
   locator: string;
+  page: number | null;
+  /** Raw extraction text for reviewers. Never shown to learners as this entry's meaning. */
+  excerpt: string;
+  human: HumanReview[];
+  human_review: HumanReviewState;
 }
 
 export interface Lesson {
@@ -76,6 +93,14 @@ export interface Source {
   source_quality: string;
   document_in_repository: boolean;
   document_note: string;
+  human_source_review: {
+    printed_revision: string | null;
+    listed_at_url: string | null;
+    listed_checked_at: string | null;
+    reviewer: string;
+    reviewed_at: string;
+    notes: string;
+  } | null;
 }
 
 export interface Jurisdiction {
@@ -98,6 +123,10 @@ export interface ContentBundle {
     teachable_letters: number;
     excluded: number;
     human_verified: number;
+    human_corrected: number;
+    human_rejected: number;
+    human_disputed: number;
+    human_reviewers: number;
   };
   generated_from: string[];
   lessons: Lesson[];

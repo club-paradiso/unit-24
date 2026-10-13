@@ -32,6 +32,10 @@ def test_counts_match_the_audit(bundle: dict) -> None:
         "teachable_letters": 26,
         "excluded": 35,
         "human_verified": 0,
+        "human_corrected": 0,
+        "human_rejected": 0,
+        "human_disputed": 0,
+        "human_reviewers": 0,
     }
 
 
@@ -53,7 +57,21 @@ def test_only_source_matched_labels_are_teachable(bundle: dict) -> None:
 
 def test_excluded_entries_never_carry_the_rejected_meaning(bundle: dict) -> None:
     for e in bundle["excluded"]:
-        assert set(e) == {"fact_id", "kind", "term", "code_system", "label", "failure_class", "reason", "locator"}
+        assert set(e) == {
+            "fact_id",
+            "kind",
+            "term",
+            "code_system",
+            "label",
+            "failure_class",
+            "reason",
+            "locator",
+            "page",
+            "excerpt",
+            "human",
+            "human_review",
+        }
+        assert "answer" not in e and "meaning" not in e
 
 
 def test_every_item_is_traceable(bundle: dict) -> None:
@@ -71,6 +89,8 @@ def test_nothing_claims_verification_or_currentness(bundle: dict) -> None:
         assert item["status"] == {
             "source_matched": True,
             "human_verified": False,
+            "human_review": "none",
+            "answer_basis": "automated_review",
             "eligibility": "RESEARCH_ONLY",
             "currentness": "UNKNOWN",
             "learner_safe": False,

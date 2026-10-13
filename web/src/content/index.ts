@@ -10,7 +10,7 @@ export function validateBundle(data: unknown): ContentBundle {
   };
   if (typeof data !== "object" || data === null) fail("not an object");
   const b = data as Partial<ContentBundle>;
-  if (b.schema_version !== 1) fail(`unsupported schema_version ${String(b.schema_version)}`);
+  if (b.schema_version !== 2) fail(`unsupported schema_version ${String(b.schema_version)}`);
   if (!Array.isArray(b.items) || b.items.length === 0) fail("no items");
   if (!Array.isArray(b.lessons)) fail("no lessons");
   if (!b.source?.sha256 || !b.source.url) fail("source identity missing");

@@ -20,6 +20,6 @@ describe("content bundle", () => {
     const bad = structuredClone(raw) as { items: { excerpt: string }[] };
     bad.items[0]!.excerpt = "";
     expect(() => validateBundle(bad)).toThrow(/not traceable/);
-    expect(() => validateBundle({ ...raw, schema_version: 2 })).toThrow(/schema_version/);
+    expect(() => validateBundle({ ...raw, schema_version: 1 })).toThrow(/schema_version/);
   });
 });

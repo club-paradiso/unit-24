@@ -10,6 +10,7 @@ import { NotFound } from "./pages/NotFound";
 import { PracticeHome, PracticeSession } from "./pages/Practice";
 import { ProgressPage } from "./pages/ProgressPage";
 import { Reference } from "./pages/Reference";
+import { ReviewPage } from "./pages/ReviewPage";
 
 function RouteError() {
   const error = useRouteError();
@@ -43,6 +44,7 @@ export const routes = [
       { path: "chp/items/:itemId", element: <ItemDetail /> },
       { path: "progress", element: <ProgressPage /> },
       { path: "about", element: <About /> },
+      { path: "review", element: <ReviewPage /> },
       { path: "*", element: <NotFound /> },
     ],
   },
