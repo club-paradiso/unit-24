@@ -44,7 +44,7 @@ export function review(prev: ItemProgress | undefined, correct: boolean, now: nu
     correct: (prev?.correct ?? 0) + (correct ? 1 : 0),
     lastResult: correct ? "correct" : "wrong",
     lastSeenAt: now,
-    dueAt: now + intervalFor(box),
+    dueAt: correct && prev && prev.dueAt > now ? prev.dueAt : now + intervalFor(box),
   };
 }
 

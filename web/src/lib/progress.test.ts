@@ -104,12 +104,7 @@ describe("ProgressStore", () => {
 });
 
 describe("parseState", () => {
-  it("drops malformed entries instead of failing", () => {
-    const st = parseState(
-      JSON.stringify({ version: 1, items: { a: { box: 9 }, b: { box: 2, seen: 1, correct: 1, lastSeenAt: 0, dueAt: 0, lastResult: "correct" } }, lessons: {}, sessions: [{}], activeSession: 5 }),
-    );
-    expect(Object.keys(st.items)).toEqual(["b"]);
-    expect(st.sessions).toEqual([]);
-    expect(st.activeSession).toBeNull();
+  it("rejects malformed records instead of silently discarding them", () => {
+    expect(() => parseState(JSON.stringify({ ...emptyState(), items: { a: { box: 9 } } }))).toThrow(/invalid/);
   });
 });

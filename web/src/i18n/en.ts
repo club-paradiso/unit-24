@@ -5,6 +5,10 @@ const s = (n: number, one: string, many: string) => (n === 1 ? one : many);
 
 /** English interface text. Must define every key in ko.ts (the compiler checks). */
 export const en: Dict = {
+  "update.title": "Update available",
+  "update.message": "A new version is ready. Lesson and practice progress is saved. Finish your current flashcard deck before reloading.",
+  "update.apply": "Update and reload",
+
   "a11y.skip": "Skip to content",
   "a11y.brandHome": "Unit-24 home",
   "a11y.mainNav": "Main",

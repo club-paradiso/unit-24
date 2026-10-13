@@ -4,6 +4,7 @@
  */
 import type { User } from "firebase/auth";
 import type { ProgressState } from "../lib/progress";
+import { mergeProgress } from "./merge";
 import { parseState } from "../lib/progress";
 import { firebaseConfig } from "./config";
 import type { Account } from "./context";
@@ -26,7 +27,7 @@ async function load() {
 
 let loading: ReturnType<typeof load> | null = null;
 export function firebase() {
-  loading ??= load();
+  loading ??= load().catch(error => { loading = null; throw error; });
   return loading;
 }
 
@@ -89,15 +90,20 @@ export const firestoreBackend: SyncBackend = {
     const { db, fsMod } = await firebase();
     const snap = await fsMod.getDoc(fsMod.doc(db, "users", uid));
     const data = snap.data();
-    if (!data || typeof data.progress !== "string") return null;
-    try {
-      return parseState(data.progress);
-    } catch {
-      return null; // an unreadable copy is overwritten by the next push rather than imported
-    }
+    if (!snap.exists()) return null;
+    if (!data || typeof data.progress !== "string") throw new Error("Invalid cloud progress; remote copy preserved");
+    return parseState(data.progress);
   },
   async push(uid, state: ProgressState) {
     const { db, fsMod } = await firebase();
-    await fsMod.setDoc(fsMod.doc(db, "users", uid), { schema: 1, progress: JSON.stringify(state), updatedAt: fsMod.serverTimestamp() });
+    const ref = fsMod.doc(db, "users", uid);
+    return fsMod.runTransaction(db, async transaction => {
+      const snap = await transaction.get(ref);
+      const data = snap.data();
+      if (snap.exists() && typeof data?.progress !== "string") throw new Error("Invalid cloud progress; remote copy preserved");
+      const merged = snap.exists() ? mergeProgress(state, parseState(data!.progress)) : parseState(JSON.stringify(state));
+      transaction.set(ref, { schema: 1, progress: JSON.stringify(merged), updatedAt: fsMod.serverTimestamp() });
+      return merged;
+    });
   },
 };

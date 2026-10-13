@@ -28,7 +28,7 @@ function mergeActive(a: ActiveSession | null, b: ActiveSession | null, finished:
   if (live.length === 0) return null;
   if (live.length === 1) return live[0]!;
   const [x, y] = live as [ActiveSession, ActiveSession];
-  if (x.id === y.id) return x.answers.length >= y.answers.length ? x : y;
+  if (x.id === y.id) return x.answers.length !== y.answers.length ? (x.answers.length > y.answers.length ? x : y) : (x.cursor >= y.cursor ? x : y);
   return lastTouched(x) >= lastTouched(y) ? x : y;
 }
 
@@ -39,10 +39,12 @@ function mergeMap<T>(a: Record<string, T>, b: Record<string, T>, pick: (x: T, y:
 }
 
 /**
- * Combines progress from two devices without losing work: the most recent answer wins per item,
+ * Combines progress from two devices using bounded, last-write-wins summaries: the most recent answer wins per item,
  * lesson results keep their best, histories are unioned, and daily activity keeps the larger count.
  */
 export function mergeProgress(local: ProgressState, remote: ProgressState): ProgressState {
+  local = parseState(JSON.stringify(local));
+  remote = parseState(JSON.stringify(remote));
   const sessionsById = new Map<string, SessionSummary>();
   for (const s of [...local.sessions, ...remote.sessions]) sessionsById.set(s.id, s);
   const sessions = [...sessionsById.values()].sort((a, b) => b.finishedAt - a.finishedAt).slice(0, MAX_HISTORY);
@@ -52,6 +54,7 @@ export function mergeProgress(local: ProgressState, remote: ProgressState): Prog
     lessons: mergeMap(local.lessons, remote.lessons, mergeLesson),
     sessions,
     activeSession: mergeActive(local.activeSession, remote.activeSession, new Set(sessionsById.keys())),
+    lessonDrafts: mergeMap(local.lessonDrafts ?? {}, remote.lessonDrafts ?? {}, (a, b) => a.updatedAt >= b.updatedAt ? a : b),
     activity: mergeMap(local.activity, remote.activity, (x, y) => Math.max(x, y)),
     updatedAt: Math.max(local.updatedAt, remote.updatedAt),
   };

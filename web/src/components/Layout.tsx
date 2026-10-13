@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, matchPath, useLocation } from "react-router";
 import { content } from "../content";
 import { useT } from "../i18n";
 import { Icon, type IconName } from "./Icon";
+import { AppUpdate } from "./AppUpdate";
 import { StorageNotice } from "./StorageNotice";
 
 const NAV: { to: string; key: "nav.home" | "nav.learn" | "nav.practice" | "nav.reference" | "nav.progress"; end: boolean; icon: IconName }[] = [
@@ -74,6 +75,7 @@ export function Layout() {
         </div>
       </header>
       <StorageNotice />
+      <AppUpdate />
       <main id="main" ref={mainRef} className="main">
         <Outlet />
       </main>

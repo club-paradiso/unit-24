@@ -5,6 +5,10 @@
 type N = { n: number };
 
 export const ko = {
+  "update.title": "새 버전이 준비됐어요",
+  "update.message": "레슨과 연습 기록은 저장됩니다. 플래시카드는 지금 덱을 마친 뒤 업데이트하세요.",
+  "update.apply": "업데이트하고 새로고침",
+
   // shell
   "a11y.skip": "본문으로 건너뛰기",
   "a11y.brandHome": "Unit-24 홈",

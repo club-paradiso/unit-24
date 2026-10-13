@@ -1,7 +1,7 @@
 # Firebase setup (accounts and sync)
 
-About five minutes in the Firebase console, then one small commit. Until this is done the app
-works device-only and says so in Settings.
+Accounts remain disabled until configuration and real integration verification are complete.
+The local learning application works without an account and says so in Settings.
 
 ## 1. Create the project (owner, in the browser)
 
@@ -10,7 +10,7 @@ works device-only and says so in Settings.
    * **Google** → Enable → choose a support email → Save.
    * **Email/Password** → Enable, and also enable **Email link (passwordless sign-in)** → Save.
 3. **Authentication → Settings → Authorized domains** → Add `unit-24.vercel.app`
-   (`localhost` is there by default).
+   (add `localhost` explicitly if needed; inspect the actual project settings).
 4. **Build → Firestore Database → Create database** → location `asia-northeast3 (Seoul)` →
    start in **production mode**.
 5. **Firestore → Rules** → replace the contents with `web/firestore.rules` from this repository
@@ -21,23 +21,27 @@ works device-only and says so in Settings.
 The values in `firebaseConfig` (apiKey, authDomain, projectId, …) identify the web app; they are
 not secrets. Access is enforced by Authentication and the rules.
 
-## 2. Plug it in (repository)
+## 2. Configure a verified Preview environment
 
-Put the object into `web/src/sync/config.ts`:
+The application reads these public build-time environment variables:
 
-```ts
-export const firebaseConfig: FirebaseOptions | null = {
-  apiKey: "…",
-  authDomain: "unit-24-xxxx.firebaseapp.com",
-  projectId: "unit-24-xxxx",
-  storageBucket: "…",
-  messagingSenderId: "…",
-  appId: "…",
-};
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_APP_ID
 ```
 
-Open a pull request. CI runs the unit, end-to-end and rules tests; after merge Vercel deploys and
-Settings → "계정과 동기화" offers Google and email-link sign-in.
+All four must be present or accounts stay disabled. Do not edit `config.ts` with credentials.
+Use a dedicated test project for Preview; do not expose production learner data to arbitrary
+preview builds. Add each authorized test domain explicitly. A configuration change requires a
+new build. These public identifiers are bundled in JavaScript; never put service-account or
+Admin SDK credentials in VITE variables.
+
+Before enabling Production, verify real providers, callbacks, published rules, two-device
+conflicts, offline reconnection, account switching and deletion. Passing mocks/emulators is
+insufficient. See `docs/recovery/REMAINING_BLOCKERS.md`; account isolation and redirect flows
+remain release blockers. This recovery does not claim any Firebase console change was made.
 
 ## 3. Check on a phone
 

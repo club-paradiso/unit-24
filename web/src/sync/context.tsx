@@ -71,14 +71,15 @@ export function SyncProvider({
 
   // Only learners who signed in before load the SDK at startup.
   useEffect(() => {
-    if (configured && rememberedSignIn()) void connect();
+    if (configured && rememberedSignIn()) void connect().catch(() => setAccount(null));
   }, [configured, connect]);
 
   useEffect(() => {
     if (!authApi) return;
     let stop: (() => void) | undefined;
-    void authApi.watchAccount((a) => setAccount(a)).then((s) => (stop = s));
-    return () => stop?.();
+    let cancelled = false;
+    void authApi.watchAccount(a => { if (!cancelled) setAccount(a); }).then(s => { if (cancelled) s(); else stop = s; }).catch(() => { if (!cancelled) setAccount(null); });
+    return () => { cancelled = true; stop?.(); };
   }, [authApi]);
 
   useEffect(() => {
@@ -98,8 +99,11 @@ export function SyncProvider({
       if (document.visibilityState === "hidden") void engine.flush();
       else void engine.syncNow();
     };
+    const onOnline = () => void engine.syncNow();
+    window.addEventListener("online", onOnline);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
+      window.removeEventListener("online", onOnline);
       document.removeEventListener("visibilitychange", onVisibility);
       engine.stop();
     };
