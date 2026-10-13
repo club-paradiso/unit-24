@@ -121,7 +121,7 @@ The app is live at **https://unit-24-3o8p.vercel.app**, served by the Vercel pro
 | Framework / build | Vite; `npm ci`, `npm run build`, output `dist/` (`web/vercel.json`) |
 | Production branch | `main` — every merge that touches `web/` goes live |
 | Other branches | preview deployments, behind Vercel Authentication |
-| Skipped builds | commits that do not change `web/` (`ignoreCommand`) |
+| Skipped builds | pushes with no change under `web/` since the branch's last successful deployment (`ignoreCommand`) |
 | Headers | strict CSP, `frame-ancestors 'none'`, nosniff, referrer and permissions policies, HSTS; hashed assets cached for a year |
 
 `vite preview` serves the same headers as production, so the Playwright suite in CI runs under

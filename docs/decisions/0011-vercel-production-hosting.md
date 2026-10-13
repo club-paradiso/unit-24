@@ -20,8 +20,9 @@ has asked for a live website on Vercel.
 * The repository-level `vercel.json` (`git.deploymentEnabled: false`) is kept. It no longer
   affects the `web/` project, but it still stops any project rooted at the repository root from
   building the CLI, which is what ADR 0007 guards against.
-* `main` deploys to production; other branches get preview deployments. `ignoreCommand` skips
-  builds when a commit does not touch `web/`.
+* `main` deploys to production; other branches get preview deployments. `ignoreCommand` skips a
+  build only when nothing under `web/` changed since the branch's last successful deployment
+  (`VERCEL_GIT_PREVIOUS_SHA`); with no previous deployment it always builds.
 * Production is public. Preview deployments stay behind Vercel Authentication
   (deployment protection scope: previews only).
 * `web/vercel.json` sends a strict Content-Security-Policy (`'self'` only, no inline script),
