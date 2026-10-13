@@ -8,6 +8,8 @@ import type { SessionSummary } from "../lib/progress";
 import { buildQuestions, itemsForMode, type PracticeMode } from "../lib/quiz";
 import { newId } from "../lib/random";
 import { useProgress, useStore, useTitle } from "../state";
+import { firebaseConfig } from "../sync/config";
+import { sendStats, sessionStats } from "../sync/stats";
 
 const MODES: PracticeMode[] = ["mixed", "codes", "alphabet", "due", "mistakes"];
 
@@ -152,6 +154,8 @@ export function PracticeSession() {
         }}
         onNext={() => {
           if (!isLast) return store.advance();
+          const answers = store.getState().activeSession?.answers.map((a) => a.itemResults) ?? [];
+          void sendStats(firebaseConfig, content.content_version, sessionStats(active.mode, answers));
           const s = store.finishSession(Date.now());
           if (s) setSummary(s);
         }}

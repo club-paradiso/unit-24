@@ -8,6 +8,8 @@ import { useI18n } from "../i18n";
 import { PASS_RATIO, type LessonResult } from "../lib/progress";
 import { lessonCheck } from "../lib/quiz";
 import { useStore, useTitle } from "../state";
+import { firebaseConfig } from "../sync/config";
+import { sendStats, sessionStats } from "../sync/stats";
 import { lessonTitle } from "./Home";
 import { NotFound } from "./NotFound";
 import { systemLabel } from "./labels";
@@ -32,6 +34,7 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
   const questions = useMemo(() => lessonCheck(items, content.items, Math.random), [items, attempt]);
   const [phase, setPhase] = useState<Phase>({ kind: "study", index: 0 });
   const [answers, setAnswers] = useState<Record<string, Answered>>({});
+  const [results, setResults] = useState<Record<string, boolean>[]>([]);
   const lessonIndex = content.lessons.findIndex((l) => l.id === lesson.id);
   const nextLesson = content.lessons[lessonIndex + 1];
   const steps = items.length + questions.length;
@@ -100,12 +103,14 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
           nextLabel={last ? t("lesson.seeResult") : t("question.next")}
           onAnswer={(response, correct, itemResults) => {
             setAnswers((a) => ({ ...a, [q.id]: { response, correct } }));
+            setResults((r) => [...r, itemResults]);
             store.recordResults(itemResults, Date.now());
           }}
           onNext={() => {
             if (!last) return setPhase({ kind: "check", index: phase.index + 1 });
             const score = questions.filter((x) => answers[x.id]?.correct).length;
             const result = store.recordLessonCheck(lesson.id, score, questions.length, Date.now());
+            void sendStats(firebaseConfig, content.content_version, sessionStats("lesson", results));
             setPhase({ kind: "done", result, score });
           }}
         />
@@ -147,6 +152,7 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
             className="btn btn-primary"
             onClick={() => {
               setAnswers({});
+              setResults([]);
               setAttempt((n) => n + 1);
               setPhase({ kind: "study", index: 0 });
             }}

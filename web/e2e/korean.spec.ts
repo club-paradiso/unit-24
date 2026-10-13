@@ -31,3 +31,15 @@ test("flashcards flip on tap and grade on swipe", async ({ page }) => {
   await expect(page.getByText(/알아요 1/)).toBeVisible();
   await expect(card.locator(".study-term")).not.toHaveText(term);
 });
+
+test("without a Firebase project the app stays device-only and says so", async ({ page }) => {
+  const firebaseRequests: string[] = [];
+  page.on("request", (r) => {
+    if (/googleapis|firebase/.test(r.url())) firebaseRequests.push(r.url());
+  });
+  await page.goto("/settings");
+  await expect(page.getByText("계정 동기화는 준비 중입니다")).toBeVisible();
+  await page.goto("/auth/finish");
+  await expect(page.getByText("유효한 로그인 링크가 아닙니다")).toBeVisible();
+  expect(firebaseRequests).toEqual([]);
+});

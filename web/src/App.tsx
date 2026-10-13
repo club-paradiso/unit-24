@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, useRouteError } from "react-router";
 import { Layout } from "./components/Layout";
 import { About } from "./pages/About";
+import { AuthFinish } from "./pages/AuthFinish";
 import { Flashcards } from "./pages/Flashcards";
 import { Home } from "./pages/Home";
 import { Hub } from "./pages/Hub";
@@ -47,6 +48,7 @@ export const routes = [
       { path: "about", element: <About /> },
       { path: "review", element: <ReviewPage /> },
       { path: "settings", element: <Settings /> },
+      { path: "auth/finish", element: <AuthFinish /> },
       { path: "*", element: <NotFound /> },
     ],
   },

@@ -299,6 +299,11 @@ export class ProgressStore {
     return JSON.stringify(this.state, null, 2);
   }
 
+  /** Replaces the whole state (used when merging a synced copy). Validated like any import. */
+  replace(next: ProgressState): void {
+    this.set(parseState(JSON.stringify(next)));
+  }
+
   importJson(text: string): void {
     this.set(parseState(text));
   }

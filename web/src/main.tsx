@@ -4,6 +4,7 @@ import { App } from "./App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { I18nProvider } from "./i18n";
 import { ProgressProvider } from "./state";
+import { SyncProvider } from "./sync/context";
 import "./styles.css";
 
 const root = document.getElementById("root");
@@ -14,7 +15,9 @@ createRoot(root).render(
     <ErrorBoundary>
       <I18nProvider>
         <ProgressProvider>
-          <App />
+          <SyncProvider>
+            <App />
+          </SyncProvider>
         </ProgressProvider>
       </I18nProvider>
     </ErrorBoundary>

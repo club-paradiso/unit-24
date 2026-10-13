@@ -51,12 +51,26 @@ export default defineConfig({
       workbox: {
         // The whole app, including the content bundle, is precached, so it works offline after the first visit.
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,txt}"],
+        // Only learners who sign in download Firebase; it is cached at runtime instead.
+        globIgnores: ["**/firebase-sdk*.js"],
+        runtimeCaching: [{ urlPattern: /\/assets\/firebase-sdk.*\.js$/, handler: "CacheFirst", options: { cacheName: "firebase-sdk" } }],
         navigateFallback: "/index.html",
+        // Firebase's auth handler pages must always come from the network.
+        navigateFallbackDenylist: [/^\/__\//],
         cleanupOutdatedCaches: true,
       },
     }),
   ],
-  build: { target: "es2022", sourcemap: true },
+  build: {
+    target: "es2022",
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        // Keep the Firebase SDK in named chunks so the service worker can leave them out of the precache.
+        manualChunks: (id: string) => (/node_modules\/(@firebase|firebase)\//.test(id) ? "firebase-sdk" : undefined),
+      },
+    },
+  },
   preview: { headers: productionHeaders() },
   test: {
     environment: "jsdom",
