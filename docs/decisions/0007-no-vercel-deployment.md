@@ -1,6 +1,6 @@
 # ADR 0007 — this repository is not a Vercel deployment target
 
-> Revisited by [ADR 0010](0010-static-learning-app.md): the learner app is a separate static surface in `web/`. Git deployments remain disabled.
+> Revisited by [ADR 0010](0010-static-learning-app.md) (the learner app is a separate static surface in `web/`) and [ADR 0011](0011-vercel-production-hosting.md) (that surface is hosted on Vercel, with root directory `web/`). This file's `vercel.json` rule still applies to anything rooted at the repository root.
 
 **Status:** accepted (2026-09-21)
 

@@ -1,0 +1,45 @@
+name: Production smoke test
+# Runs the end-to-end and accessibility suite against the live site after each successful
+# Vercel production deployment, and can be started by hand for any public URL.
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Base URL to test (e.g. the production domain)
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: production-smoke
+  cancel-in-progress: true
+jobs:
+  smoke:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' && startsWith(github.event.deployment.environment, 'Production'))
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      E2E_BASE_URL: ${{ github.event.inputs.url || github.event.deployment_status.environment_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: echo "Testing $E2E_BASE_URL"
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: production-playwright-report
+          path: web/playwright-report
+          retention-days: 7

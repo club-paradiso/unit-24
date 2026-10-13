@@ -87,11 +87,29 @@ Playwright uses Chromium; in CI it is installed with `npx playwright install --w
 
 ## Deploying
 
-`npm run build` produces a static site in `web/dist/`. Any static host works, provided unknown
-paths fall back to `index.html` (client-side routing). `web/vercel.json` declares this for
-Vercel. Deployment is **not enabled**: the repository-level `vercel.json` keeps Git deployments
-off (ADR 0007). Enabling it means pointing a Vercel project's root directory at `web/` and
-turning deployments on, which is an owner decision.
+The app is live at **https://unit-24-3o8p.vercel.app**, served by the Vercel project
+`unit-24-3o8p` in the Club Paradiso team ([ADR 0011](decisions/0011-vercel-production-hosting.md)).
+
+| Setting | Value |
+|---|---|
+| Root directory | `web/` — Vercel never sees the Python pipeline or its CLI |
+| Framework / build | Vite; `npm ci`, `npm run build`, output `dist/` (`web/vercel.json`) |
+| Production branch | `main` — every merge that touches `web/` goes live |
+| Other branches | preview deployments, behind Vercel Authentication |
+| Skipped builds | commits that do not change `web/` (`ignoreCommand`) |
+| Headers | strict CSP, `frame-ancestors 'none'`, nosniff, referrer and permissions policies, HSTS; hashed assets cached for a year |
+
+`vite preview` serves the same headers as production, so the Playwright suite in CI runs under
+the production Content-Security-Policy. After each successful production deployment,
+`.github/workflows/production-smoke.yml` runs the whole suite against the live URL; it can also
+be started by hand (Actions → Production smoke test → Run workflow) with any public URL.
+
+**Rolling back:** in the Vercel dashboard, open the project's Deployments, pick the last good
+production deployment and choose *Promote to Production* (or *Instant Rollback*). Then revert the
+offending commit on `main` so the next deployment does not reintroduce it.
+
+The repository-level `vercel.json` still disables Git deployments for any project rooted at the
+repository root (ADR 0007). It does not affect the `web/` project.
 
 ## Known limitations
 
@@ -102,5 +120,6 @@ turning deployments on, which is an owner decision.
   layout-aware candidates in `data/evaluation/real_document_candidates.jsonl` have not been
   adjudicated.
 * Progress is per browser; there are no accounts or sync.
-* Verified in automated Chromium only (desktop 1280×800 and Pixel 7 emulation). Not yet tested
-  on physical devices, Safari or Firefox, or with a screen reader by a person.
+* Verified in automated Chromium only (desktop 1280×800 and Pixel 7 emulation), locally and
+  against production. Not yet tested on physical devices, Safari or Firefox, or with a screen
+  reader by a person.

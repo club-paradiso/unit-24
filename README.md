@@ -8,6 +8,8 @@ Patrol.
 
 ## Learner app
 
+**Live:** https://unit-24-3o8p.vercel.app
+
 `web/` teaches the 24 radio codes and 26-letter spelling alphabet that an independent source
 review matched on the CHP 254 Aural Brevity Card. It has lessons, flashcards, practice
 sessions with spaced repetition, mistake review, saved and resumable progress, and a source
