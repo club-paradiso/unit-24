@@ -1,4 +1,5 @@
 import { content, type LearningItem } from "../content";
+import { useT } from "../i18n";
 
 /** Splits the excerpt around this item's own entry so it can be highlighted among neighbouring columns. */
 export function excerptParts(item: LearningItem): [string, string, string] {
@@ -9,10 +10,11 @@ export function excerptParts(item: LearningItem): [string, string, string] {
 }
 
 export function Excerpt({ item }: { item: LearningItem }) {
+  const t = useT();
   const [before, match, after] = excerptParts(item);
   return (
     <figure className="excerpt">
-      <blockquote>
+      <blockquote lang="en">
         <p>
           {before}
           {match && <mark>{match}</mark>}
@@ -20,73 +22,74 @@ export function Excerpt({ item }: { item: LearningItem }) {
         </p>
       </blockquote>
       <figcaption>
-        {item.status.answer_basis === "human_reading" ? "Extraction text" : "Text recorded"} from page {item.page ?? "?"} of the card
-        {match ? "; this entry is highlighted" : ""}. Neighbouring columns of the card appear in the
-        same line of text.
+        {[
+          t(item.status.answer_basis === "human_reading" ? "source.excerptExtraction" : "source.excerptRecorded", { page: item.page ?? "?" }),
+          match ? t("source.excerptHighlighted") : "",
+          t("source.excerptColumns"),
+        ]
+          .filter(Boolean)
+          .join(" ")}
       </figcaption>
     </figure>
   );
 }
 
-const HUMAN_DECISION = { ACCEPT: "Accepted", REJECT: "Rejected", CORRECT: "Corrected" } as const;
-
 export function SourceDetails({ item }: { item: LearningItem }) {
+  const t = useT();
   const src = content.source;
+  const decision = { ACCEPT: t("review.accepted"), REJECT: t("review.rejected"), CORRECT: t("review.corrected") } as const;
   return (
     <dl className="facts">
-      <dt>Jurisdiction</dt>
+      <dt>{t("source.jurisdiction")}</dt>
+      <dd>{src.issuing_agency}</dd>
+      <dt>{t("source.document")}</dt>
       <dd>
-        {src.issuing_agency} — {src.jurisdiction}
-      </dd>
-      <dt>Source document</dt>
-      <dd>
-        {src.title}
+        <span lang="en">{src.title}</span>
         <br />
         <a href={src.url} target="_blank" rel="noreferrer noopener">
-          Original PDF on chp.ca.gov<span className="visually-hidden"> (opens in a new tab)</span>
+          {t("source.originalPdf")}
+          <span className="visually-hidden"> {t("a11y.newTab")}</span>
         </a>
       </dd>
-      <dt>Version</dt>
+      <dt>{t("source.version")}</dt>
       <dd>
-        {src.version} <span className="muted">— {src.version_basis}</span>
+        {src.version} <span className="muted">— {src.human_source_review?.printed_revision ? t("source.versionPrinted") : t("source.versionFilename")}</span>
       </dd>
-      <dt>Location in document</dt>
+      <dt>{t("source.location")}</dt>
       <dd>
-        Page {item.page ?? "?"} ({item.locator_kind})
+        {t("source.page", { page: item.page ?? "?" })} ({t("source.physicalPage")})
       </dd>
-      <dt>Document fingerprint</dt>
+      <dt>{t("source.fingerprint")}</dt>
       <dd>
         <code className="hash">sha256:{src.sha256}</code>
         <br />
         <span className="muted">
-          {src.byte_length.toLocaleString()} bytes, {src.page_count} pages, retrieved {src.retrieved_at.slice(0, 10)}. {src.document_note}
+          {t("source.fingerprintNote", { bytes: src.byte_length.toLocaleString(), pages: src.page_count, date: src.retrieved_at.slice(0, 10) })}
         </span>
       </dd>
-      <dt>Automated review</dt>
+      <dt>{t("source.automatedReview")}</dt>
       <dd>
-        {item.review.reviewer_is_human ? "Human review" : "Automated (AI agent) review"} on {item.review.reviewed_at}: “{item.review.finding}”
+        {t("source.automatedReviewText", { date: item.review.reviewed_at })} <span lang="en">“{item.review.finding}”</span>
       </dd>
-      <dt>Human review</dt>
+      <dt>{t("source.humanReview")}</dt>
       <dd>
         {item.review.human.length === 0 ? (
-          "None yet — no human reviewer has checked this entry against the card."
+          t("source.noHumanReview")
         ) : (
           <ul className="plain-list">
             {item.review.human.map((h) => (
               <li key={`${h.reviewer}-${h.reviewed_at}`}>
-                {HUMAN_DECISION[h.decision]} by {h.reviewer} on {h.reviewed_at}
+                {t("source.humanDecision", { decision: decision[h.decision], who: h.reviewer, date: h.reviewed_at })}
                 {h.notes ? <span className="muted"> — “{h.notes}”</span> : null}
               </li>
             ))}
           </ul>
         )}
-        {item.status.human_review === "disputed" && <p className="muted">Reviewers disagree, so this entry is not marked human-verified.</p>}
+        {item.status.human_review === "disputed" && <p className="muted">{t("source.disputedNote")}</p>}
       </dd>
-      <dt>Currentness</dt>
-      <dd>{item.limitations[1]}</dd>
-      <dt>Corpus status</dt>
+      <dt>{t("source.corpusStatus")}</dt>
       <dd>
-        <code>{item.status.eligibility}</code> — the research corpus has not approved this as a training answer.
+        <code>{item.status.eligibility}</code> — {t("source.researchOnly")}
       </dd>
     </dl>
   );

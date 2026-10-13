@@ -60,9 +60,3 @@ export function needsReview(p: ItemProgress | undefined): boolean {
   return p !== undefined && (p.lastResult === "wrong" || p.box <= 1);
 }
 
-export const STATE_LABEL: Record<ItemState, string> = {
-  new: "New",
-  learning: "Learning",
-  reviewing: "Reviewing",
-  mastered: "Mastered",
-};

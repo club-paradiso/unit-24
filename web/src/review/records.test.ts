@@ -22,10 +22,10 @@ describe("review records", () => {
   });
 
   it("mirrors the validator's rules", () => {
-    expect(draftProblem(byTerm("10-4", false), draft({ decision: "ACCEPT" }))).toMatch(/nothing to accept/);
-    expect(draftProblem(byTerm("10-1", true), draft({ decision: "REJECT" }))).toMatch(/why/);
-    expect(draftProblem(byTerm("10-4", false), draft({ decision: "CORRECT" }))).toMatch(/exactly as printed/);
-    expect(draftProblem(byTerm("10-4", false), draft({ decision: "CORRECT", meaning: "Not on the card" }))).toMatch(/where on the card/);
+    expect(draftProblem(byTerm("10-4", false), draft({ decision: "ACCEPT" }))).toBe("acceptExcluded");
+    expect(draftProblem(byTerm("10-1", true), draft({ decision: "REJECT" }))).toBe("rejectNoNotes");
+    expect(draftProblem(byTerm("10-4", false), draft({ decision: "CORRECT" }))).toBe("correctNoMeaning");
+    expect(draftProblem(byTerm("10-4", false), draft({ decision: "CORRECT", meaning: "Not on the card" }))).toBe("correctNotInExcerpt");
     expect(draftProblem(byTerm("10-4", false), draft({ decision: "CORRECT", meaning: "message RECEIVED" }))).toBeNull();
     expect(draftProblem(byTerm("10-1", true), draft({ decision: "ACCEPT" }))).toBeNull();
   });

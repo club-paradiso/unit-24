@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, test as base, type Page } from "@playwright/test";
 import content from "../src/content/chp.json" with { type: "json" };
 
 type Item = (typeof content.items)[number];
@@ -33,3 +33,14 @@ export async function expectFeedback(page: Page, correct: boolean) {
 }
 
 export { content };
+
+/** Most journeys assert English text; Korean (the default) has its own spec. */
+export const test = base.extend<{ english: void }>({
+  english: [
+    async ({ page }, use) => {
+      await page.addInitScript(() => window.localStorage.setItem("unit24.lang", "en"));
+      await use();
+    },
+    { auto: true },
+  ],
+});

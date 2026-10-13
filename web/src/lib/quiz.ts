@@ -14,7 +14,6 @@ export interface ChoiceQuestion {
   id: string;
   type: Exclude<QuestionType, "spell">;
   itemIds: [string];
-  prompt: string;
   /** The thing being asked about, shown large (a code, a meaning or a letter). */
   subject: string;
   options: string[];
@@ -25,7 +24,6 @@ export interface SpellQuestion {
   id: string;
   type: "spell";
   itemIds: string[];
-  prompt: string;
   subject: string;
   /** The card words for each letter, in order. */
   answerWords: string[];
@@ -33,21 +31,6 @@ export interface SpellQuestion {
 }
 
 export type Question = ChoiceQuestion | SpellQuestion;
-
-export const QUESTION_LABEL: Record<QuestionType, string> = {
-  "code-to-meaning": "Code → meaning",
-  "meaning-to-code": "Meaning → code",
-  "letter-to-word": "Letter → card word",
-  spell: "Spell it out",
-};
-
-export const MODE_LABEL: Record<PracticeMode, string> = {
-  mixed: "Mixed practice",
-  codes: "Codes only",
-  alphabet: "Card alphabet only",
-  mistakes: "Review mistakes",
-  due: "Due for review",
-};
 
 const OPTION_COUNT = 4;
 
@@ -81,13 +64,7 @@ export function choiceQuestion(
   const field = askMeaning ? "answer" : "term";
   const answer = item[field];
   const options = shuffle([answer, ...distractors(item, pool, field, rng)], rng);
-  const prompt =
-    type === "code-to-meaning"
-      ? "What does this code mean on the CHP card?"
-      : type === "meaning-to-code"
-        ? "Which code has this meaning on the CHP card?"
-        : "Which word does the CHP card use for this letter?";
-  return { id, type, itemIds: [item.id], prompt, subject: askMeaning ? item.term : item.answer, options, answer };
+  return { id, type, itemIds: [item.id], subject: askMeaning ? item.term : item.answer, options, answer };
 }
 
 export function spellQuestion(letters: readonly LearningItem[], id: string): SpellQuestion {
@@ -96,7 +73,6 @@ export function spellQuestion(letters: readonly LearningItem[], id: string): Spe
     id,
     type: "spell",
     itemIds: letters.map((l) => l.id),
-    prompt: "Spell these letters using the CHP card words, in order.",
     subject: letters.map((l) => l.term).join(" "),
     answerWords: letters.map((l) => l.answer),
     answer: letters.map((l) => l.answer).join(" "),

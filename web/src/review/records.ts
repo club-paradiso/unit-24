@@ -3,8 +3,7 @@
  * validates (schema "human-review-1"). The reviewer page builds them in the browser; a person
  * commits the downloaded file to data/adjudication/human/chp_reviews.jsonl.
  */
-import { content, SYSTEM_LABEL } from "../content";
-import type { CodeSystem } from "../content/types";
+import { content } from "../content";
 
 export const REVIEW_SCHEMA = "human-review-1";
 export type Decision = "ACCEPT" | "REJECT" | "CORRECT";
@@ -12,7 +11,8 @@ export type Decision = "ACCEPT" | "REJECT" | "CORRECT";
 export interface ReviewEntry {
   factId: string;
   term: string;
-  typeLabel: string;
+  /** Code system of the entry (null for the alphabet-system claim). */
+  system: string | null;
   /** The answer learners currently see, or null when the entry is not taught. */
   shownAnswer: string | null;
   excerpt: string;
@@ -42,17 +42,12 @@ export interface ReviewRecord {
   notes: string;
 }
 
-function typeLabel(system: string | null, kind: string): string {
-  if (system && system in SYSTEM_LABEL) return SYSTEM_LABEL[system as CodeSystem];
-  return kind === "letter" ? "Alphabet entry" : "Code";
-}
-
 /** Every reviewed CHP entry, taught ones first, in the bundle's order. */
 export function reviewEntries(): ReviewEntry[] {
   const taught: ReviewEntry[] = content.items.map((i) => ({
     factId: i.id,
     term: i.term,
-    typeLabel: SYSTEM_LABEL[i.code_system],
+    system: i.code_system,
     shownAnswer: i.answer,
     excerpt: i.excerpt,
     page: i.page,
@@ -61,8 +56,8 @@ export function reviewEntries(): ReviewEntry[] {
   }));
   const excluded: ReviewEntry[] = content.excluded.map((e) => ({
     factId: e.fact_id,
-    term: e.term === "APCO_1941" ? "Alphabet label “APCO 1941”" : e.term,
-    typeLabel: typeLabel(e.code_system, e.kind),
+    term: e.term === "APCO_1941" ? "APCO 1941" : e.term,
+    system: e.kind === "letter" ? "CHP_CARD_ALPHABET" : e.code_system,
     shownAnswer: null,
     excerpt: e.excerpt,
     page: e.page,
@@ -74,14 +69,15 @@ export function reviewEntries(): ReviewEntry[] {
 
 const norm = (s: string) => s.split(/\s+/).filter(Boolean).join(" ").toLowerCase();
 
+export type DraftProblem = "acceptExcluded" | "rejectNoNotes" | "correctNoMeaning" | "correctNotInExcerpt";
+
 /** The same rules the Python validator applies, so a reviewer sees problems before committing. */
-export function draftProblem(entry: ReviewEntry, draft: Draft): string | null {
-  if (draft.decision === "ACCEPT" && !entry.taught) return "This entry is not taught, so there is nothing to accept. Use “Correct” and type the meaning as printed.";
-  if (draft.decision === "REJECT" && !draft.notes.trim()) return "Say why it should not be taught.";
+export function draftProblem(entry: ReviewEntry, draft: Draft): DraftProblem | null {
+  if (draft.decision === "ACCEPT" && !entry.taught) return "acceptExcluded";
+  if (draft.decision === "REJECT" && !draft.notes.trim()) return "rejectNoNotes";
   if (draft.decision === "CORRECT") {
-    if (!draft.meaning.trim()) return "Type the meaning exactly as printed on the card.";
-    if (!norm(entry.excerpt).includes(norm(draft.meaning)) && !draft.notes.trim())
-      return "That text is not in the recorded excerpt. Add a note saying where on the card you read it.";
+    if (!draft.meaning.trim()) return "correctNoMeaning";
+    if (!norm(entry.excerpt).includes(norm(draft.meaning)) && !draft.notes.trim()) return "correctNotInExcerpt";
   }
   return null;
 }

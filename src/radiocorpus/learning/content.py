@@ -47,7 +47,10 @@ NEW_LESSON = {
     "id": "newly-reviewed",
     "title": "Newly reviewed entries",
     "summary": "Entries a human reviewer read from the card after they were first left out.",
+    "title_ko": "새로 검수된 항목",
+    "summary_ko": "처음에는 빠졌다가 사람 검수자가 카드에서 직접 읽어 추가한 항목",
 }
+LESSON_FIELDS = ("id", "title", "summary", "title_ko", "summary_ko")
 
 ALPHABET_SYSTEM = "CHP_CARD_ALPHABET"
 
@@ -319,7 +322,7 @@ def build(root: Path) -> dict[str, Any]:
             raise LearningContentError(f"lesson {lesson['id']} references non-teachable terms: {missing}")
         ids = [by_term[t] for t in lesson["terms"] if t in by_term]
         if ids:
-            lessons.append({k: lesson[k] for k in ("id", "title", "summary")} | {"item_ids": ids})
+            lessons.append({k: lesson[k] for k in LESSON_FIELDS} | {"item_ids": ids})
     in_lessons = {i for lesson in lessons for i in lesson["item_ids"]}
     leftover = [i for i in sorted(items, key=_order) if i["id"] not in in_lessons]
     unreviewed = [i["id"] for i in leftover if i["status"]["answer_basis"] != "human_reading"]

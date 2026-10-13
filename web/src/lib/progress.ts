@@ -8,6 +8,7 @@
  */
 import type { PracticeMode, Question } from "./quiz";
 import { review, type ItemProgress } from "./srs";
+import { bump, type Activity } from "./streak";
 
 export const STORAGE_KEY = "unit24.progress";
 export const STATE_VERSION = 1;
@@ -58,12 +59,16 @@ export interface ProgressState {
   lessons: Record<string, LessonResult>;
   sessions: SessionSummary[];
   activeSession: ActiveSession | null;
+  /** Answers given per local day, for streaks and the daily count. */
+  activity: Activity;
+  /** When this state last changed (ms), used to merge with a synced copy. */
+  updatedAt: number;
 }
 
 export type StorageNotice = "unavailable" | "corrupt" | "write-failed" | null;
 
 export function emptyState(): ProgressState {
-  return { version: STATE_VERSION, items: {}, lessons: {}, sessions: [], activeSession: null };
+  return { version: STATE_VERSION, items: {}, lessons: {}, sessions: [], activeSession: null, activity: {}, updatedAt: 0 };
 }
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
@@ -119,7 +124,10 @@ export function parseState(text: string): ProgressState {
     (s): s is SessionSummary => isObj(s) && typeof s.id === "string" && isNum(s.total) && isNum(s.correct) && Array.isArray(s.missedItemIds),
   );
   const activeSession = validSession(data.activeSession) ? data.activeSession : null;
-  return { version: STATE_VERSION, items, lessons, sessions: sessions.slice(0, MAX_HISTORY), activeSession };
+  const activity: Activity = {};
+  if (isObj(data.activity)) for (const [day, n] of Object.entries(data.activity)) if (/^\d{4}-\d{2}-\d{2}$/.test(day) && isNum(n) && n > 0) activity[day] = n;
+  const updatedAt = isNum(data.updatedAt) ? data.updatedAt : 0;
+  return { version: STATE_VERSION, items, lessons, sessions: sessions.slice(0, MAX_HISTORY), activeSession, activity, updatedAt };
 }
 
 export interface KeyValueStorage {
@@ -190,10 +198,10 @@ export class ProgressStore {
   }
 
   private set(next: ProgressState): void {
-    this.state = next;
+    this.state = { ...next, updatedAt: Date.now() };
     if (this.storage) {
       try {
-        this.storage.setItem(STORAGE_KEY, JSON.stringify(next));
+        this.storage.setItem(STORAGE_KEY, JSON.stringify(this.state));
         if (this.notice === "write-failed") this.notice = null;
       } catch {
         this.notice = "write-failed";
@@ -216,7 +224,7 @@ export class ProgressStore {
       items[id] = after;
       if (after.box === 5 && (before?.box ?? 0) < 5) mastered.push(id);
     }
-    this.set({ ...this.state, items });
+    this.set({ ...this.state, items, activity: bump(this.state.activity, now) });
     return mastered;
   }
 

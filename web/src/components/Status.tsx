@@ -1,50 +1,68 @@
 import type { LearningItem } from "../content";
-import { STATE_LABEL, stateOf, type ItemProgress } from "../lib/srs";
+import { useT } from "../i18n";
+import { stateOf, type ItemProgress } from "../lib/srs";
 
 /** The verification status of an item, always shown in words (never colour alone). */
 export function TrustBadges({ item, compact = false }: { item: LearningItem; compact?: boolean }) {
+  const t = useT();
   const { status } = item;
   const latest = item.review.human[item.review.human.length - 1];
   return (
-    <ul className="badges" aria-label="Verification status">
+    <ul className="badges" aria-label={t("trust.label")}>
       {status.answer_basis === "human_reading" ? (
-        <li className="badge badge-ok" title="The extractor misread this entry; a person read the meaning from the card">
-          <span aria-hidden="true">✓</span> Read from the card by a person
+        <li className="badge badge-ok" title={t("trust.humanReadingTitle")}>
+          <span aria-hidden="true">✓</span> {t("trust.humanReading")}
         </li>
       ) : (
-        <li className="badge badge-ok" title="An automated review matched this to the source document">
-          <span aria-hidden="true">✓</span> Source-matched
+        <li className="badge badge-ok" title={t("trust.sourceMatchedTitle")}>
+          <span aria-hidden="true">✓</span> {t("trust.sourceMatched")}
         </li>
       )}
       {status.human_verified ? (
-        <li className="badge badge-ok" title={latest ? `Verified by ${latest.reviewer} on ${latest.reviewed_at}` : "Verified by a human reviewer"}>
-          <span aria-hidden="true">✓</span> Human-verified
+        <li className="badge badge-ok" title={latest ? t("trust.verifiedBy", { who: latest.reviewer, date: latest.reviewed_at }) : undefined}>
+          <span aria-hidden="true">✓</span> {t("trust.humanVerified")}
         </li>
       ) : status.human_review === "disputed" ? (
-        <li className="badge badge-warn" title="Human reviewers disagree about this entry">
-          <span aria-hidden="true">!</span> Reviewers disagree
+        <li className="badge badge-warn" title={t("trust.disputedTitle")}>
+          <span aria-hidden="true">!</span> {t("trust.disputed")}
         </li>
       ) : (
-        <li className="badge badge-warn" title="No human reviewer has verified this entry">
-          <span aria-hidden="true">!</span> {compact ? "Unverified" : "Not human-verified"}
+        <li className="badge badge-warn" title={t("trust.notVerifiedTitle")}>
+          <span aria-hidden="true">!</span> {compact ? t("trust.notVerifiedShort") : t("trust.notVerified")}
         </li>
       )}
       {status.currentness === "UNKNOWN" ? (
-        <li className="badge badge-muted" title="It is unknown whether this card is still in use">
-          <span aria-hidden="true">?</span> {compact ? "Currentness unknown" : "Current use unknown"}
+        <li className="badge badge-muted" title={t("trust.currentUnknownTitle")}>
+          <span aria-hidden="true">?</span> {t("trust.currentUnknown")}
         </li>
       ) : (
-        <li className="badge badge-muted" title="CHP was seen listing this card; that does not prove operational use">
-          <span aria-hidden="true">i</span> Listed by CHP
+        <li className="badge badge-muted" title={t("trust.listedTitle")}>
+          <span aria-hidden="true">i</span> {t("trust.listed")}
         </li>
       )}
     </ul>
   );
 }
 
+/** Plain-language limitations, built from the item's structured status (not from English prose). */
+export function useLimitations(item: LearningItem): string[] {
+  const t = useT();
+  const humans = item.review.human.map((h) => `${h.reviewer} (${h.reviewed_at})`).join(", ");
+  const out: string[] = [];
+  if (item.status.human_review === "disputed") out.push(t("limit.disputed", { who: humans }));
+  else if (item.status.human_review === "corrected") out.push(t("limit.corrected", { who: humans }));
+  else if (item.status.human_verified) out.push(t("limit.accepted", { who: humans }));
+  else out.push(t("limit.notVerified"));
+  out.push(item.status.currentness === "UNKNOWN" ? t("limit.currentUnknown") : t("limit.listed"));
+  out.push(t("limit.agencyOnly"));
+  out.push(item.kind === "letter" ? t("limit.cardAlphabet") : t("limit.meaningOnly"));
+  return out;
+}
+
 export function LearnState({ progress }: { progress: ItemProgress | undefined }) {
+  const t = useT();
   const state = stateOf(progress);
-  return <span className={`state state-${state}`}>{STATE_LABEL[state]}</span>;
+  return <span className={`state state-${state}`}>{t(`state.${state}`)}</span>;
 }
 
 export function Meter({ value, max, label }: { value: number; max: number; label: string }) {

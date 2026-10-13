@@ -5,31 +5,96 @@
       "id": "radio-traffic",
       "title": "Radio reception & message handling",
       "summary": "Codes for signal quality, relaying, repeating and controlling radio traffic.",
-      "terms": ["10-1", "10-2", "10-5", "10-9", "10-17", "10-22", "10-23", "10-30", "10-36"]
+      "title_ko": "무선 수신과 메시지 처리",
+      "summary_ko": "신호 상태, 메시지 중계·반복, 무선 교신 통제에 쓰는 코드",
+      "terms": [
+        "10-1",
+        "10-2",
+        "10-5",
+        "10-9",
+        "10-17",
+        "10-22",
+        "10-23",
+        "10-30",
+        "10-36"
+      ]
     },
     {
       "id": "status-requests",
       "title": "Status, requests & assignments",
       "summary": "Codes for unit status, locations, checks and meeting other units.",
-      "terms": ["10-7", "10-13", "10-14", "10-15", "10-20", "10-21", "10-28", "11-27", "11-98"]
+      "title_ko": "상태 보고·요청·임무",
+      "summary_ko": "근무 상태, 위치, 조회 요청, 다른 차량과의 합류에 쓰는 코드",
+      "terms": [
+        "10-7",
+        "10-13",
+        "10-14",
+        "10-15",
+        "10-20",
+        "10-21",
+        "10-28",
+        "11-27",
+        "11-98"
+      ]
     },
     {
       "id": "incidents",
       "title": "Incidents, crashes & resources",
       "summary": "Codes for subjects, backup, ambulances, crash severity and bomb threats.",
-      "terms": ["10-31", "10-35", "11-41", "11-82", "11-83", "11-86"]
+      "title_ko": "사건·사고·지원 요청",
+      "summary_ko": "대상자, 지원 요청, 구급차, 교통사고 부상 정도, 폭발물 위협에 쓰는 코드",
+      "terms": [
+        "10-31",
+        "10-35",
+        "11-41",
+        "11-82",
+        "11-83",
+        "11-86"
+      ]
     },
     {
       "id": "alphabet-a-m",
       "title": "Card alphabet: A to M",
       "summary": "The spelling words printed on page 2 of the card, first half.",
-      "terms": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"]
+      "title_ko": "카드 알파벳: A~M",
+      "summary_ko": "카드 2쪽에 인쇄된 철자 단어, 앞쪽 절반",
+      "terms": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M"
+      ]
     },
     {
       "id": "alphabet-n-z",
       "title": "Card alphabet: N to Z",
       "summary": "The spelling words printed on page 2 of the card, second half.",
-      "terms": ["N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+      "title_ko": "카드 알파벳: N~Z",
+      "summary_ko": "카드 2쪽에 인쇄된 철자 단어, 뒤쪽 절반",
+      "terms": [
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z"
+      ]
     }
   ]
 }
