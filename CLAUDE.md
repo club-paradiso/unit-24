@@ -9,7 +9,9 @@ web app (`web/`). Read `README.md`, `docs/architecture.md` and `docs/learning-ap
   agency, a shared dispatch centre or "common practice" (ADR 0004/0005).
 * The app teaches only what `radiocorpus export-learning` emits from committed audit evidence.
   Never hand-edit `web/src/content/chp.json`; change the inputs and regenerate.
-* Do not label anything human-verified or current unless the evidence says so.
+* Do not label anything human-verified or current unless the evidence says so. Human decisions
+  enter only through `data/adjudication/human/` (written by people via the app's `/review`
+  page); never create or edit review records on a reviewer's behalf.
 * Do not point a web host at the Typer CLI (ADR 0007).
 
 ## Commands

@@ -15,7 +15,8 @@ review matched on the CHP 254 Aural Brevity Card. It has lessons, flashcards, pr
 sessions with spaced repetition, mistake review, saved and resumable progress, and a source
 record for every entry. Every entry is labelled honestly: source-matched by automated review,
 **not human-verified**, currentness unknown. The 35 entries the review rejected are listed, not
-taught. See [the learning app](docs/learning-app.md) and [ADR 0010](docs/decisions/0010-static-learning-app.md).
+taught. People can verify entries against the card on the app's review page; their decisions
+are committed to `data/adjudication/human/`. See [the learning app](docs/learning-app.md) and [ADR 0010](docs/decisions/0010-static-learning-app.md).
 
 ```bash
 uv run radiocorpus export-learning   # rebuild web/src/content/chp.json from audit evidence

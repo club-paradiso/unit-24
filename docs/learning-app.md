@@ -30,7 +30,8 @@ status of every entry. Architecture decision: [ADR 0010](decisions/0010-static-l
 * `data/audit/real_sources.jsonl` and `data/raw/layout-validation/MANIFEST.json` — source identity
   (URL, SHA-256, size, pages, retrieval time);
 * `data/audit/real_conflicts.jsonl` — the five letters with a competing extraction;
-* `data/learning/chp_lessons.json` — editorial lesson groupings (a teaching choice, not a claim).
+* `data/learning/chp_lessons.json` — editorial lesson groupings (a teaching choice, not a claim);
+* `data/adjudication/human/` — human review decisions (see *Human review* below).
 
 An entry is **teachable** only when the review found it on the card exactly:
 
@@ -50,7 +51,8 @@ alphabets.
 | Label | Meaning | Source field |
 |---|---|---|
 | Source-matched | An automated (AI agent) review found the entry on the card as shown. | `review.*`, `status.source_matched` |
-| Not human-verified | No human has accepted it. The corpus keeps it `RESEARCH_ONLY`. | `status.human_verified`, `status.eligibility` |
+| Not human-verified / Human-verified | Whether a named person has checked it against the card. The corpus keeps it `RESEARCH_ONLY` either way. | `status.human_verified`, `status.human_review`, `review.human` |
+| Read from the card by a person | The extractor misread it; the answer is a human reviewer's reading. | `status.answer_basis` |
 | Current use unknown | The card has no confirmed revision or effective date. | `status.currentness` |
 
 Regenerate after any change to the inputs:
@@ -59,6 +61,29 @@ Regenerate after any change to the inputs:
 uv run radiocorpus export-learning
 uv run radiocorpus check-invariants   # fails if the bundle is stale
 ```
+
+## Human review
+
+No entry starts out human-verified. People change that by reviewing entries against the card on
+the app's review page (`/review`, linked from *Sources*). The page lists all 85 extracted entries,
+including the 35 that are not taught, with the raw extraction text and the card page. For each
+entry the reviewer chooses **Accept**, **Reject** or **Correct** (typing the meaning as printed).
+Drafts stay in the reviewer's browser; the page downloads them as JSON lines, which go into
+`data/adjudication/human/chp_reviews.jsonl` through a pull request.
+
+On the next export:
+
+| Decision | Effect in the app |
+|---|---|
+| Accept (taught entry) | badge "Human-verified", reviewer and date on the entry page |
+| Correct | the typed meaning is taught, marked "Read from the card by a person"; a formerly excluded entry joins the "Newly reviewed entries" lesson |
+| Reject | the entry leaves the lessons and is listed as rejected by a human reviewer |
+| Reviewers disagree | "Reviewers disagree"; not human-verified until they agree |
+
+The format and rules are in `data/adjudication/human/README.md`; validation is in
+`src/radiocorpus/learning/human_review.py`. An invalid line fails `check-invariants` and CI.
+Human verification is reported to learners; it does not change the research corpus's eligibility
+policy (`RESEARCH_ONLY`).
 
 ## Learning model
 
@@ -113,9 +138,9 @@ repository root (ADR 0007). It does not affect the `web/` project.
 
 ## Known limitations
 
-* No entry is human-verified, and the card's currentness is unknown. The app says so on every
-  entry, but it should not be presented as an authoritative reference until a human adjudicates
-  the 50 entries and the card's revision status is confirmed.
+* No entry is human-verified until reviewers commit decisions, and the card's currentness is
+  unknown. The app says so on every entry, but it should not be presented as an authoritative
+  reference until people have reviewed the entries and the card's revision status is confirmed.
 * 35 card entries, the card's "Code" status list and its statute column are not taught: the
   layout-aware candidates in `data/evaluation/real_document_candidates.jsonl` have not been
   adjudicated.
