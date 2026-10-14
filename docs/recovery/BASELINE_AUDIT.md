@@ -22,3 +22,7 @@ This audit distinguishes reproduced behavior from historical claims. PASS means 
 Inventory: main and five historical branches; PRs 1–9 closed, PRs 2–9 merged; workflows ci.yml and production-smoke.yml. Main branch protection was not enforced at inspection. Historical CI success is supporting evidence only. Source snapshot includes Python pipeline, generated learner content, React/Vite app, Firebase adapter/rules and PWA. No rewrite or nationwide expansion is part of recovery.
 
 Read historical commitments in README.md, CLAUDE.md, docs/handoff-astra.md, docs/learning-app.md, docs/firebase-setup.md, docs/hardening-audit.md, docs/extraction-metrics.md, docs/real-source-metrics.md and docs/decisions. Historical handoff counts and unavailable-PDF statements must be read in their original chronology.
+
+## Recovery disposition (2026-10-14)
+
+The table's Status column describes the initial baseline, not the repaired release. Verified functional production is 6446fcc4ce74f04521b893b38ab44bf79925a687, PR #10. See FIX_REGISTER.md and VERIFICATION_MATRIX.md for passed repair/production evidence. Firebase remains disabled, source human/currentness verification remains 0, physical devices remain unverified, and pipeline/branch-protection limits are explicitly recorded rather than marked complete.

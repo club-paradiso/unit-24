@@ -1,55 +1,71 @@
-# Recovery verification matrix
+# Verification matrix — independently reproduced recovery
 
-## Reproduction
+## Release evidence
+
+Functional production SHA `6446fcc4ce74f04521b893b38ab44bf79925a687`; recovery PR head `a749d80441c253eb65805f5493e875c38eb486c8`.
+
+| Gate | Actual result | Evidence / limit |
+|---|---|---|
+| Python | 259 passed | Exact-head CI checks; no new independent real-document accuracy implied |
+| Ruff | Passed | src/tests/scripts; output-directory CLI line-length failure repaired |
+| Corpus invariants | 14 sections, 0 violations | Includes normalized/fixture/export checks; empty DB portions do not prove coverage |
+| Frontend unit/component | 79 passed | Nested corruption, contradictory answers, atomic writes, sequential tabs, SRS, sync lifecycle, config, worker lifecycle, canonical source questions and failed recovery backup |
+| Typecheck / production build | Passed | Exact-head CI and Vercel |
+| Firestore rules | 8 passed on emulator | Ownership/validation supporting evidence; not published-production rules or real Auth |
+| Built-app browser | 252 passed | Seven projects, including 14 real-browser worker fixtures at controlled loopback origins |
+| Immutable Preview | 238 passed, 14 explicitly skipped | Exact-head Preview URL; only origin-control worker fixtures skipped, all application journeys retained |
+| Production smoke | 238 passed, 14 explicitly skipped | Actual released deployment, all seven projects |
+| Actual baseline → production update | PASS in Cloud desktop Chrome | Old/new script identity and same 10-14 answer at 1/10; no storage clearing |
+| Actual production lesson | PASS in Cloud desktop Chrome | All 9 cards, 5-question completion; card/feedback/completion reload continuity |
+| Actual Firebase/Auth/two-device sync | BLOCKED | No deployed configuration; mocks/emulator do not establish readiness |
+| Physical devices / screen reader | UNVERIFIED | No physical iPhone, Android or human assistive-technology run |
+
+CI: https://github.com/club-paradiso/unit-24/actions/runs/38494501402
+Main CI: https://github.com/club-paradiso/unit-24/actions/runs/38495723876
+Production smoke: https://github.com/club-paradiso/unit-24/actions/runs/38495765818
+
+## Browser matrix
+
+| Project | Engine/environment | Result |
+|---|---|---|
+| desktop | Chromium, 1280×800 | PASS built / Preview / production |
+| mobile | Chromium, Pixel 7 viewport | PASS built / Preview / production; emulation |
+| firefox | Desktop Firefox | PASS built / Preview / production |
+| webkit | Desktop WebKit | PASS built / Preview / production; not physical Safari |
+| iphone | iPhone 13-sized WebKit | PASS built / Preview / production; emulation |
+| tablet | Chromium, 768×1024 | PASS built / Preview / production |
+| small-mobile | Chromium, 320×640 | PASS built / Preview / production |
+
+Flows: homepage/CHP, every first-lesson card and assessment, source warnings/provenance, flashcard flip/swipe/grade, all practice modes including empty due/mistake queues, correct/incorrect feedback, mistake review, interrupted feedback resume, stats/progress, reference search/history, Korean/English persistence, valid export/import, invalid and source-tampered import rejection, recovery download, reset confirmation, human-review draft/export (test fixtures only), manifest/icons, offline deep links/reference, strict CSP/console assertions, dark-mode axe scans and viewport overflow. Serious accessibility assertions are not a complete human accessibility certification.
+
+Worker fixture skips are explicit because tests replace the origin's worker script. Deployed offline journeys remain enabled on every engine. The actual legacy production migration was additionally observed in Cloud Chrome. Physical installation, iOS home-screen lifecycle, eviction and long-duration storage are not verified.
+
+## Reproduce
 
 ```sh
 uv sync
 uv run pytest
 uv run ruff check src tests scripts
 uv run radiocorpus check-invariants
+uv run radiocorpus export-learning
+git diff --exit-code -- web/src/content/chp.json
 cd web
 npm ci
 npm test
 npm run build
 npx playwright install --with-deps chromium firefox webkit
 npx playwright test --workers=2
-# Immutable deployment validation:
 E2E_BASE_URL=https://DEPLOYMENT.vercel.app npx playwright test --workers=2
 ```
 
-| Check | Baseline | Recovery | Limits |
-|---|---|---|---|
-| Python tests | 259 passed | Pipeline unchanged | Does not establish real-PDF accuracy |
-| Ruff | Passed | Pipeline unchanged | Static lint only |
-| Corpus invariant checks | 14 sections, 0 violations | Pipeline unchanged | Empty DB portions do not prove corpus coverage |
-| Frontend unit tests | 58 passed | 70 passed in initial recovery run; fresh rerun in progress | Mocks do not prove Firebase production |
-| Baseline browser tests | 56 passed desktop/mobile Chromium | Expanded suite pending | Prior smoke missed lesson reload loss |
-| New data-integrity tests | 8 failed before repair | 8 passed after repair | Sequential two-store behavior, not true simultaneous atomicity |
-| Live production lesson reload | Failed; assessment returned to first card | Not deployed | Direct browser observation |
-| Desktop Firefox | Not previously measured | Pending | Must record actual run |
-| Desktop WebKit / iPhone-sized WebKit | Not previously measured | Pending CI host dependencies | Emulation is not physical Safari |
-| Android-sized / tablet / 320px | Prior mobile Chromium only | Pending expanded run | Viewports, not physical hardware |
-| Offline and service-worker upgrade | Existing tests cover basic offline | Upgrade gate pending | Must not claim long-term persistence or physical iOS |
-| Firebase production | Disabled | BLOCKED | No configuration or operational access verified |
-| Physical devices | UNVERIFIED | UNVERIFIED | No physical iPhone/Android available |
+Use an immutable deployment URL and confirm its SHA before citing results. Local scratch browser downloads hit truncation/stale locks; newer local Firefox targets crashed under the execution host. Certificate verification was never disabled for proxy access. The authoritative seven-engine/viewport results were produced on GitHub's supported Linux hosts with OS dependencies, plus direct Cloud Chrome production interaction.
 
-Local browser runtime reinstall encountered a truncated download and stale installation lock after session resumption. Retrying into a separate cache; this is an execution-environment problem, not an application test result. Earlier WebKit could not launch because host libraries were missing. CI installs supported OS dependencies.
+## Failed iterations retained
 
-## Recovery iteration evidence
+Baseline: 58 unit tests and 56 Chromium desktop/mobile browser tests passed, yet actual production lesson feedback was lost on reload. Eight new integrity cases failed before repair.
 
-- Initial recovery CI `38427123487`: Python/rules passed; browser 223 passed, 8 failed. Failures were retained, not skipped or force-merged. WebKit navigation/offline, iPhone review overflow and the 320px swipe test were investigated.
-- Playwright upgraded from 1.56.1 to 1.64.0. Upstream issue https://github.com/microsoft/playwright/issues/42775 documents WebKit offline navigation failure and its v1.64 fix. No application offline check was removed.
-- The swipe endpoint now stays inside a 320px viewport. Review fieldsets can shrink and long command text wraps. Overflow assertions now identify the route and overflowing elements.
-- Current local unit run: 74 passed; typecheck/build passed. First-install/update lifecycle tests cover false update banners and another tab's activation.
-- `update.spec.ts` uses the actual built app with a synthetic previous worker at a loopback origin. It checks explicit activation, exact feedback/progress preservation, offline reload and reference. It is intentionally skipped for deployed URLs because that fixture controls the origin; deployed offline tests remain enabled on all seven projects. This is not physical-device evidence.
-- Exact-head Preview gate added to CI. It resolves successful non-production deployment metadata for the PR head SHA, validates its Vercel hostname, and runs the full browser suite against that immutable deployment. No older Preview can satisfy this gate.
-- Local deployed-browser access through the environment proxy hit certificate-authority errors. Certificate verification was not disabled. Cloud-browser interaction independently confirmed Preview card-2 reload continuity. GitHub-hosted Preview tests provide the broader deployed matrix.
+First seven-project CI (38427123487): 223 passed, 8 failed. WebKit offline/navigation automation, iPhone review overflow and 320px swipe coordinates were investigated. Playwright 1.64 contains the upstream fix documented at https://github.com/microsoft/playwright/issues/42775; application offline checks were not removed. Fieldsets shrink and commands wrap; swipe endpoints remain in the viewport.
 
-Final release results must be appended before claiming production recovery.
+Preview iteration 38491444205: 224 passed, 7 CSP failures from Vercel feedback injection. The optional toolbar was disabled and fresh Preview verified; CSP was preserved. These failed Previews were not released. No failing gate was force-merged.
 
-- Commit `a468d5dc5e88feffbe9253d015583b4e6077b79f`: local-build browser gate passed **245 tests**, including both worker lifecycle fixtures on all seven projects. CI: https://github.com/club-paradiso/unit-24/actions/runs/38492017324. Its deployed Preview gate failed only on the old immutable Preview's injected Vercel feedback-script CSP errors; that deployment was not released.
-- New Preview `dpl_JBwhCtXLkB5sRaA75xyW1VN2qb2K` for `d57366c1d3fda35efe128949aec54a471c589544` returned HTML without feedback-script injection. CSP remains unchanged. Latest canonical-question guards bring local unit count to 77; exact-head browser/Preview gates are rerunning.
-
-- Head `0dd24a27cdc7bc205f958348048ce9d6d24cf57a`: **all four gates passed** in https://github.com/club-paradiso/unit-24/actions/runs/38493174413 — Python 259, frontend unit 77, Firestore rule emulator 8, local built-app browser 252, immutable Preview browser 238 with 14 explicit loopback-only fixture skips. No application journey or engine was skipped. Preview: https://unit-24-l6iq3qkl0-club-paradiso.vercel.app (`dpl_DrLwSycKnCBQz5paE4pzRmhmZaaD`).
-- Final storage-message/recovery-download repair increases local unit coverage to 79; build passed. This repair must pass a new exact-head CI/Preview run before release. The former green head is not used to authorize newer code.
-- React quality pass: hooks remain unconditional within each component; incompatible-data branches are after hooks; no new runtime dependency/framework; SDK stays conditional; storage/listener cleanup and keyboard/axe coverage retained. No speculative performance rewrite was introduced.
+React final review retained unconditional hooks, explicit incompatible-data branches, listener/timer cleanup, conditional SDK loading, existing styles and keyboard/axe coverage. No speculative framework/performance rewrite.

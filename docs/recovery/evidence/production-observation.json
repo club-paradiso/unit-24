@@ -1,0 +1,51 @@
+{
+  "observed_date_utc": "2026-10-14",
+  "environment": "Cloud desktop Chrome; not a physical mobile device",
+  "functional_release_sha": "6446fcc4ce74f04521b893b38ab44bf79925a687",
+  "deployment_id": "dpl_9VeBm1p9E4rbT9Qr8jKm9jqLBFME",
+  "production_url": "https://unit-24.vercel.app",
+  "pre_update_scripts": [
+    "/assets/index-4BslfJ1e.js",
+    "/registerSW.js"
+  ],
+  "first_normal_reload_scripts": [
+    "/assets/index-4BslfJ1e.js",
+    "/registerSW.js"
+  ],
+  "second_normal_reload_scripts": [
+    "/assets/index-C18Ho0a_.js"
+  ],
+  "retained_practice": {
+    "subject": "10-14",
+    "answer": "Provide escort",
+    "position": "1/10",
+    "feedback": "correct"
+  },
+  "lesson": {
+    "route": "/chp/lessons/radio-traffic",
+    "cards_visited": [
+      "10-1",
+      "10-2",
+      "10-5",
+      "10-9",
+      "10-17",
+      "10-22",
+      "10-23",
+      "10-30",
+      "10-36"
+    ],
+    "card_2_survived_reload": true,
+    "first_assessment_feedback_survived_reload": true,
+    "completion_after_reload": "5/5 correct, lesson complete"
+  },
+  "source_review": {
+    "human_records_added": 0,
+    "operational_currentness_promoted": false
+  },
+  "console_note": "Observed Cloud Chrome errors were metadata-transmission failures from chrome-extension content-script.bundle.js. These are outside the application. All deployed browser-route console/CSP assertions passed in production smoke.",
+  "screenshots": [
+    "production-upgrade-before-1791940436051.jpg",
+    "production-upgrade-after-1791941481731.jpg",
+    "production-lesson-restored-1791941648476.jpg"
+  ]
+}
