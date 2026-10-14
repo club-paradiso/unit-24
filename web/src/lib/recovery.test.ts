@@ -43,6 +43,15 @@ describe('recovery: data integrity', () => {
     expect(Object.keys(saved.items).sort()).toEqual(['a', 'b']);
     expect(saved.items.a?.seen).toBe(2);
   });
+  it('backs up corruption introduced by another tab before the next write', () => {
+    const mem = new Mem(); const store = new ProgressStore(mem);
+    store.recordResults({ kept: true }, 1);
+    mem.setItem(STORAGE_KEY, '{corrupt');
+    store.recordResults({ another: true }, 2);
+    expect(mem.getItem(`${STORAGE_KEY}.corrupt-backup`)).toBe('{corrupt');
+    expect(store.notice).toBe('corrupt');
+    expect(Object.keys(new ProgressStore(mem).getState().items)).toEqual(['kept', 'another']);
+  });
   it('does not delay the scheduled review when practising early', () => {
     const first = review(undefined, true, 1000);
     expect(review(first, true, 1000 + DAY_MS / 2).dueAt).toBe(first.dueAt);

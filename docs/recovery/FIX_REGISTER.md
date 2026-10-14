@@ -15,3 +15,9 @@ Changes below are implemented on the recovery branch. A local test does not impl
 | R09 | Seven browser/viewport projects, regression journeys | playwright.config.ts, e2e/recovery.spec.ts, workflows | Expanded CI required | Pending |
 
 Known limits: localStorage read-before-write preserves sequential completed writes but is not a distributed transaction for truly simultaneous writes. Sync merges per-item latest state and max daily counts; it is not an additive event log. Same-item simultaneous work can be undercounted. Do not describe it as lossless. Flashcard answers persist, but a deck's exact cursor is not resumable.
+
+R10: Corruption introduced by another open tab is now backed up before a subsequent valid write. If the recovery backup cannot be saved, the store keeps learning in memory and preserves the original storage value. A regression verifies retained valid item records and the exact corrupt backup.
+
+R11: First service-worker installation no longer presents a false update prompt. Waiting-worker state is rechecked after activation. Three lifecycle regressions passed; real worker activation is covered by the loopback update journey.
+
+R12: CI gains an exact-commit Preview job; Playwright 1.64 fixes the documented upstream WebKit offline automation defect. Review fieldset sizing/command wrapping and small-screen swipe coordinates address failures from the first seven-project run.

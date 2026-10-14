@@ -34,3 +34,15 @@ E2E_BASE_URL=https://DEPLOYMENT.vercel.app npx playwright test --workers=2
 | Physical devices | UNVERIFIED | UNVERIFIED | No physical iPhone/Android available |
 
 Local browser runtime reinstall encountered a truncated download and stale installation lock after session resumption. Retrying into a separate cache; this is an execution-environment problem, not an application test result. Earlier WebKit could not launch because host libraries were missing. CI installs supported OS dependencies.
+
+## Recovery iteration evidence
+
+- Initial recovery CI `38427123487`: Python/rules passed; browser 223 passed, 8 failed. Failures were retained, not skipped or force-merged. WebKit navigation/offline, iPhone review overflow and the 320px swipe test were investigated.
+- Playwright upgraded from 1.56.1 to 1.64.0. Upstream issue https://github.com/microsoft/playwright/issues/42775 documents WebKit offline navigation failure and its v1.64 fix. No application offline check was removed.
+- The swipe endpoint now stays inside a 320px viewport. Review fieldsets can shrink and long command text wraps. Overflow assertions now identify the route and overflowing elements.
+- Current local unit run: 74 passed; typecheck/build passed. First-install/update lifecycle tests cover false update banners and another tab's activation.
+- `update.spec.ts` uses the actual built app with a synthetic previous worker at a loopback origin. It checks explicit activation, exact feedback/progress preservation, offline reload and reference. It is intentionally skipped for deployed URLs because that fixture controls the origin; deployed offline tests remain enabled on all seven projects. This is not physical-device evidence.
+- Exact-head Preview gate added to CI. It resolves successful non-production deployment metadata for the PR head SHA, validates its Vercel hostname, and runs the full browser suite against that immutable deployment. No older Preview can satisfy this gate.
+- Local deployed-browser access through the environment proxy hit certificate-authority errors. Certificate verification was not disabled. Cloud-browser interaction independently confirmed Preview card-2 reload continuity. GitHub-hosted Preview tests provide the broader deployed matrix.
+
+Final release results must be appended before claiming production recovery.

@@ -249,13 +249,17 @@ export class ProgressStore {
   /** Read before each mutation so another tab's completed write cannot be overwritten by stale state. */
   refresh = (): void => {
     if (!this.storage || this.notice === "write-failed") return;
-    try {
-      const raw = this.storage.getItem(STORAGE_KEY);
-      if (raw && raw !== JSON.stringify(this.state)) {
-        this.state = parseState(raw);
-        this.emit();
-      }
-    } catch { this.notice = "corrupt"; }
+    let raw: string | null;
+    try { raw = this.storage.getItem(STORAGE_KEY); }
+    catch { this.notice = "unavailable"; this.storage = null; this.emit(); return; }
+    if (!raw || raw === JSON.stringify(this.state)) return;
+    try { this.state = parseState(raw); }
+    catch {
+      this.notice = "corrupt";
+      try { this.storage.setItem(`${STORAGE_KEY}.corrupt-backup`, raw); }
+      catch { this.storage = null; } // Preserve the only copy if recovery storage fails.
+    }
+    this.emit();
   };
 
   private set(next: ProgressState): void {

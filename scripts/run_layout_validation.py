@@ -118,5 +118,8 @@ def main(output_dir: Path = OUT) -> int:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, default=OUT, help="Separate output directory for a new measurement; preserves historical outputs when provided")
+    parser.add_argument(
+        "--output-dir", type=Path, default=OUT,
+        help="Separate output directory for a new measurement; preserves historical outputs when provided",
+    )
     sys.exit(main(parser.parse_args().output_dir))
