@@ -11,6 +11,7 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: {
+    ...(process.env.E2E_PROXY_SERVER ? { proxy: { server: process.env.E2E_PROXY_SERVER } } : {}),
     baseURL: BASE_URL ?? `http://localhost:${PORT}`,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",

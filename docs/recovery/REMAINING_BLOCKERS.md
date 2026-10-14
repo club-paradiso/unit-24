@@ -7,7 +7,7 @@
 - True simultaneous localStorage writes and additive same-item sync counts are not solved by read-before-write/LWW. Accounts must not be marketed as lossless multi-device learning.
 - Account switching isolation, redirect sign-in completion, deletion versus pending pushes and real network retries still need adversarial integration verification.
 - Flashcard deck cursor does not persist, though each grade does.
-- Current-parser real-document evaluation and complete 85-candidate PDF-geometry review remain incomplete. Historical metrics are unchanged.
+- Current-parser measurements were reproduced for CHP only, and all 85 existing candidates received an explicitly AI-only original-PDF reconciliation. Independent precision/recall, other documents and human-labelled complete-fact inventories remain incomplete. Historical metrics are unchanged.
 - Main branch protection was not enforced at inspection; passing checks must be explicitly verified before merge.
 
 ## External configuration

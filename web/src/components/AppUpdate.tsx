@@ -11,15 +11,17 @@ export function AppUpdate() {
     let stopped = false;
     let registration: ServiceWorkerRegistration | undefined;
     let timer: ReturnType<typeof setInterval> | undefined;
-    const offer = () => { if (!stopped && registration?.waiting) setWaiting(registration.waiting); };
+    const offer = () => {
+      if (!stopped) setWaiting(navigator.serviceWorker.controller && registration?.waiting?.state === "installed" ? registration.waiting : null);
+    };
     const update = () => { if (navigator.onLine) void registration?.update().catch(() => {}); };
     const found = () => {
       const worker = registration?.installing;
-      worker?.addEventListener("statechange", () => { if (worker.state === "installed") offer(); });
+      worker?.addEventListener("statechange", offer);
     };
     void navigator.serviceWorker.register("/sw.js", { updateViaCache: "none" }).then(r => {
       if (stopped) return;
-      registration = r; offer(); r.addEventListener("updatefound", found);
+      registration = r; offer(); r.waiting?.addEventListener("statechange", offer); found(); r.addEventListener("updatefound", found);
       timer = setInterval(update, 60 * 60 * 1000);
       update();
     }).catch(() => {});

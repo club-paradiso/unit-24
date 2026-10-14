@@ -26,7 +26,7 @@ test("flashcards flip on tap and grade on swipe", async ({ page }) => {
   const y = box.y + box.height / 2;
   await page.mouse.move(box.x + box.width / 2, y);
   await page.mouse.down();
-  await page.mouse.move(box.x + box.width / 2 + 160, y, { steps: 8 });
+  await page.mouse.move(Math.min(box.x + box.width / 2 + 120, box.x + box.width - 5), y, { steps: 8 });
   await page.mouse.up();
   await expect(page.getByText(/알아요 1/)).toBeVisible();
   await expect(card.locator(".study-term")).not.toHaveText(term);

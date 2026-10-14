@@ -1,0 +1,813 @@
+{
+  "review_date_utc": "2026-10-13",
+  "reviewer": "AI assistant; not a human reviewer",
+  "human_review": false,
+  "source_sha256": "eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064",
+  "source_bytes": 60110,
+  "source_pages": 2,
+  "printed_revision_observation": "CHP 254 (REV 10-21) OPI 048, page 1 header",
+  "currentness_verified": false,
+  "method": "Visual inspection of both rendered original pages, with layout text as navigation aid. Counts describe existing candidates, not a complete-fact recall inventory. No learner export or gold labels changed.",
+  "items": [
+    {
+      "fact_id": "fct_1782e9995e6858f5",
+      "term": "10-1",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Reception poor",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_972f37fdfe43efa0",
+      "term": "10-2",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Reception good",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_4c4344d20b622844",
+      "term": "10-5",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Relay message",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b19a58d0a56231fe",
+      "term": "10-7",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Out of service",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_30c5f15b29d20175",
+      "term": "10-9",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Repeat transmission",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_ba456f1a20a32db4",
+      "term": "10-13",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Advise road or weather conditions",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_6ec2dd758b9c9f9b",
+      "term": "10-14",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Provide escort",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_844bd1d3d6bc2bbc",
+      "term": "10-15",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Prisoner in custody",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_c45956509101fd00",
+      "term": "10-17",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Relay papers, supplies, etc.",
+      "comparison": "MATCH_NORMALIZED",
+      "note": "10-17 drops terminal period; 10-21/11-98 omit write-in blank only."
+    },
+    {
+      "fact_id": "fct_a5b07eda6ae88350",
+      "term": "10-20",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Location requested",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_d65a53d55450fb67",
+      "term": "10-21",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Telephone",
+      "comparison": "MATCH_NORMALIZED",
+      "note": "10-17 drops terminal period; 10-21/11-98 omit write-in blank only."
+    },
+    {
+      "fact_id": "fct_3ca78d86b13dcb50",
+      "term": "10-22",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Disregard (message or assignment)",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_0608bd6b523fc1fc",
+      "term": "10-23",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Stand by",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_8aac46e56135f14e",
+      "term": "10-28",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Request for registration",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_838f1283980e98df",
+      "term": "10-30",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Improper radio traffic",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_1de0602001ee9c82",
+      "term": "10-31",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Suicidal subject",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_2a2a004996468801",
+      "term": "10-35",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Officer needs backup, suspect is present",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_7b3437b073c7596a",
+      "term": "10-36",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Confidential information",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_af7c7fbdf2cac9e5",
+      "term": "11-27",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "DL check",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_cbb588e2c72e7edd",
+      "term": "11-41",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Ambulance",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_2e59e75b616e2581",
+      "term": "11-82",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Traffic crash - no injury",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_7e9bf4d24058ad61",
+      "term": "11-83",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Traffic crash - unknown injury",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_e6062f1e5d40ebca",
+      "term": "11-86",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Bomb threat",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_1852edd32d3cc24c",
+      "term": "11-98",
+      "page": 1,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Meet",
+      "comparison": "MATCH_NORMALIZED",
+      "note": "10-17 drops terminal period; 10-21/11-98 omit write-in blank only."
+    },
+    {
+      "fact_id": "fct_6506cc6c5663c7a3",
+      "term": "A",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Adam",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_55940c08f7a7967c",
+      "term": "B",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Boy",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_ab33c569fa55649a",
+      "term": "C",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Charles",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_8602964d273ed959",
+      "term": "D",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "David",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_37fe35686fe80339",
+      "term": "E",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Edward",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b94958653634a856",
+      "term": "F",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Frank",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_c279aba6ca7e2aa4",
+      "term": "G",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "George",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_c8237fde8cd82e17",
+      "term": "H",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Henry",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_7ba07bb19f0d9385",
+      "term": "I",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Ida",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b7a7ca6d1848e809",
+      "term": "J",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "John",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_2de3d2f02190e334",
+      "term": "K",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "King",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_68d9b80961d1fa79",
+      "term": "L",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Lincoln",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_d8f70ab4838b81b8",
+      "term": "M",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Mary",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_755d63c705a81658",
+      "term": "N",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Nora",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b03f223afd50923a",
+      "term": "O",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Ocean",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_704d5b7f308b2324",
+      "term": "P",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Paul",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_c8ae651f98598dc5",
+      "term": "Q",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Queen",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_50745070da1e96b3",
+      "term": "R",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Robert",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_f7dfd6abbeb80c73",
+      "term": "S",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Sam",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b41ac96a10da6d3b",
+      "term": "T",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Tom",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_42f7d97890fd1a69",
+      "term": "U",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Union",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_51f9bc8f649cd46b",
+      "term": "V",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Victor",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_af1c29c47e40d0ce",
+      "term": "W",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "William",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_ada0b2361ed493b2",
+      "term": "X",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Xray",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_c7b91b6537c056b5",
+      "term": "Y",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Yellow",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_0b0de9ba77b791ec",
+      "term": "Z",
+      "page": 2,
+      "disposition": "RETAIN_RESEARCH_ONLY",
+      "source_reading": "Zebra",
+      "comparison": "MATCH_NORMALIZED",
+      "note": null
+    },
+    {
+      "fact_id": "fct_b6f9a4a4e0a4692c",
+      "term": "10-4",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Message received",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Armed belongs to adjacent 10-36A"
+    },
+    {
+      "fact_id": "fct_8e169fdae966c0a8",
+      "term": "10-6",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Busy, stand by",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Wants belongs to adjacent 10-36F"
+    },
+    {
+      "fact_id": "fct_51b3e9556c4773ee",
+      "term": "10-8",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "In service",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Misdemeanor wants belongs to adjacent 10-36M"
+    },
+    {
+      "fact_id": "fct_f591a149b8d6e877",
+      "term": "10-10",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Off duty",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Multi-column bleed into code meaning"
+    },
+    {
+      "fact_id": "fct_6b27c8e625488776",
+      "term": "10-11",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Identify mobile frequency - KA4993 (\"S\" Channel)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Continuation identifying S channel omitted"
+    },
+    {
+      "fact_id": "fct_17629625d5684d63",
+      "term": "10-19",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Return to (specify location)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Required location qualifier truncated"
+    },
+    {
+      "fact_id": "fct_e4eacf4e1887f67e",
+      "term": "10-29",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Check for wants (person, vehicle, or object)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Person/vehicle/object continuation omitted"
+    },
+    {
+      "fact_id": "fct_776863d486b104ec",
+      "term": "10-36A",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Confidential information, subject possibly armed",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Armed continuation omitted"
+    },
+    {
+      "fact_id": "fct_811b9db31ddc8ca3",
+      "term": "10-36F",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Confidential information, possible felony wants",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Wants continuation omitted"
+    },
+    {
+      "fact_id": "fct_1e7071f9955bffa3",
+      "term": "10-36M",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Confidential information, possible misdemeanor wants",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Misdemeanor wants continuation omitted"
+    },
+    {
+      "fact_id": "fct_4941a09d18850633",
+      "term": "10-36P",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Confidential information, subject possibly on parole, probation, or post-release community supervision",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "Probation and post-release supervision continuation omitted"
+    },
+    {
+      "fact_id": "fct_f6a1bf8cd500abc3",
+      "term": "10-37",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "What time is it?",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Multi-column bleed"
+    },
+    {
+      "fact_id": "fct_559dbf21a0424d54",
+      "term": "10-39",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Message or item delivered",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Multi-column bleed"
+    },
+    {
+      "fact_id": "fct_fc5cbacbe4ad44b2",
+      "term": "10-97",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Arrived at scene",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent code and statutory text merged"
+    },
+    {
+      "fact_id": "fct_cf1d03c24a7918c6",
+      "term": "10-98",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Assignment completed",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent code and statutory text merged"
+    },
+    {
+      "fact_id": "fct_d23df4f37589b668",
+      "term": "11-10",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Take a report",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent code and statutory text merged"
+    },
+    {
+      "fact_id": "fct_d57f0b467d304ba1",
+      "term": "11-24",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Abandoned vehicle",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent code and statutory text merged"
+    },
+    {
+      "fact_id": "fct_acf4c1f96e0a2149",
+      "term": "11-25",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Traffic hazard (specify type)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent code and statutory text merged"
+    },
+    {
+      "fact_id": "fct_06b58cd14d397f12",
+      "term": "11-26",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Disabled vehicle, occupied",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_c6066ac3c79c4651",
+      "term": "11-44",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Fatality",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_b34fb7a4e016cc9a",
+      "term": "11-48",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Provide transportation (person)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_e34ed047132588ba",
+      "term": "11-66",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Defective traffic signals (describe)",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_0b5d0d02b9a843cd",
+      "term": "11-79",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Traffic crash - ambulance rolling",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_4a24be553f0b86cf",
+      "term": "11-80",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Traffic crash - major injury",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_071ea1169a1aa45f",
+      "term": "11-81",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Traffic crash - minor injury",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_37b10a6820e7b2eb",
+      "term": "11-84",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Direct traffic",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_db9974c9002cbf9a",
+      "term": "11-85",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Tow truck",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_72043090ff44c1a0",
+      "term": "11-87",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Bomb found",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_b3d38ca604c848b2",
+      "term": "11-99",
+      "page": 1,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": "Officer requires help, emergency",
+      "comparison": "CORRECTABLE_FROM_DIRECT_SOURCE",
+      "failure_class": "LAYOUT_COLUMN_BLEED",
+      "note": "Adjacent statutory text merged"
+    },
+    {
+      "fact_id": "fct_0770d1217faad381",
+      "term": "A",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "UNCLASSIFIED",
+      "note": "A ARMED is an aural brevity suffix, not phonetics; claimed APCO_1941 system is unsupported by complete recovered alphabet"
+    },
+    {
+      "fact_id": "fct_e1455d046e17b56b",
+      "term": "F",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "UNCLASSIFIED",
+      "note": "F FELONY is a suffix, not phonetics; claimed APCO_1941 system is unsupported by complete recovered alphabet"
+    },
+    {
+      "fact_id": "fct_d017ac66e143140f",
+      "term": "M",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "LAYOUT_CONTINUATION_LOST",
+      "note": "M MISDEMEANOR is a suffix; word also truncated; claimed APCO_1941 system is unsupported by complete recovered alphabet"
+    },
+    {
+      "fact_id": "fct_82e99b4bc0116ebe",
+      "term": "P",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "UNCLASSIFIED",
+      "note": "P PAROLE is a suffix, not phonetics; claimed APCO_1941 system is unsupported by complete recovered alphabet"
+    },
+    {
+      "fact_id": "fct_d7c6a8a5b28343ad",
+      "term": "R",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "UNCLASSIFIED",
+      "note": "R RESIDENCE is a suffix, not phonetics; claimed APCO_1941 system is unsupported by complete recovered alphabet"
+    },
+    {
+      "fact_id": "fct_95c7bfa7875e10d2",
+      "term": "APCO_1941",
+      "page": 2,
+      "disposition": "KEEP_EXCLUDED",
+      "source_reading": null,
+      "comparison": "NOT_AN_ALPHABET_ENTRY_OR_SYSTEM",
+      "failure_class": "UNCLASSIFIED",
+      "note": "APCO_1941 system inferred despite YELLOW instead of YOUNG and contradictory mappings"
+    }
+  ]
+}

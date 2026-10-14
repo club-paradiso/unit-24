@@ -87,7 +87,8 @@ test('critical pages fit the viewport and contain no runtime errors', async ({ p
   for (const path of ['/', '/chp', '/chp/lessons/radio-traffic', '/chp/reference', '/progress', '/settings', '/review']) {
     await page.goto(path);
     await expect(page.locator('main h1')).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    const dimensions = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth, overflowing: [...document.querySelectorAll('main *')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).map(e => ({ tag: e.tagName, class: e.className, text: e.textContent?.slice(0, 80) })) }));
+    expect(dimensions.scroll, `${path}: ${JSON.stringify(dimensions)}`).toBeLessThanOrEqual(dimensions.width + 1);
   }
   expect(errors).toEqual([]);
 });
