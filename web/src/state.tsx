@@ -5,6 +5,11 @@ const StoreContext = createContext<ProgressStore | null>(null);
 
 export function ProgressProvider({ store, children }: { store?: ProgressStore; children: ReactNode }) {
   const value = useMemo(() => store ?? new ProgressStore(), [store]);
+  useEffect(() => {
+    const changed = (event: StorageEvent) => { if (event.key === "unit24.progress") value.refresh(); };
+    window.addEventListener("storage", changed);
+    return () => window.removeEventListener("storage", changed);
+  }, [value]);
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
 

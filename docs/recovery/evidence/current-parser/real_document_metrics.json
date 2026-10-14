@@ -1,0 +1,85 @@
+{
+  "documents": {
+    "CHP_AURAL_BREVITY": {
+      "alphabet": {
+        "coverage": 1.0,
+        "divergences": {},
+        "evidence": [
+          "multiple_words_for_A:['ADAM', 'ARMED']",
+          "multiple_words_for_F:['FELONY', 'FRANK']",
+          "multiple_words_for_M:['MARY', 'MISDEMEANOR']",
+          "multiple_words_for_P:['PAROLE', 'PAUL']",
+          "multiple_words_for_R:['RESIDENCE', 'ROBERT']",
+          "best_reference=APCO_1941 ratio=0.846 below 0.9"
+        ],
+        "label": "LOCAL",
+        "mappings": {
+          "A": "ADAM",
+          "B": "BOY",
+          "C": "CHARLES",
+          "D": "DAVID",
+          "E": "EDWARD",
+          "F": "FELONY",
+          "G": "GEORGE",
+          "H": "HENRY",
+          "I": "IDA",
+          "J": "JOHN",
+          "K": "KING",
+          "L": "LINCOLN",
+          "M": "MARY",
+          "N": "NORA",
+          "O": "OCEAN",
+          "P": "PAROLE",
+          "Q": "QUEEN",
+          "R": "RESIDENCE",
+          "S": "SAM",
+          "T": "TOM",
+          "U": "UNION",
+          "V": "VICTOR",
+          "W": "WILLIAM",
+          "X": "XRAY",
+          "Y": "YELLOW",
+          "Z": "ZEBRA"
+        }
+      },
+      "blocks_excluded": 0,
+      "blocks_kept": 124,
+      "code_candidates": 55,
+      "document_sha256": "eec212ac94b0f12cbfbf5286cde85995e96e83d66f40939aa9c3d3406c1e6064",
+      "expected_page_count": 2,
+      "max_columns": 4,
+      "page_count_matches": true,
+      "pages": 2,
+      "phonetic_candidates": 31,
+      "procedure_candidates": 0,
+      "procedure_context_complete": 0,
+      "procedure_decomposition_complete": 0,
+      "status": "PARSED",
+      "text_extraction_methods": [
+        "native_pdf_text"
+      ],
+      "warnings": [],
+      "yielded_no_text": false
+    },
+    "FL_FHP_POLICY_14_01": {
+      "note": null,
+      "status": "MISSING"
+    },
+    "IN_ISP_COMMUNICATIONS": {
+      "note": null,
+      "status": "MISSING"
+    },
+    "PHL_PPD_DIRECTIVE_7_1": {
+      "note": null,
+      "status": "MISSING"
+    }
+  },
+  "note": "Candidate counts are not precision. Adjudicate data/evaluation/real_document_candidates.jsonl against the source documents before quoting any precision figure.",
+  "parser_versions": {
+    "code_parser_version": "4",
+    "layout_code_fingerprint": "c2182ffac80dc387",
+    "layout_version": "layout-2",
+    "phonetic_parser_version": "5",
+    "procedure_parser_version": "4"
+  }
+}

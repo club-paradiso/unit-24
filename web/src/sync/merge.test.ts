@@ -36,9 +36,9 @@ describe("mergeProgress", () => {
     expect(m.activity).toEqual({ "2026-10-12": 5, "2026-10-13": 1 });
   });
 
-  it("discards malformed remote data instead of importing it", () => {
+  it("rejects malformed remote data without silently discarding it", () => {
     const remote = { ...emptyState(), items: { bad: { box: 99 } } } as unknown as ProgressState;
-    expect(mergeProgress(emptyState(), remote).items).toEqual({});
+    expect(() => mergeProgress(emptyState(), remote)).toThrow(/invalid/);
   });
 
   it("compares states ignoring the change time", () => {

@@ -105,3 +105,11 @@ authenticates, never retries a 403, and never circumvents CAPTCHAs, paywalls or 
 restrictions. The corpus models static, publicly documented communication protocol for
 language education; it contains nothing that enables live tracking, evasion, surveillance,
 or interference with emergency communications.
+
+## Recovery evidence
+
+The October 2026 recovery records reproduced defects, implemented repairs and release gates in
+[docs/recovery](docs/recovery). Read the verification matrix and deployment report for actual
+browser/commit evidence, and remaining blockers for Firebase, source review and physical devices.
+Core learning stays available without an account. No human verification or operational-currentness
+claim is implied by a successful build or browser test.

@@ -1,12 +1,15 @@
 import type { FirebaseOptions } from "firebase/app";
 
-/**
- * Public identifiers of the Firebase web app (Project settings → Your apps → Web). They are not
- * secrets: access is controlled by Firebase Authentication and firestore.rules. `null` until the
- * Firebase project exists; the app then works exactly as before, saving on the device only.
- */
-export const firebaseConfig: FirebaseOptions | null = null;
-
-export function isSyncConfigured(): boolean {
-  return firebaseConfig !== null;
+/** Public web identifiers only. Nothing is enabled until every required value is present. */
+export function readFirebaseConfig(env: Record<string, unknown>): FirebaseOptions | null {
+  const fields = { apiKey: 'VITE_FIREBASE_API_KEY', authDomain: 'VITE_FIREBASE_AUTH_DOMAIN', projectId: 'VITE_FIREBASE_PROJECT_ID', appId: 'VITE_FIREBASE_APP_ID' };
+  const config: Record<string, string> = {};
+  for (const [field, name] of Object.entries(fields)) {
+    const value = env[name];
+    if (typeof value !== 'string' || !value.trim()) return null;
+    config[field] = value.trim();
+  }
+  return config;
 }
+export const firebaseConfig: FirebaseOptions | null = readFirebaseConfig(import.meta.env);
+export function isSyncConfigured(): boolean { return firebaseConfig !== null; }

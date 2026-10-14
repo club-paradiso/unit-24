@@ -11,6 +11,7 @@ Output: data/evaluation/real_document_candidates.jsonl and
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import sys
@@ -30,9 +31,9 @@ DIR = ROOT / "data" / "raw" / "layout-validation"
 OUT = ROOT / "data" / "evaluation"
 
 
-def main() -> int:
+def main(output_dir: Path = OUT) -> int:
     manifest = json.loads((DIR / "MANIFEST.json").read_text())
-    OUT.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
     rows: list[dict] = []
     summary: dict[str, dict] = {}
     missing: list[str] = []
@@ -84,10 +85,10 @@ def main() -> int:
             "document_sha256": digest,
             "yielded_no_text": not layout.included_blocks(),
         }
-    with (OUT / "real_document_candidates.jsonl").open("w", encoding="utf-8") as handle:
+    with (output_dir / "real_document_candidates.jsonl").open("w", encoding="utf-8") as handle:
         for row in rows:
             handle.write(json.dumps(row, sort_keys=True) + "\n")
-    (OUT / "real_document_metrics.json").write_text(
+    (output_dir / "real_document_metrics.json").write_text(
         json.dumps(
             {
                 "parser_versions": {
@@ -116,4 +117,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir", type=Path, default=OUT,
+        help="Separate output directory for a new measurement; preserves historical outputs when provided",
+    )
+    sys.exit(main(parser.parse_args().output_dir))

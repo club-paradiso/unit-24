@@ -5,6 +5,14 @@
 type N = { n: number };
 
 export const ko = {
+  "recovery.contentTitle": "저장된 문제의 출처 확인이 필요합니다",
+  "recovery.contentMessage": "저장된 문제가 현재 원문 기반 학습 자료와 다릅니다. 진도는 보존됩니다. 이 세션을 바꾸기 전에 백업을 내려받으세요.",
+  "recovery.backup": "설정에서 진도 백업하기",
+  "recovery.restart": "이 세션을 버리고 현재 자료로 학습하기",
+  "update.title": "새 버전이 준비됐어요",
+  "update.message": "레슨과 연습 기록은 저장됩니다. 플래시카드는 지금 덱을 마친 뒤 업데이트하세요.",
+  "update.apply": "업데이트하고 새로고침",
+
   // shell
   "a11y.skip": "본문으로 건너뛰기",
   "a11y.brandHome": "Unit-24 홈",
@@ -31,7 +39,10 @@ export const ko = {
   "common.previous": "이전",
   "common.cancel": "취소",
   "storage.unavailable": "이 브라우저가 저장을 허용하지 않아, 탭을 닫으면 학습 기록이 사라집니다.",
-  "storage.corrupt": "저장된 학습 기록을 읽을 수 없어 초기화했습니다. 읽지 못한 데이터는 이 브라우저에 따로 보관해 두었습니다.",
+  "storage.corrupt": "저장된 기록을 읽을 수 없습니다. 읽지 못한 원문은 복구용 사본으로 보관했습니다. 이 탭에 이미 열린 정상 진도는 유지됩니다.",
+  "storage.recovery-failed": "저장된 기록을 읽을 수 없고 복구 사본 저장도 실패했습니다. 원본은 건드리지 않았습니다. 새 진도는 탭을 닫기 전까지만 유지되니 설정에서 먼저 내려받으세요.",
+  "settings.recoveryNote": "이전 기록이나 읽지 못한 원문을 복구용으로 보관하세요. 내려받아도 현재 진도는 바뀌지 않습니다. 손상된 사본은 복구 전에는 가져올 수 없습니다.",
+  "settings.recoveryDownload": "복구용 사본 내려받기",
   "storage.write-failed": "최근 기록을 저장하지 못했습니다(저장 공간 부족일 수 있음). 탭을 닫기 전까지는 유지됩니다.",
 
   // labels shared across screens

@@ -82,3 +82,25 @@ describe("SyncEngine", () => {
     expect(e.getSnapshot().status).toBe("off");
   });
 });
+
+it("does not resurrect synced status after sign-out during a push", async () => {
+  let release!: () => void;
+  const backend: SyncBackend = { pull: async () => null, push: () => new Promise<void>(r => { release = r; }) };
+  const e = new SyncEngine(new ProgressStore(new Mem()), backend);
+  const started = e.start('u1');
+  await Promise.resolve();
+  e.stop(); release(); await started;
+  expect(e.getSnapshot().status).toBe('off');
+});
+
+it("pulls remote work before a debounced upload instead of overwriting it", async () => {
+  const backend = new FakeBackend(), local = new ProgressStore(new Mem());
+  const e = new SyncEngine(local, backend);
+  await e.start('u');
+  const other = new ProgressStore(new Mem()); other.recordResults({ remote: true }, 10);
+  backend.docs.set('u', other.getState());
+  local.recordResults({ local: true }, 20);
+  await e.flush();
+  expect(Object.keys(backend.docs.get('u')!.items).sort()).toEqual(['local', 'remote']);
+  e.stop();
+});

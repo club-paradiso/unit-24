@@ -1,0 +1,24 @@
+# Recovery baseline — 2026-10-13 UTC
+
+Baseline main: `0253df8d3397caa184f8d89c851eb40537b98b0e`. Re-read remote main before recovery; do not replace later commits. Baseline production: `dpl_7TvFyiZXC7LQ1yodMp3ZRxcvo2pf`, https://unit-24.vercel.app.
+
+This audit distinguishes reproduced behavior from historical claims. PASS means the specified check only, not general production readiness.
+
+| Feature | Promised behavior | Actual behavior | Evidence | Root cause | Severity | Recovery action | Verification | Status |
+|---|---|---|---|---|---|---|---|---|
+| Lessons | Continue learning across interruptions | Production lesson feedback returns to card 1 after reload | Browser: radio-traffic, answer first assessment, reload; `web/src/pages/Lesson.tsx` baseline | Draft held only in React state | P1 | Persist cards, generated questions, feedback and completion | recovery.spec.ts lesson reload | FAIL |
+| Import | Reject corrupt backups without damaging progress | Nested malformed session accepted by baseline parser | recovery.test.ts, four failing baseline cases | Shallow validation and silent pruning | P1 | Validate entire nested state before write; retain pre-import backup | recovery.test.ts | FAIL |
+| Answer persistence | One answer is one durable change | Item counters and answer stored separately | progress.ts baseline `answer`/`recordResults`; regression write count | Two storage writes leave crash window | P1 | Atomic single state write | recovery.test.ts | FAIL |
+| Two tabs | Preserve completed writes | Stale in-memory state overwrites other tab's items | Two stores regression | No read-before-write or storage event listener | P1 | Refresh before mutation and listen for other tabs | recovery.spec.ts and recovery.test.ts | FAIL |
+| Review schedule | Early review does not postpone due date | Early correct answer restarts interval | srs.ts; recovery.test.ts | dueAt recomputed on early recall | P2 | Retain existing due date | recovery.test.ts | FAIL |
+| Accounts | Optional real sign-in/sync | Disabled, firebaseConfig=null; Vercel env list empty | sync/config.ts; project env metadata (no values requested) | No deployed Firebase configuration | P1 | Build-time public config adapter; leave disabled until integration verified | config.test.ts; actual auth gate | BLOCKED |
+| Sync | Preserve offline and remote work | Original flush writes without pulling; stale completion can change signed-out status | engine.test.ts; sync/engine.ts | Missing generation guards, pull-before-push and transaction | P1 | Guard lifecycle; transactional merge | engine/merge unit tests; real Firebase remains blocked | FAIL |
+| PWA updates | Safe update and ongoing work | Auto-update registration; no explicit user-controlled update pathway | vite.config.ts baseline | Automatic activation/reload policy | P2 | Waiting-worker update prompt; persist lesson draft | Browser update gate pending | UNVERIFIED |
+| Learning corpus | Traceable agency-specific learning | 50 research-only items, 35 excluded, no human decisions | generated chp.json and human/chp_reviews.jsonl | Evidence limitations, not a label bug | P1 | Preserve all labels and exclusions | Content integrity report | PASS |
+| CI breadth | Browser compatibility | Prior smoke 56 Chromium desktop/mobile; no Firefox/WebKit | Workflows and previous run 38335776587 | Narrow browser projects | P2 | Seven projects and all three engines | Expanded CI | UNVERIFIED |
+| Deployment config | Known active configuration | Build log command matches web/vercel.json; root differs | Vercel deployment build log; ADR; web/vercel.json | Project root settings not exposed by connector response | P2 | Preserve both until effective root setting explicitly verified | Existing production HTTP/security headers | UNVERIFIED |
+| Extraction accuracy | Real-document reproducibility | 259 pipeline tests pass; older PDF measurements are historical | pytest; docs/real-source-metrics.md; docs/extraction-metrics.md | Missing original local PDFs and independent human gold inventory | P1 | Preserve safeguards; report measurement limits | Current tests vs historical metrics separated | UNVERIFIED |
+
+Inventory: main and five historical branches; PRs 1–9 closed, PRs 2–9 merged; workflows ci.yml and production-smoke.yml. Main branch protection was not enforced at inspection. Historical CI success is supporting evidence only. Source snapshot includes Python pipeline, generated learner content, React/Vite app, Firebase adapter/rules and PWA. No rewrite or nationwide expansion is part of recovery.
+
+Read historical commitments in README.md, CLAUDE.md, docs/handoff-astra.md, docs/learning-app.md, docs/firebase-setup.md, docs/hardening-audit.md, docs/extraction-metrics.md, docs/real-source-metrics.md and docs/decisions. Historical handoff counts and unavailable-PDF statements must be read in their original chronology.

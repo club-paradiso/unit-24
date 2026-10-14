@@ -1048,6 +1048,9 @@ td {
 }
 
 /* ---------- reviewer page ---------- */
+.steps code {
+  overflow-wrap: anywhere;
+}
 .steps {
   padding-left: 1.25rem;
 }
@@ -1055,6 +1058,7 @@ td {
   margin-top: 0.35rem;
 }
 .review-entries {
+  min-width: 0;
   list-style: none;
   padding: 0;
   display: grid;
@@ -1080,6 +1084,7 @@ td {
   font-size: 1.3rem;
 }
 .review-decision {
+  min-width: 0;
   border: 0;
   padding: 0;
   margin: 0;

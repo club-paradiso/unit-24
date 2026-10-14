@@ -1,20 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router";
 import { content, getLesson, lessonItems } from "../content";
-import { QuestionView, type Answered } from "../components/QuestionView";
+import { lessonDraftMatchesContent } from "../lib/content-progress";
+import { SavedContentNotice } from "../components/SavedContentNotice";
+import { QuestionView } from "../components/QuestionView";
 import { Excerpt } from "../components/SourceDetails";
 import { TrustBadges } from "../components/Status";
 import { useI18n } from "../i18n";
-import { PASS_RATIO, type LessonResult } from "../lib/progress";
+import { PASS_RATIO, type LessonDraft } from "../lib/progress";
 import { lessonCheck } from "../lib/quiz";
-import { useStore, useTitle } from "../state";
+import { useProgress, useStore, useTitle } from "../state";
 import { firebaseConfig } from "../sync/config";
 import { sendStats, sessionStats } from "../sync/stats";
 import { lessonTitle } from "./Home";
 import { NotFound } from "./NotFound";
 import { systemLabel } from "./labels";
-
-type Phase = { kind: "study"; index: number } | { kind: "check"; index: number } | { kind: "done"; result: LessonResult; score: number };
 
 export function LessonPage() {
   const { lessonId = "" } = useParams();
@@ -30,15 +30,22 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
   useTitle(title);
   const store = useStore();
   const items = useMemo(() => lessonItems(lesson), [lesson]);
-  const [attempt, setAttempt] = useState(0);
-  const questions = useMemo(() => lessonCheck(items, content.items, Math.random), [items, attempt]);
-  const [phase, setPhase] = useState<Phase>({ kind: "study", index: 0 });
-  const [answers, setAnswers] = useState<Record<string, Answered>>({});
-  const [results, setResults] = useState<Record<string, boolean>[]>([]);
+  const progress = useProgress();
+  const fresh = useMemo<LessonDraft>(() => ({ phase: "study", index: 0, questions: lessonCheck(items, content.items, Math.random), answers: [], contentVersion: content.content_version, updatedAt: Date.now() }), [items]);
+  const saved = progress.lessonDrafts[lessonId];
+  const compatible = saved && lessonDraftMatchesContent(lessonId, progress);
+  const draft = compatible ? saved : fresh;
+  useEffect(() => { if (!saved) store.saveLessonDraft(lessonId, fresh); }, [saved, fresh, store, lessonId]);
+  const questions = draft.questions;
+  const answers = Object.fromEntries(draft.answers.map(a => [a.questionId, a]));
+  const phase = { kind: draft.phase, index: draft.index, score: draft.answers.filter(a => a.correct).length };
+  const setPhase = (next: { kind: "study" | "check"; index: number }) => store.saveLessonDraft(lessonId, { ...draft, phase: next.kind, index: next.index, updatedAt: Date.now() });
   const lessonIndex = content.lessons.findIndex((l) => l.id === lesson.id);
   const nextLesson = content.lessons[lessonIndex + 1];
   const steps = items.length + questions.length;
   const step = phase.kind === "study" ? phase.index : phase.kind === "check" ? items.length + phase.index : steps;
+
+  if (saved && !compatible) return <SavedContentNotice onRestart={() => store.saveLessonDraft(lessonId, { ...fresh, updatedAt: Date.now() })} />;
 
   const header = (
     <header className="stack-sm">
@@ -102,16 +109,13 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
           position={{ index: phase.index, total: questions.length }}
           nextLabel={last ? t("lesson.seeResult") : t("question.next")}
           onAnswer={(response, correct, itemResults) => {
-            setAnswers((a) => ({ ...a, [q.id]: { response, correct } }));
-            setResults((r) => [...r, itemResults]);
-            store.recordResults(itemResults, Date.now());
+            store.answerLesson(lessonId, { questionId: q.id, response, correct, itemResults, at: Date.now() });
           }}
           onNext={() => {
             if (!last) return setPhase({ kind: "check", index: phase.index + 1 });
-            const score = questions.filter((x) => answers[x.id]?.correct).length;
-            const result = store.recordLessonCheck(lesson.id, score, questions.length, Date.now());
-            void sendStats(firebaseConfig, content.content_version, sessionStats("lesson", results));
-            setPhase({ kind: "done", result, score });
+            if (store.getState().lessonDrafts[lessonId]?.phase !== "check") return;
+            store.completeLesson(lessonId, Date.now());
+            void sendStats(firebaseConfig, content.content_version, sessionStats("lesson", draft.answers.map(a => a.itemResults)));
           }}
         />
       </div>
@@ -146,15 +150,12 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
         )}
       </section>
       <div className="actions">
-        {!passed && (
+        {(
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => {
-              setAnswers({});
-              setResults([]);
-              setAttempt((n) => n + 1);
-              setPhase({ kind: "study", index: 0 });
+              store.saveLessonDraft(lessonId, { ...fresh, questions: lessonCheck(items, content.items, Math.random), updatedAt: Date.now() });
             }}
           >
             {t("lesson.studyAgain")}
