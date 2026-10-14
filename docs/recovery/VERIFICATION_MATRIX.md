@@ -46,3 +46,6 @@ Local browser runtime reinstall encountered a truncated download and stale insta
 - Local deployed-browser access through the environment proxy hit certificate-authority errors. Certificate verification was not disabled. Cloud-browser interaction independently confirmed Preview card-2 reload continuity. GitHub-hosted Preview tests provide the broader deployed matrix.
 
 Final release results must be appended before claiming production recovery.
+
+- Commit `a468d5dc5e88feffbe9253d015583b4e6077b79f`: local-build browser gate passed **245 tests**, including both worker lifecycle fixtures on all seven projects. CI: https://github.com/club-paradiso/unit-24/actions/runs/38492017324. Its deployed Preview gate failed only on the old immutable Preview's injected Vercel feedback-script CSP errors; that deployment was not released.
+- New Preview `dpl_JBwhCtXLkB5sRaA75xyW1VN2qb2K` for `d57366c1d3fda35efe128949aec54a471c589544` returned HTML without feedback-script injection. CSP remains unchanged. Latest canonical-question guards bring local unit count to 77; exact-head browser/Preview gates are rerunning.

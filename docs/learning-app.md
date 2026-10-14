@@ -133,7 +133,11 @@ policy (`RESEARCH_ONLY`).
   teachable answers of the same kind; spelling questions graded letter by letter.
 * **Persistence** (`web/src/lib/progress.ts`): `localStorage` key `unit24.progress`, schema
   version 1, validated on load. Unreadable data is backed up to `unit24.progress.corrupt-backup`
-  and replaced; unavailable or full storage falls back to memory with a visible notice.
+  before a recoverable replacement; unavailable or full storage falls back to memory with a visible notice.
+  Lesson cards, exact assessment questions/feedback and completion are saved. Answers update
+  scheduling and the session in one write. Imports validate nested records and source-backed
+  questions before changing progress, and keep a pre-import backup. Incompatible saved questions
+  are held for explicit backup/replacement rather than taught or silently erased.
 
 ## Develop, test, build
 
@@ -148,7 +152,10 @@ npx playwright test  # end-to-end journeys + axe accessibility scans, desktop an
 npm run test:rules   # Firestore security rules on the emulator (needs Java; firebase-tools via npx)
 ```
 
-Playwright uses Chromium; in CI it is installed with `npx playwright install --with-deps chromium`.
+Playwright 1.64 tests Chromium, Firefox and WebKit across seven desktop/mobile/tablet viewport
+projects. CI installs all three engines with OS dependencies. Worker-version fixtures run on the
+built app at loopback origins; deployed Preview/production runs retain offline journeys but skip
+those origin-control fixtures explicitly. Physical-device testing remains separate.
 
 ## Deploying
 
@@ -159,9 +166,9 @@ The app is live at **https://unit-24.vercel.app**, served by the Vercel project
 |---|---|
 | Root directory | `web/` — Vercel never sees the Python pipeline or its CLI |
 | Framework / build | Vite; `npm ci`, `npm run build`, output `dist/` (`web/vercel.json`) |
-| Production branch | `main` — every merge that touches `web/` goes live |
-| Other branches | preview deployments, behind Vercel Authentication |
-| Skipped builds | pushes with no change under `web/` since the branch's last successful deployment (`ignoreCommand`) |
+| Production branch | `main` — commits build and deploy after verified recovery release gates |
+| Other branches | Preview deployments; access protection was disabled at the recovery inspection; optional feedback toolbar now off |
+| Skipped builds | Disabled: every head needs a concrete Preview for exact-commit verification |
 | Headers | strict CSP (`'self'` plus only the Google endpoints Firebase Auth and Firestore need), `frame-ancestors 'none'`, nosniff, referrer and permissions policies, HSTS; hashed assets cached for a year |
 
 `vite preview` serves the same headers as production, so the Playwright suite in CI runs under
@@ -187,7 +194,8 @@ repository root (ADR 0007). It does not affect the `web/` project.
 * Sync needs the Firebase project to be set up ([Firebase setup](firebase-setup.md)); until then
   progress is per device. Sign-in and sync have been tested against fakes and the Firestore
   emulator, not yet against the live Firebase project.
-* Verified in automated Chromium only (desktop 1280×800 and Pixel 7 emulation), locally and
-  against production. Not yet tested on physical phones (iOS Safari in particular, where
-  vibration is unavailable and install works through the Share menu), Firefox, or with a screen
-  reader by a person.
+* Recovery CI tests desktop Chromium/Firefox/WebKit, iPhone-sized WebKit, Android-sized
+  Chromium, tablet and 320px viewports. See [the verification matrix](recovery/VERIFICATION_MATRIX.md)
+  and [deployment report](recovery/DEPLOYMENT_REPORT.md) for exact commit/run/release evidence.
+  This does not verify physical phones, storage eviction, long-duration persistence or a human
+  screen-reader journey. Flashcard grades persist, but the exact deck cursor does not.
