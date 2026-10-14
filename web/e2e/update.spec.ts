@@ -6,12 +6,15 @@ import { test, answerQuestion, expectFeedback } from './helpers';
 
 // Controlled worker lifecycle fixture. The app is the real built application;
 // the previous worker is synthetic, so this is not a claim about physical Safari.
-test('a waiting worker activates only on request and retains quiz feedback offline', async ({ page, context }) => {
+for (const legacy of [false, true]) test(`${legacy ? 'legacy shell can recover on normal reload' : 'current shell activates only on request'} and retains quiz feedback offline`, async ({ page, context }) => {
   test.skip(!!process.env.E2E_BASE_URL, 'Requires a loopback worker-version fixture; deployed offline journeys run separately.');
   let upgraded = false;
   const root = resolve('dist');
   const previous = `self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-    self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));`;
+    self.addEventListener('activate', e => e.waitUntil((async () => {
+      ${legacy ? `const c = await caches.open('workbox-precache-v2-' + self.registration.scope); await c.put('/registerSW.js', new Response('legacy registration'));` : ''}
+      await self.clients.claim();
+    })()));`;
   const mime: Record<string, string> = { '.js': 'text/javascript', '.html': 'text/html', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
   const server = createServer((req, res) => {
     const pathname = new URL(req.url!, 'http://localhost').pathname;
@@ -41,11 +44,20 @@ test('a waiting worker activates only on request and retains quiz feedback offli
     const before = await page.evaluate(() => localStorage.getItem('unit24.progress'));
     upgraded = true;
     await page.evaluate(async () => { const r = await navigator.serviceWorker.getRegistration(); await r!.update(); });
-    await expect(page.getByRole('button', { name: 'Update and reload' })).toBeVisible();
-    await expect(page.locator('.question-subject')).toHaveText(subject);
-    await expectFeedback(page, false);
-    expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(before);
-    await Promise.all([page.waitForEvent('load'), page.getByRole('button', { name: 'Update and reload' }).click()]);
+    if (legacy) {
+      await expect.poll(() => page.evaluate(async () => !(await caches.match('/registerSW.js')))).toBe(true);
+      // Legacy clients have no prompt: activation permits an ordinary reload.
+      // It must not force that reload or modify the in-progress answer.
+      await expectFeedback(page, false);
+      expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(before);
+      await page.reload();
+    } else {
+      await expect(page.getByRole('button', { name: 'Update and reload' })).toBeVisible();
+      await expect(page.locator('.question-subject')).toHaveText(subject);
+      await expectFeedback(page, false);
+      expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(before);
+      await Promise.all([page.waitForEvent('load'), page.getByRole('button', { name: 'Update and reload' }).click()]);
+    }
     await expect(page.locator('.question-subject')).toHaveText(subject);
     await expectFeedback(page, false);
     expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(before);

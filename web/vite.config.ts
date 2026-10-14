@@ -49,6 +49,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        importScripts: ["/legacy-worker-migration.js"],
         // The whole app, including the content bundle, is precached, so it works offline after the first visit.
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,txt}"],
         // Only learners who sign in download Firebase; it is cached at runtime instead.

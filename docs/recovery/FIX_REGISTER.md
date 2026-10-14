@@ -21,3 +21,5 @@ R10: Corruption introduced by another open tab is now backed up before a subsequ
 R11: First service-worker installation no longer presents a false update prompt. Waiting-worker state is rechecked after activation. Three lifecycle regressions passed; real worker activation is covered by the loopback update journey.
 
 R12: CI gains an exact-commit Preview job; Playwright 1.64 fixes the documented upstream WebKit offline automation defect. Review fieldset sizing/command wrapping and small-screen swipe coordinates address failures from the first seven-project run.
+
+R13: Legacy installed shells have no waiting-worker button. `legacy-worker-migration.js` checks only Workbox precaches for the old `registerSW.js` marker and activates the recovery worker in that case. It does not force a page reload or touch localStorage. A normal reload escapes the old shell; later workers use the explicit prompt. The production baseline worker was fetched and confirmed to precache that marker. Two lifecycle browser fixtures cover legacy and current shells; actual old production shell upgrade is a separate release observation.
