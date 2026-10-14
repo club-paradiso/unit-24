@@ -5,6 +5,10 @@ const s = (n: number, one: string, many: string) => (n === 1 ? one : many);
 
 /** English interface text. Must define every key in ko.ts (the compiler checks). */
 export const en: Dict = {
+  "recovery.contentTitle": "Saved questions need a source check",
+  "recovery.contentMessage": "The saved questions differ from this source-backed course. Your progress is kept. Download a backup before replacing this session.",
+  "recovery.backup": "Open settings to back up progress",
+  "recovery.restart": "Discard this session and use current content",
   "update.title": "Update available",
   "update.message": "A new version is ready. Lesson and practice progress is saved. Finish your current flashcard deck before reloading.",
   "update.apply": "Update and reload",

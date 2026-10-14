@@ -5,6 +5,10 @@
 type N = { n: number };
 
 export const ko = {
+  "recovery.contentTitle": "저장된 문제의 출처 확인이 필요합니다",
+  "recovery.contentMessage": "저장된 문제가 현재 원문 기반 학습 자료와 다릅니다. 진도는 보존됩니다. 이 세션을 바꾸기 전에 백업을 내려받으세요.",
+  "recovery.backup": "설정에서 진도 백업하기",
+  "recovery.restart": "이 세션을 버리고 현재 자료로 학습하기",
   "update.title": "새 버전이 준비됐어요",
   "update.message": "레슨과 연습 기록은 저장됩니다. 플래시카드는 지금 덱을 마친 뒤 업데이트하세요.",
   "update.apply": "업데이트하고 새로고침",

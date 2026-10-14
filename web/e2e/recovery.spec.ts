@@ -92,3 +92,22 @@ test('critical pages fit the viewport and contain no runtime errors', async ({ p
   }
   expect(errors).toEqual([]);
 });
+
+test('a structurally valid backup cannot inject invented source answers', async ({ page }) => {
+  await page.goto('/chp/practice');
+  await page.getByRole('button', { name: /Codes only/ }).click();
+  await page.goto('/settings');
+  const before = await page.evaluate(() => localStorage.getItem('unit24.progress'));
+  const fake = JSON.parse(before!);
+  const question = fake.activeSession.questions[0];
+  question.options = question.options.map((v: string) => v === question.answer ? 'Invented source answer' : v);
+  question.answer = 'Invented source answer';
+  await page.locator('input[type=file]').setInputFiles({ name: 'tampered.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fake)) });
+  await expect(page.getByRole('status').filter({ hasText: /source-backed content/ })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(before);
+  await page.evaluate(state => localStorage.setItem('unit24.progress', JSON.stringify(state)), fake);
+  await page.goto('/chp/practice/session');
+  await expect(page.getByRole('heading', { name: 'Saved questions need a source check' })).toBeVisible();
+  await expect(page.locator('.question-subject')).toHaveCount(0);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('unit24.progress')!).activeSession.questions[0].answer)).toBe('Invented source answer');
+});

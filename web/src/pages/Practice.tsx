@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { content, getItem } from "../content";
+import { questionMatchesContent } from "../lib/content-progress";
+import { SavedContentNotice } from "../components/SavedContentNotice";
 import { QuestionView } from "../components/QuestionView";
 import { useT } from "../i18n";
 import { percent } from "../lib/format";
@@ -121,6 +123,8 @@ export function PracticeSession() {
       </div>
     );
   }
+
+  if (!active.questions.every(questionMatchesContent)) return <SavedContentNotice onRestart={() => store.abandonSession()} />;
 
   const viewingIndex = active.cursor;
   const question = active.questions[viewingIndex]!;

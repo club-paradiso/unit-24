@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router";
 import { content, getLesson, lessonItems } from "../content";
+import { lessonDraftMatchesContent } from "../lib/content-progress";
+import { SavedContentNotice } from "../components/SavedContentNotice";
 import { QuestionView } from "../components/QuestionView";
 import { Excerpt } from "../components/SourceDetails";
 import { TrustBadges } from "../components/Status";
@@ -31,8 +33,9 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
   const progress = useProgress();
   const fresh = useMemo<LessonDraft>(() => ({ phase: "study", index: 0, questions: lessonCheck(items, content.items, Math.random), answers: [], contentVersion: content.content_version, updatedAt: Date.now() }), [items]);
   const saved = progress.lessonDrafts[lessonId];
-  const draft = saved?.contentVersion === content.content_version && (saved.phase !== "study" || saved.index < items.length) ? saved : fresh;
-  useEffect(() => { if (draft === fresh) store.saveLessonDraft(lessonId, fresh); }, [draft, fresh, store, lessonId]);
+  const compatible = saved && lessonDraftMatchesContent(lessonId, progress);
+  const draft = compatible ? saved : fresh;
+  useEffect(() => { if (!saved) store.saveLessonDraft(lessonId, fresh); }, [saved, fresh, store, lessonId]);
   const questions = draft.questions;
   const answers = Object.fromEntries(draft.answers.map(a => [a.questionId, a]));
   const phase = { kind: draft.phase, index: draft.index, score: draft.answers.filter(a => a.correct).length };
@@ -41,6 +44,8 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
   const nextLesson = content.lessons[lessonIndex + 1];
   const steps = items.length + questions.length;
   const step = phase.kind === "study" ? phase.index : phase.kind === "check" ? items.length + phase.index : steps;
+
+  if (saved && !compatible) return <SavedContentNotice onRestart={() => store.saveLessonDraft(lessonId, { ...fresh, updatedAt: Date.now() })} />;
 
   const header = (
     <header className="stack-sm">

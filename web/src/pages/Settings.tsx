@@ -1,5 +1,7 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { Link } from "react-router";
+import { assertImportContent } from "../lib/content-progress";
+import { parseState } from "../lib/progress";
 import { content } from "../content";
 import { InstallCard } from "../components/InstallCard";
 import { useI18n, type Lang } from "../i18n";
@@ -49,7 +51,9 @@ export function Settings() {
     e.target.value = "";
     if (!file) return;
     try {
-      store.importJson(await file.text());
+      const text = await file.text();
+      assertImportContent(parseState(text));
+      store.importJson(text);
       setMessage(t("settings.restored"));
     } catch (err) {
       setMessage(t("settings.restoreFailed", { reason: err instanceof Error ? err.message : String(err) }));
