@@ -32,3 +32,7 @@ The canonical PDF was retrieved on 2026-10-13 UTC: 60,110 bytes; SHA-256 exactly
 `evidence/current-parser/real_document_metrics.json` is a fresh current-parser run on this exact PDF, with its code fingerprint: 55 code candidates, 31 phonetic candidates, 0 procedure candidates. It still includes suffix words in phonetic candidates, while classifying the combined alphabet LOCAL rather than falsely certifying APCO. These are yields, not precision/recall estimates. The other three documents were absent in this run and explicitly report MISSING. Historical evaluation files were not overwritten.
 
 Reproduce without overwriting historical metrics: place the hash-verified PDF at the manifest filename, run `uv run python scripts/run_layout_validation.py --output-dir docs/recovery/evidence/current-parser`. It returns 1 while any other manifest PDF is absent. See the committed output for exact parser versions and fingerprint.
+
+## Released integrity check
+
+At functional release 6446fcc4ce74f04521b893b38ab44bf79925a687, export-learning regenerated chp.json byte-for-byte without a diff; human/chp_reviews.jsonl still has 0 lines. Counts remain 85 AI-reviewed candidates, 50 research-only learner items (24 codes/26 letters), 35 excluded, 0 human verified, 0 operational-currentness verified. Canonical-question guards now prevent structurally valid backups from injecting unsupported subjects, answers, distractors or source references. They do not turn application progress into source verification.
