@@ -39,7 +39,10 @@ export const ko = {
   "common.previous": "이전",
   "common.cancel": "취소",
   "storage.unavailable": "이 브라우저가 저장을 허용하지 않아, 탭을 닫으면 학습 기록이 사라집니다.",
-  "storage.corrupt": "저장된 학습 기록을 읽을 수 없어 초기화했습니다. 읽지 못한 데이터는 이 브라우저에 따로 보관해 두었습니다.",
+  "storage.corrupt": "저장된 기록을 읽을 수 없습니다. 읽지 못한 원문은 복구용 사본으로 보관했습니다. 이 탭에 이미 열린 정상 진도는 유지됩니다.",
+  "storage.recovery-failed": "저장된 기록을 읽을 수 없고 복구 사본 저장도 실패했습니다. 원본은 건드리지 않았습니다. 새 진도는 탭을 닫기 전까지만 유지되니 설정에서 먼저 내려받으세요.",
+  "settings.recoveryNote": "이전 기록이나 읽지 못한 원문을 복구용으로 보관하세요. 내려받아도 현재 진도는 바뀌지 않습니다. 손상된 사본은 복구 전에는 가져올 수 없습니다.",
+  "settings.recoveryDownload": "복구용 사본 내려받기",
   "storage.write-failed": "최근 기록을 저장하지 못했습니다(저장 공간 부족일 수 있음). 탭을 닫기 전까지는 유지됩니다.",
 
   // labels shared across screens

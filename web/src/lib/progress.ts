@@ -75,7 +75,7 @@ export interface ProgressState {
   updatedAt: number;
 }
 
-export type StorageNotice = "unavailable" | "corrupt" | "write-failed" | null;
+export type StorageNotice = "unavailable" | "corrupt" | "write-failed" | "recovery-failed" | null;
 
 export function emptyState(): ProgressState {
   return { version: STATE_VERSION, items: {}, lessons: {}, sessions: [], activeSession: null, lessonDrafts: {}, activity: {}, updatedAt: 0 };
@@ -203,6 +203,7 @@ export class ProgressStore {
   private state: ProgressState;
   private listeners = new Set<() => void>();
   private storage: KeyValueStorage | null;
+  private recoveryRaw: string | null = null;
   notice: StorageNotice = null;
 
   constructor(storage: KeyValueStorage | null | undefined = undefined) {
@@ -225,10 +226,12 @@ export class ProgressStore {
         this.state = parseState(raw);
       } catch {
         this.notice = "corrupt";
+        this.recoveryRaw = raw;
         try {
           this.storage.setItem(`${STORAGE_KEY}.corrupt-backup`, raw);
         } catch {
           this.storage = null; // Do not overwrite the only recoverable copy.
+          this.notice = "recovery-failed";
         }
       }
     }
@@ -256,8 +259,9 @@ export class ProgressStore {
     try { this.state = parseState(raw); }
     catch {
       this.notice = "corrupt";
+      this.recoveryRaw = raw;
       try { this.storage.setItem(`${STORAGE_KEY}.corrupt-backup`, raw); }
-      catch { this.storage = null; } // Preserve the only copy if recovery storage fails.
+      catch { this.storage = null; this.notice = "recovery-failed"; } // Preserve the only copy if recovery storage fails.
     }
     this.emit();
   };
@@ -404,6 +408,13 @@ export class ProgressStore {
     this.set(emptyState());
   }
 
+  /** Downloadable recovery copy, including unreadable originals retained in memory. */
+  recoveryJson(): string | null {
+    if (this.recoveryRaw !== null) return this.recoveryRaw;
+    try { return this.storage?.getItem(`${STORAGE_KEY}.before-import`) ?? this.storage?.getItem(`${STORAGE_KEY}.corrupt-backup`) ?? null; }
+    catch { return null; }
+  }
+
   exportJson(): string {
     return JSON.stringify(this.state, null, 2);
   }
@@ -415,7 +426,9 @@ export class ProgressStore {
 
   importJson(text: string): void {
     const next = parseState(text);
-    if (this.storage) this.storage.setItem(`${STORAGE_KEY}.before-import`, this.exportJson());
+    const backup = this.exportJson();
+    if (this.storage) this.storage.setItem(`${STORAGE_KEY}.before-import`, backup);
+    this.recoveryRaw = backup;
     this.set(next);
   }
 }

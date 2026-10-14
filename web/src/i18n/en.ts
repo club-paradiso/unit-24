@@ -38,7 +38,10 @@ export const en: Dict = {
   "common.previous": "Previous",
   "common.cancel": "Cancel",
   "storage.unavailable": "Your browser is not letting this site save data, so progress will be lost when you close the tab.",
-  "storage.corrupt": "Saved progress could not be read and has been reset. A copy of the unreadable data was kept in this browser.",
+  "storage.corrupt": "Saved progress could not be read. The unreadable data was kept in a recovery copy. Any valid progress already open in this tab is retained.",
+  "storage.recovery-failed": "Saved data is unreadable and a recovery copy could not be saved. The original remains untouched. New progress is kept only until this tab closes; download it from Settings first.",
+  "settings.recoveryNote": "Keep this previous or unreadable copy for recovery. Downloading it does not change your current progress; an unreadable copy cannot be imported without repair.",
+  "settings.recoveryDownload": "Download recovery copy",
   "storage.write-failed": "Your latest progress could not be saved (storage may be full). It is kept until you close the tab.",
 
   "system.ten": "10-code",

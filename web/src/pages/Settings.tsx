@@ -46,6 +46,15 @@ export function Settings() {
     setMessage(t("settings.downloaded"));
   };
 
+  const downloadRecovery = () => {
+    const text = store.recoveryJson();
+    if (text === null) return;
+    const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = `unit24-recovery-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
   const upload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -92,6 +101,10 @@ export function Settings() {
       <section className="stack-sm" aria-labelledby="data-h">
         <h2 id="data-h">{t("settings.data")}</h2>
         <p className="muted small">{t("settings.dataNote")}</p>
+        {store.recoveryJson() !== null && <div className="card stack-sm">
+          <p className="small">{t("settings.recoveryNote")}</p>
+          <button type="button" className="btn" onClick={downloadRecovery}>{t("settings.recoveryDownload")}</button>
+        </div>}
         <div className="actions">
           <button type="button" className="btn" onClick={download}>
             {t("settings.download")}

@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import { test, answerQuestion, expectFeedback } from './helpers';
 
 test('lesson study, check feedback and completion survive reload without duplicate credit', async ({ page }) => {
@@ -42,6 +43,13 @@ test('invalid nested import is rejected, valid export is restored with a recover
   await page.locator('input[type=file]').setInputFiles(path!);
   await expect(page.getByRole('status').filter({ hasText: /restored/i })).toBeVisible();
   expect(JSON.parse((await page.evaluate(() => localStorage.getItem('unit24.progress.before-import')))! )).toEqual(JSON.parse(before!));
+  const current = await page.evaluate(() => localStorage.getItem('unit24.progress'));
+  const recoveryDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download recovery copy' }).click();
+  const recoveryPath = await (await recoveryDownload).path();
+  expect(JSON.parse(readFileSync(recoveryPath!, 'utf8'))).toEqual(JSON.parse(before!));
+  expect(await page.evaluate(() => localStorage.getItem('unit24.progress'))).toBe(current);
+
 });
 
 test('two open tabs retain both flashcard answers', async ({ page, context }) => {

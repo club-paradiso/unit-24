@@ -52,6 +52,23 @@ describe('recovery: data integrity', () => {
     expect(store.notice).toBe('corrupt');
     expect(Object.keys(new ProgressStore(mem).getState().items)).toEqual(['kept', 'another']);
   });
+  it('does not claim a successful backup or overwrite the original when recovery storage fails', () => {
+    const mem = new Mem(); mem.setItem(STORAGE_KEY, '{only-copy');
+    const originalSet = mem.setItem.bind(mem);
+    mem.setItem = (k, v) => { if (k.endsWith('.corrupt-backup')) throw new Error('quota'); originalSet(k, v); };
+    const store = new ProgressStore(mem);
+    expect(store.notice).toBe('recovery-failed');
+    expect(store.recoveryJson()).toBe('{only-copy');
+    store.recordResults({ new: true }, 1);
+    expect(mem.getItem(STORAGE_KEY)).toBe('{only-copy');
+  });
+  it('makes the pre-import progress downloadable without changing current progress', () => {
+    const store = new ProgressStore(new Mem()); store.recordResults({ kept: true }, 1);
+    const before = store.exportJson();
+    store.importJson(JSON.stringify(emptyState()));
+    expect(store.recoveryJson()).toBe(before);
+    expect(store.getState().items).toEqual({});
+  });
   it('does not delay the scheduled review when practising early', () => {
     const first = review(undefined, true, 1000);
     expect(review(first, true, 1000 + DAY_MS / 2).dueAt).toBe(first.dueAt);
