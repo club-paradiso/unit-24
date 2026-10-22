@@ -10,6 +10,8 @@ const COPY = {
     sectionTitle: "학습 시나리오",
     overview: "상황 카드를 펼치면 학습 목표를 확인할 수 있어요.",
     preview: "준비 중",
+    pilot: "대화 연습 베타",
+    tryPilot: "영어 대화 연습 시작",
     goals: "이 상황에서 배울 내용",
     notice: "현재는 시나리오 목록을 미리 보는 단계입니다. 대화형 연습·음성 평가 기능은 아직 제공되지 않습니다.",
     legal: "미국의 경찰 관련 절차와 권리는 주·장소·상황에 따라 달라질 수 있습니다. 이 목록은 영어 학습용이며 법률 조언이나 실제 대응 지침이 아닙니다.",
@@ -26,6 +28,8 @@ const COPY = {
     sectionTitle: "Learning scenarios",
     overview: "Expand any card to preview its learning goals.",
     preview: "Coming soon",
+    pilot: "Dialogue beta",
+    tryPilot: "Try language practice",
     goals: "Learning goals",
     notice: "These are scenario previews, not playable lessons. Interactive dialogue and speech feedback are not available yet.",
     legal: "Police procedures and rights vary by state, location and circumstances. This is language education, not legal advice or real-world response instructions.",
@@ -70,7 +74,7 @@ export function Encounters() {
                     <span className="eyebrow">{copy.categories[scenario.category]} · {scenario.level}</span>
                     <strong className="encounter-card-title">{scenario.title.en}</strong>
                     <span className="muted small">{scenario.summary[lang]}</span>
-                    <span className="encounter-stage">{copy.preview}</span>
+                    <span className="encounter-stage">{scenario.stage === "pilot" ? copy.pilot : copy.preview}</span>
                   </span>
                   <span className="encounter-expand" aria-hidden="true">⌄</span>
                 </summary>
@@ -79,7 +83,9 @@ export function Encounters() {
                   <ul>
                     {scenario.learningGoals.map((goal, i) => <li key={i}>{goal[lang]}</li>)}
                   </ul>
-                  <p className="muted small">{copy.notice}</p>
+                  {scenario.stage === "pilot" ? (
+                    <Link className="btn btn-primary encounter-try" to={`/encounters/${scenario.id}`}>{copy.tryPilot}</Link>
+                  ) : <p className="muted small">{copy.notice}</p>}
                 </div>
               </details>
             </li>

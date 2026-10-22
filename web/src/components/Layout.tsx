@@ -18,6 +18,7 @@ const NAV: { to: string; key: "nav.home" | "nav.learn" | "nav.practice" | "nav.r
 const FOCUS: { pattern: string; exitTo: string }[] = [
   { pattern: "/chp/practice/session", exitTo: "/chp/practice" },
   { pattern: "/chp/flashcards", exitTo: "/chp" },
+  { pattern: "/encounters/:scenarioId", exitTo: "/encounters" },
   { pattern: "/chp/lessons/:lessonId", exitTo: "/chp" },
 ];
 

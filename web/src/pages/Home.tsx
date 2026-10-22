@@ -91,7 +91,7 @@ export function Home() {
         <div className="encounter-promo-copy">
           <p className="eyebrow">UNIT-24 / ENCOUNTER</p>
           <h2 id="encounter-promo-title">{lang === "ko" ? "경찰과 마주하는 순간의 영어" : "English for police encounters"}</h2>
-          <p className="muted">{lang === "ko" ? "교통 단속, 경찰의 질문, 신고 상황을 영어로 준비해 보세요. 6개 학습 시나리오 미리보기가 열렸습니다." : "Explore six upcoming scenarios for traffic stops, police questions and reporting incidents."}</p>
+          <p className="muted">{lang === "ko" ? "교통 단속, 경찰의 질문, 신고 상황을 영어로 준비해 보세요. 6개 시나리오 중 Traffic Stop 영어 대화 연습 베타를 시작할 수 있어요." : "Explore six scenarios, including a Traffic Stop conversation beta."}</p>
         </div>
         <Link className="btn btn-primary" to="/encounters">
           {lang === "ko" ? "ENCOUNTER 살펴보기" : "Explore ENCOUNTER"}

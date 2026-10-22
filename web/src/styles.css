@@ -1508,3 +1508,20 @@ input[type="email"] {
 .encounter-card-details ul { padding-left: 1.15rem; }
 .encounter-card-details .muted { margin-top: 0.8rem; }
 .encounter-disclaimer { color: var(--text-muted); font-size: 0.87rem; background: var(--surface-2); }
+
+/* Traffic Stop language-only pilot. Routes through the existing focus-mode layout. */
+.encounter-try { display: inline-flex; width: 100%; justify-content: center; align-items: center; margin-top: 0.9rem; min-height: 44px; }
+.encounter-player { max-width: 50rem; margin-inline: auto; }
+.encounter-player .eyebrow { font-size: 0.72rem; }
+.encounter-player .pilot-warning { border-left: 4px solid var(--warn); }
+.encounter-player .pilot-warning > * + * { margin-top: 0.45rem; }
+.encounter-player .pilot-source-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.84rem; }
+.encounter-player .utterance { font-size: clamp(1.24rem, 3.5vw, 1.65rem); font-weight: 700; overflow-wrap: anywhere; line-height: 1.4; }
+.encounter-player .options { display: grid; gap: 0.6rem; }
+.encounter-player .response-choice { width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; text-align: left; border-radius: var(--radius); padding: 0.85rem 1rem; min-height: 50px; cursor: pointer; overflow-wrap: anywhere; }
+.encounter-player .response-choice:hover:not(:disabled), .encounter-player .response-choice[aria-pressed="true"] { border-color: var(--brand); background: var(--surface-2); }
+.encounter-player .response-choice:disabled { cursor: default; }
+.encounter-player .response-feedback { border-left: 4px solid var(--brand); }
+.encounter-player .response-feedback h2 { margin-bottom: 0.45rem; }
+.encounter-player .player-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.encounter-player .player-actions .btn { flex: 1 1 12rem; }
