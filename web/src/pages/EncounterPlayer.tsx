@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { encounterCatalog } from "../encounters/catalog";
+import { ListenButton } from "../components/ListenButton";
+import { SpeechCoach } from "../components/SpeechCoach";
 import { useI18n } from "../i18n";
 import { useTitle } from "../state";
 
@@ -110,6 +112,7 @@ export function EncounterPlayer() {
             <p className="eyebrow">{copy.prompt}</p>
             <h2 id="encounter-officer" className="utterance" lang="en">{turn.utterance}</h2>
             <p className="small muted">{copy.translation}: {turn.translation[lang]}</p>
+            <ListenButton text={turn.utterance} />
           </section>
           <section className="stack" aria-labelledby="encounter-responses">
             <h2 id="encounter-responses">{copy.choose}</h2>
@@ -132,6 +135,7 @@ export function EncounterPlayer() {
               <h2>{copy.feedbackTitle}</h2>
               <strong>{copy[selected.languageRating]}</strong>
               <p>{selected.feedback[lang]}</p>
+              <SpeechCoach key={selected.id} phrase={selected.utterance} compact />
               <button type="button" className="btn btn-primary btn-block" onClick={advance}>
                 {selected.nextTurnId === null ? copy.finish : copy.next}
               </button>

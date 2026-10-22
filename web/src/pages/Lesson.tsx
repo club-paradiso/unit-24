@@ -5,6 +5,8 @@ import { lessonDraftMatchesContent } from "../lib/content-progress";
 import { SavedContentNotice } from "../components/SavedContentNotice";
 import { QuestionView } from "../components/QuestionView";
 import { Excerpt } from "../components/SourceDetails";
+import { SpeechCoach } from "../components/SpeechCoach";
+import { radioReading } from "../lib/radioSpeech";
 import { TrustBadges } from "../components/Status";
 import { useI18n } from "../i18n";
 import { PASS_RATIO, type LessonDraft } from "../lib/progress";
@@ -80,6 +82,7 @@ function LessonFlow({ lessonId }: { lessonId: string }) {
             {t("lesson.sourceDetails", { term: item.term })}
           </Link>
         </article>
+        <SpeechCoach key={item.id} phrase={radioReading(item)} compact />
         <div className="sticky-actions">
           <button type="button" className="btn" disabled={phase.index === 0} onClick={() => setPhase({ kind: "study", index: phase.index - 1 })}>
             {t("common.previous")}

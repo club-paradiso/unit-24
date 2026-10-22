@@ -5,6 +5,7 @@ import { AuthFinish } from "./pages/AuthFinish";
 import { Flashcards } from "./pages/Flashcards";
 import { Encounters } from "./pages/Encounters";
 import { EncounterPlayer } from "./pages/EncounterPlayer";
+import { RadioLab } from "./pages/RadioLab";
 import { Home } from "./pages/Home";
 import { Hub } from "./pages/Hub";
 import { ItemDetail } from "./pages/ItemDetail";
@@ -40,6 +41,7 @@ export const routes = [
     children: [
       { index: true, element: <Home /> },
       { path: "chp", element: <Hub /> },
+      { path: "chp/speak", element: <RadioLab /> },
       { path: "encounters", element: <Encounters /> },
       { path: "encounters/:scenarioId", element: <EncounterPlayer /> },
       { path: "chp/lessons/:lessonId", element: <LessonPage /> },

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointer
 import { Link } from "react-router";
 import { content, type LearningItem } from "../content";
 import { Excerpt } from "../components/SourceDetails";
+import { SpeechCoach } from "../components/SpeechCoach";
+import { radioReading } from "../lib/radioSpeech";
 import { LearnState, TrustBadges } from "../components/Status";
 import { useT } from "../i18n";
 import { haptic } from "../lib/haptics";
@@ -177,6 +179,7 @@ export function Flashcards() {
                 {flipped ? t("flash.swipeHint") : t("flash.tapHint")}
               </p>
             </article>
+            <SpeechCoach key={item.id} phrase={radioReading(item)} compact />
             <div className="sticky-actions">
               {flipped ? (
                 <>

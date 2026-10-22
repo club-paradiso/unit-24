@@ -24,6 +24,12 @@ export function Hub() {
         <p className="lead">{t("hub.lead", { title: content.source.title, version: content.source.version })}</p>
       </header>
 
+      <section className="card radio-lab-cta">
+        <div><p className="eyebrow">RADIO LAB / SPEAKING</p>
+          <h2>{lang === "ko" ? "그냥 외우지 말고 소리 내어 말하세요." : "Hear the code. Then say it."}</h2>
+          <p className="muted">{lang === "ko" ? "코드를 어떻게 읽는지부터 설명하고, 실제 녹음과 음성 인식 연습도 제공해요." : "Learn a spoken reading, then try recording and recognition."}</p></div>
+        <Link to="/chp/speak" className="btn btn-primary">{lang === "ko" ? "무전 말하기 연습" : "Speaking Lab"} →</Link>
+      </section>
       <aside className="notice notice-info">
         <button type="button" className="notice-toggle" aria-expanded={open} aria-controls="trust-details" onClick={() => setOpen((v) => !v)}>
           <span className="notice-title">{t("hub.trustTitle")}</span>
