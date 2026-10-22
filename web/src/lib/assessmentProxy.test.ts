@@ -22,7 +22,7 @@ function request(reference = "ten one", origin = "https://unit24.example"): Requ
       "content-type": "audio/wav",
       "x-reference-text": reference,
     },
-    body: wav().buffer,
+    body: wav().buffer as ArrayBuffer,
   });
 }
 function enable(configuredLimiter = true): void {
