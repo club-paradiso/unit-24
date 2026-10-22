@@ -38,7 +38,7 @@ const COPY = {
     error: "음성 기능을 시작하지 못했어요. 기기 권한과 인터넷 연결을 확인하세요.",
     ttsMissing: "이 기기에서 음성 합성을 사용할 수 없어요.",
     stopped: "중지했어요. 준비되면 다시 시도할 수 있어요.",
-    privacy: "녹음 저장 없음 · 마이크는 버튼을 눌렀을 때만 작동",
+    privacy: "마이크는 버튼을 누른 뒤에만 작동 · AI 분석을 명시적으로 요청한 경우에만 음성 전송",
   },
   en: {
     hear: "Hear pronunciation", slow: "Hear slowly", talk: "Speak & transcribe", rec: "Record myself",
@@ -55,7 +55,7 @@ const COPY = {
     error: "Voice capture couldn't start. Check browser permissions and your connection.",
     ttsMissing: "Text-to-speech is not available on this device.",
     stopped: "Stopped. You can try again.",
-    privacy: "No recording uploads · microphone starts only when tapped",
+    privacy: "Microphone starts only when tapped · audio is sent only after explicit AI assessment consent",
   },
 } as const;
 
