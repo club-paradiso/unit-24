@@ -164,7 +164,7 @@ export async function POST(request: Request): Promise<Response> {
         "Accept": "application/json",
         "Pronunciation-Assessment": settings,
       },
-      body: wav,
+      body: wav.buffer.slice(wav.byteOffset, wav.byteOffset + wav.byteLength) as ArrayBuffer,
       signal: AbortSignal.timeout(12_000),
       cache: "no-store",
     });
