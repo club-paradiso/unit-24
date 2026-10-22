@@ -1,6 +1,8 @@
 import { Link, useParams } from "react-router";
 import { content, getItem } from "../content";
 import { Excerpt, SourceDetails } from "../components/SourceDetails";
+import { SpeechCoach } from "../components/SpeechCoach";
+import { radioReading, radioDisplayReading } from "../lib/radioSpeech";
 import { LearnState, TrustBadges, useLimitations } from "../components/Status";
 import { useI18n } from "../i18n";
 import { percent, relativeDue, shortDate } from "../lib/format";
@@ -41,6 +43,12 @@ function Detail({ itemId }: { itemId: string }) {
         <TrustBadges item={item} />
       </header>
 
+      <section aria-label={lang === "ko" ? "발음과 말하기 연습" : "Pronunciation and speaking"} className="stack-sm">
+        <p className="eyebrow">{lang === "ko" ? "이 코드는 이렇게 읽는 연습을 해요" : "Try reading the code aloud"}</p>
+        <p lang="en" className="radio-reading">{radioDisplayReading(item)}</p>
+        <SpeechCoach key={item.id} phrase={radioReading(item)} compact />
+        <p className="muted small">{lang === "ko" ? "일반적인 학습용 읽기입니다. 실제 무전 발성과 다를 수 있어요." : "A learner-friendly reading, not a verified official broadcast."}</p>
+      </section>
       <section className="stack" aria-labelledby="mine-h">
         <h2 id="mine-h">{t("detail.yourProgress")}</h2>
         {p ? (
