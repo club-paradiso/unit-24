@@ -30,7 +30,11 @@ base("ENCOUNTER copy is localized for the default Korean interface", async ({ pa
   await expect(page.getByText("요청과 지시를 구분해 듣기")).toBeVisible();
 });
 
-test("switching the language in Settings translates the encounter screen and survives reload", async ({ page }) => {
+base("switching the language in Settings translates the encounter screen and survives reload", async ({ page }) => {
+  // This must use a clean context: the English fixture forcibly seeds localStorage
+  // on EVERY navigation, masking the actual persisted locale.
+  await page.goto("/settings");
+  await page.getByRole("button", { name: "English" }).click();
   await page.goto("/encounters");
   await expect(page.getByRole("heading", { name: "English for police encounters" })).toBeVisible();
   await page.getByRole("link", { name: "Settings" }).click();
