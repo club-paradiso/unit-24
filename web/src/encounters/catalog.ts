@@ -50,7 +50,7 @@ const validText = (s: LocalizedText) => !!s && !!s.ko?.trim() && !!s.en?.trim();
 /** Guardrails for future branching lessons. Planned topics must never look playable. */
 export function validateEncounterCatalog(items: readonly EncounterScenario[]): readonly EncounterScenario[] {
   const ids = new Set<string>();
-  if (!Array.isArray(items) || items.length === 0) throw new Error("Encounter catalog must not be empty");
+  if (items.length === 0) throw new Error("Encounter catalog must not be empty");
   for (const s of items) {
     if (!s.id || ids.has(s.id)) throw new Error("Encounter scenario ID missing or duplicated");
     ids.add(s.id);

@@ -1,4 +1,5 @@
-import { expect, test } from "./helpers";
+import { expect } from "@playwright/test";
+import { test } from "./helpers";
 import { test as base } from "@playwright/test";
 
 test("ENCOUNTER entry is reachable without touching radio lessons or learner progress", async ({ page }) => {
