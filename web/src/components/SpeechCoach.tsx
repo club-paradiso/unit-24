@@ -89,7 +89,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
   useEffect(() => {
     active.current = true;
     setRecognitionSupported(recognitionAvailable());
-    setRecordSupported(Boolean(navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== "undefined"));
+    setRecordSupported(Boolean(typeof navigator.mediaDevices?.getUserMedia === "function" && typeof MediaRecorder !== "undefined"));
     return () => {
       active.current = false;
       if (timer.current) clearTimeout(timer.current);
