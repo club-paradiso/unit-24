@@ -2,9 +2,10 @@
  * UNIT-24 scripted, opt-in speech assessment proxy.
  * No recording or Azure key is persisted. Deliberately OFF unless explicitly enabled.
  *
- * IMPORTANT: Public paid traffic also needs durable external quota enforcement/WAF.
- * This in-memory limiter is merely an additional per-instance safeguard.
+ * Paid calls require Redis-backed atomic hourly/daily budgets. All failures fail closed.
+ * A separate Vercel WAF rule and Azure billing alerts remain strongly recommended.
  */
+import { createHmac } from "node:crypto";
 // This function is self-contained because the Vercel Node ESM runtime does not
 // resolve frontend TS directory imports. Update this allowlist with approved lessons.
 const allowedReferences = [
@@ -75,16 +76,81 @@ function normalizeAzureAssessment(payload: unknown, referenceText: string) {
 
 export const maxDuration = 20;
 const MAX_WAV_BYTES = 44 + 16000 * 2 * 21;
-const LIMIT_PER_IP = 3;
-const LIMIT_GLOBAL = 30;
-const windowMs = 60_000;
-const recentByIp = new Map<string, number[]>();
-let recentGlobal: number[] = [];
+const LIMIT_PER_IP_HOUR = 8;
+const LIMIT_GLOBAL_MINUTE = 10;
+const LIMIT_GLOBAL_DAY = 50;
 
+// This script runs atomically in the Redis database. Check all counters before
+// writing to any of them. A failed reservation causes zero Azure billable calls.
+const QUOTA_SCRIPT = `
+  for i = 1, #KEYS do
+    local current = tonumber(redis.call("GET", KEYS[i]) or "0")
+    if current >= tonumber(ARGV[i]) then return {0, i} end
+  end
+  for i = 1, #KEYS do
+    local n = redis.call("INCR", KEYS[i])
+    if n == 1 then redis.call("EXPIRE", KEYS[i], tonumber(ARGV[i + #KEYS])) end
+  end
+  return {1, 0}
+`;
+
+function limiterConfigured(): boolean {
+  const raw = process.env.UPSTASH_REDIS_REST_URL ?? "";
+  try {
+    const url = new URL(raw);
+    return url.protocol === "https:"
+      && url.hostname.endsWith(".upstash.io")
+      && url.username === "" && url.password === ""
+      && url.pathname === "/" && !url.search && !url.hash
+      && (process.env.UPSTASH_REDIS_REST_TOKEN?.length ?? 0) >= 12
+      && (process.env.UNIT24_SPEECH_IP_HASH_SECRET?.length ?? 0) >= 32;
+  } catch { return false; }
+}
 function enabled(): boolean {
   return process.env.UNIT24_SPEECH_ASSESSMENT_ENABLED === "true"
     && Boolean(process.env.AZURE_SPEECH_KEY)
-    && /^[a-z0-9-]{3,40}$/.test(process.env.AZURE_SPEECH_REGION ?? "");
+    && /^[a-z0-9-]{3,40}$/.test(process.env.AZURE_SPEECH_REGION ?? "")
+    && limiterConfigured();
+}
+
+/** Redis stores an HMAC-derived bucket identifier, never a raw client IP. */
+async function reserveQuota(request: Request): Promise<"allowed" | "limited" | "unavailable"> {
+  const ip = (request.headers.get("x-vercel-forwarded-for")
+    ?? request.headers.get("x-forwarded-for") ?? "").split(",")[0]?.trim() ?? "";
+  if (!ip || ip.length > 64 || !/^[a-fA-F0-9.:]+$/.test(ip)) return "unavailable";
+  const ipId = createHmac("sha256", process.env.UNIT24_SPEECH_IP_HASH_SECRET!)
+    .update(ip).digest("hex").slice(0, 32);
+  const now = Date.now();
+  const keys = [
+    `unit24:speech:ip-hour:${ipId}:${Math.floor(now / 3600_000)}`,
+    `unit24:speech:global-minute:${Math.floor(now / 60_000)}`,
+    `unit24:speech:global-day:${Math.floor(now / 86400_000)}`,
+  ];
+  try {
+    const response = await fetch(process.env.UPSTASH_REDIS_REST_URL!, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN!}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(["EVAL", QUOTA_SCRIPT, 3, ...keys,
+        LIMIT_PER_IP_HOUR, LIMIT_GLOBAL_MINUTE, LIMIT_GLOBAL_DAY,
+        3700, 75, 90000]),
+      cache: "no-store",
+      signal: AbortSignal.timeout(3500),
+    });
+    if (!response.ok) return "unavailable";
+    const data: unknown = await response.json();
+    if (!data || typeof data !== "object" || !("result" in data)) return "unavailable";
+    const values = (data as { result?: unknown }).result;
+    if (!Array.isArray(values) || values.length !== 2) return "unavailable";
+    if (Number(values[0]) === 1 && Number(values[1]) === 0) return "allowed";
+    if (Number(values[0]) === 0 && [1, 2, 3].includes(Number(values[1]))) return "limited";
+    return "unavailable";
+  } catch {
+    // Redis downtime, expired credentials, and errors must never trigger Azure.
+    return "unavailable";
+  }
 }
 function json(data: unknown, status = 200): Response {
   return Response.json(data, { status, headers: {
@@ -107,18 +173,6 @@ function wavDurationValid(bytes: Uint8Array): boolean {
     && dataLength <= 16000 * 2 * 21;
 }
 
-function throttle(ip: string): boolean {
-  const now = Date.now();
-  const local = (recentByIp.get(ip) ?? []).filter(t => now - t < windowMs);
-  recentGlobal = recentGlobal.filter(t => now - t < windowMs);
-  if (local.length >= LIMIT_PER_IP || recentGlobal.length >= LIMIT_GLOBAL) return false;
-  local.push(now);
-  recentGlobal.push(now);
-  recentByIp.set(ip, local);
-  if (recentByIp.size > 500) recentByIp.clear();
-  return true;
-}
-
 export function GET(): Response {
   return json({ enabled: enabled(), provider: "azure-pronunciation-assessment", maxSeconds: 20 });
 }
@@ -137,13 +191,13 @@ export async function POST(request: Request): Promise<Response> {
   if (request.headers.get("content-type") !== "audio/wav") return json({ error: "UNSUPPORTED_AUDIO" }, 415);
   const size = Number(request.headers.get("content-length") ?? 0);
   if (size > MAX_WAV_BYTES) return json({ error: "AUDIO_TOO_LARGE" }, 413);
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (!throttle(ip)) return json({ error: "RATE_LIMITED" }, 429);
-
   let wav: Uint8Array;
   try { wav = new Uint8Array(await request.arrayBuffer()); }
   catch { return json({ error: "AUDIO_READ_FAILED" }, 400); }
   if (!wavDurationValid(wav)) return json({ error: "INVALID_WAV_16K_MONO" }, 400);
+  const quota = await reserveQuota(request);
+  if (quota === "limited") return json({ error: "RATE_LIMITED" }, 429);
+  if (quota !== "allowed") return json({ error: "QUOTA_UNAVAILABLE" }, 503);
   const settings = Buffer.from(JSON.stringify({
     ReferenceText: reference,
     GradingSystem: "HundredMark",
