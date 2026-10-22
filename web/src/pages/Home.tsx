@@ -87,6 +87,18 @@ export function Home() {
         </Link>
       </nav>
 
+      <section className="encounter-promo card" aria-labelledby="encounter-promo-title">
+        <div className="encounter-promo-copy">
+          <p className="eyebrow">UNIT-24 / ENCOUNTER</p>
+          <h2 id="encounter-promo-title">{lang === "ko" ? "경찰과 마주하는 순간의 영어" : "English for police encounters"}</h2>
+          <p className="muted">{lang === "ko" ? "교통 단속, 경찰의 질문, 신고 상황을 영어로 준비해 보세요. 6개 학습 시나리오 미리보기가 열렸습니다." : "Explore six upcoming scenarios for traffic stops, police questions and reporting incidents."}</p>
+        </div>
+        <Link className="btn btn-primary" to="/encounters">
+          {lang === "ko" ? "ENCOUNTER 살펴보기" : "Explore ENCOUNTER"}
+          <Icon name="arrow" />
+        </Link>
+      </section>
+
       <InstallCard />
 
       <section aria-labelledby="pick-h" className="stack">

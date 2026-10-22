@@ -3,6 +3,7 @@ import { Layout } from "./components/Layout";
 import { About } from "./pages/About";
 import { AuthFinish } from "./pages/AuthFinish";
 import { Flashcards } from "./pages/Flashcards";
+import { Encounters } from "./pages/Encounters";
 import { Home } from "./pages/Home";
 import { Hub } from "./pages/Hub";
 import { ItemDetail } from "./pages/ItemDetail";
@@ -38,6 +39,7 @@ export const routes = [
     children: [
       { index: true, element: <Home /> },
       { path: "chp", element: <Hub /> },
+      { path: "encounters", element: <Encounters /> },
       { path: "chp/lessons/:lessonId", element: <LessonPage /> },
       { path: "chp/flashcards", element: <Flashcards /> },
       { path: "chp/practice", element: <PracticeHome /> },
