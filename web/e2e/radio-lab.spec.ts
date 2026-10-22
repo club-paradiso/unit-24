@@ -21,7 +21,7 @@ base("Korean radio lab gives pronunciation first, even without mic permission", 
   await page.addInitScript(() => localStorage.setItem("unit24.lang", "ko"));
   await page.goto("/chp/speak");
   await expect(page.getByRole("heading", { name: /코드를 읽기만 하지 말고/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /발음 듣기/ })).toBeVisible();
+  await expect(page.locator(".speech-coach").getByRole("button", { name: /발음 듣기/ })).toBeVisible();
   await expect(page.getByText("수신 상태 불량")).toBeVisible();
   await expect(page.getByText(/녹음은 이 기기에서만 재생/)).toBeVisible();
 });
