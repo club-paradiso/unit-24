@@ -5,10 +5,73 @@
  * IMPORTANT: Public paid traffic also needs durable external quota enforcement/WAF.
  * This in-memory limiter is merely an additional per-instance safeguard.
  */
-import { content } from "../src/content";
-import { encounterCatalog } from "../src/encounters/catalog";
-import { radioReading } from "../src/lib/radioSpeech";
-import { normalizeAzureAssessment } from "../src/lib/assessment";
+// This function is self-contained because the Vercel Node ESM runtime does not
+// resolve frontend TS directory imports. Update this allowlist with approved lessons.
+const allowedReferences = [
+  "ten one", "ten two", "ten five", "ten seven", "ten nine",
+  "ten thirteen", "ten fourteen", "ten fifteen", "ten seventeen",
+  "ten twenty", "ten twenty one", "ten twenty two", "ten twenty three",
+  "ten twenty eight", "ten thirty", "ten thirty one", "ten thirty five",
+  "ten thirty six", "eleven twenty seven", "eleven forty one",
+  "eleven eighty two", "eleven eighty three", "eleven eighty six",
+  "eleven ninety eight",
+  "Adam", "Boy", "Charles", "David", "Edward", "Frank", "George",
+  "Henry", "Ida", "John", "King", "Lincoln", "Mary", "Nora",
+  "Ocean", "Paul", "Queen", "Robert", "Sam", "Tom", "Union",
+  "Victor", "William", "Xray", "Yellow", "Zebra",
+  "Good evening. Do you know why I pulled you over?",
+  "I'm not sure. Could you tell me why?",
+  "Sorry, could you repeat that?",
+  "I guess I was speeding.",
+  "I asked whether you know why I stopped your car.",
+  "Thanks for repeating that. I'm not sure.",
+  "Could you explain why you stopped me?",
+  "One of your brake lights appears to be out.",
+  "Thank you for letting me know. I didn't realize that.",
+  "Could you clarify which brake light you mean?",
+  "The left brake light, at the back of the car.",
+  "Thanks for clarifying.",
+  "Got it. Thank you.",
+] as const;
+const allowedPhrases = new Map(allowedReferences.map(phrase => [phrase.toLowerCase(), phrase]));
+
+function score(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 100 ? value : null;
+}
+function obj(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown> : {};
+}
+function normalizeAzureAssessment(payload: unknown, referenceText: string) {
+  const root = obj(payload);
+  if (root.RecognitionStatus !== "Success") throw new Error("SPEECH_NOT_RECOGNIZED");
+  const best = Array.isArray(root.NBest) ? obj(root.NBest[0]) : {};
+  if (best.PronScore === undefined || best.AccuracyScore === undefined) {
+    throw new Error("ASSESSMENT_NOT_AVAILABLE");
+  }
+  const words = Array.isArray(best.Words) ? best.Words.slice(0, 50).map((input: unknown) => {
+    const word = obj(input);
+    return {
+      text: typeof word.Word === "string" ? word.Word.slice(0, 80) : "",
+      accuracy: score(word.AccuracyScore),
+      errorType: typeof word.ErrorType === "string" ? word.ErrorType.slice(0, 48) : null,
+      phonemes: Array.isArray(word.Phonemes) ? word.Phonemes.slice(0, 24).map((p: unknown) => {
+        const phoneme = obj(p);
+        return { sound: typeof phoneme.Phoneme === "string" ? phoneme.Phoneme.slice(0, 24) : "",
+          accuracy: score(phoneme.AccuracyScore) };
+      }) : [],
+    };
+  }).filter((word: { text: string }) => word.text.length > 0) : [];
+  return {
+    provider: "azure-pronunciation-assessment",
+    referenceText, recognizedText: typeof root.DisplayText === "string" ? root.DisplayText.slice(0, 320)
+      : typeof best.Display === "string" ? best.Display.slice(0, 320) : "",
+    scores: { overall: score(best.PronScore), accuracy: score(best.AccuracyScore),
+      fluency: score(best.FluencyScore), completeness: score(best.CompletenessScore),
+      prosody: score(best.ProsodyScore) },
+    words,
+  };
+}
 
 export const maxDuration = 20;
 const MAX_WAV_BYTES = 44 + 16000 * 2 * 21;
@@ -17,16 +80,6 @@ const LIMIT_GLOBAL = 30;
 const windowMs = 60_000;
 const recentByIp = new Map<string, number[]>();
 let recentGlobal: number[] = [];
-
-const allowedPhrases = new Map<string, string>();
-for (const item of content.items) {
-  const phrase = radioReading(item);
-  allowedPhrases.set(phrase.toLowerCase(), phrase);
-}
-for (const s of encounterCatalog) for (const turn of s.turns) {
-  allowedPhrases.set(turn.utterance.toLowerCase(), turn.utterance);
-  for (const response of turn.responses) allowedPhrases.set(response.utterance.toLowerCase(), response.utterance);
-}
 
 function enabled(): boolean {
   return process.env.UNIT24_SPEECH_ASSESSMENT_ENABLED === "true"
