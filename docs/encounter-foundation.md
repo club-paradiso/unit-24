@@ -25,3 +25,20 @@ Implementation branch: `feat/encounter-foundation` (Phase 1 scaffold).
 5. Do not merge directly without evidence and owner approval; `main` branch protection is currently absent (see issue #12).
 
 Follow-on phase: implement `ScenarioPlayer` with reviewed turns and options, then a separate progress store and speech layer.
+
+## iPad manual QA follow-up (user report, 2026-10-22 KST)
+
+These are **user-reported**, not assistant-reproduced results for the immutable Preview `a2435cd0`:
+- PASS: Preview loaded and ENCOUNTER heading visible.
+- PASS: All six scenario cards visible.
+- NOT CHECKED: Traffic Stop card expansion and learning goals.
+- NOT CHECKED: Switching Korean and English in Settings.
+- NOT CHECKED: Preservation of existing RADIO progress.
+
+Follow-on coverage added in this branch:
+- Expand Traffic Stop and assert its specific learning goal is visible (not a vacuous hidden-text check).
+- Toggle Korean/English via Settings, navigate back, reload, and confirm translations persist.
+- Record an actual RADIO flashcard answer, visit ENCOUNTER, then assert the exact existing `unit24.progress` value survives navigation and reload.
+- Check page width and card expansion at iPad portrait viewport size; run browser tests on an additional `ipad-webkit` WebKit-emulated project.
+
+**Automated checks are still blocked:** GitHub Actions jobs ended without runner assignment or steps on PR #13 (even after one rerun). Vercel `READY` validates TypeScript/Vite build, not Playwright. The iPad WebKit project is browser emulation, not a physical iPad. Neither should be recorded as a passed on-device check.
