@@ -4,7 +4,7 @@ export type LocalizedText = Record<EncounterLanguage, string>;
 export type EncounterLevel = "B1-B2" | "B2" | "B2-C1" | "C1";
 export type EncounterCategory =
   | "traffic" | "street" | "identification" | "witness" | "reporting" | "detention";
-export type EncounterStage = "planned" | "playable";
+export type EncounterStage = "planned" | "pilot" | "playable";
 
 export interface EncounterSource {
   /** Verified source URL for any legal or operational claim; do not infer law from radio-card data. */
@@ -19,6 +19,8 @@ export interface EncounterResponse {
   /** The words a learner may choose or later say aloud. */
   utterance: string;
   feedback: LocalizedText;
+  /** Language-specific feedback only: never a judgment about the learner\'s legal rights. */
+  languageRating: "natural" | "acceptable" | "needs_clarification";
   /** Null ends a path; otherwise it must target an existing turn. */
   nextTurnId: string | null;
 }

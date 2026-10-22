@@ -18,11 +18,188 @@ function planned(
   };
 }
 
+const trafficStopPilot: EncounterScenario = {
+  "id": "traffic-stop",
+  "category": "traffic",
+  "level": "B1-B2",
+  "title": {
+    "en": "Traffic Stop",
+    "ko": "교통 단속"
+  },
+  "summary": {
+    "en": "Understand why an officer stopped a vehicle and ask for clarification.",
+    "ko": "단속 사유를 듣고 모르는 내용을 정중하게 확인하는 상황."
+  },
+  "learningGoals": [
+    {
+      "en": "Recognize common traffic-stop questions.",
+      "ko": "교통 단속 중 자주 들리는 질문 이해"
+    },
+    {
+      "en": "Ask for clarification without guessing.",
+      "ko": "추측하지 않고 설명을 요청하는 표현 연습"
+    }
+  ],
+  "jurisdiction": {
+    "country": "US",
+    "state": null
+  },
+  "stage": "pilot",
+  "legalReview": "pending",
+  "sources": [
+    {
+      "title": "U.S. Department of Justice · procedural justice traffic-stop example",
+      "url": "https://www.justice.gov/ag/media/1079466/dl?inline=",
+      "checkedAt": "2026-10-22",
+      "jurisdiction": "US · illustrative training context"
+    },
+    {
+      "title": "ACLU · Stopped by Police",
+      "url": "https://www.aclu.org/know-your-rights/stopped-by-police",
+      "checkedAt": "2026-10-22",
+      "jurisdiction": "United States · general educational resource"
+    }
+  ],
+  "turns": [
+    {
+      "id": "opening",
+      "speaker": "officer",
+      "utterance": "Good evening. Do you know why I pulled you over?",
+      "translation": {
+        "ko": "안녕하세요. 제가 왜 차를 세웠는지 아시겠어요?",
+        "en": "Do you know the reason for this traffic stop?"
+      },
+      "responses": [
+        {
+          "id": "request-reason",
+          "utterance": "I'm not sure. Could you tell me why?",
+          "feedback": {
+            "ko": "모른다는 점을 명확히 밝히고 이유를 묻는 자연스러운 응답이에요.",
+            "en": "Clear and polite: you say you do not know and ask for the reason."
+          },
+          "nextTurnId": "reason",
+          "languageRating": "natural"
+        },
+        {
+          "id": "repeat",
+          "utterance": "Sorry, could you repeat that?",
+          "feedback": {
+            "ko": "잘 들리지 않았을 때 다시 말해 달라고 요청하는 적절한 표현이에요.",
+            "en": "A polite way to ask for repetition when you did not hear the question."
+          },
+          "nextTurnId": "repeated",
+          "languageRating": "natural"
+        },
+        {
+          "id": "assume",
+          "utterance": "I guess I was speeding.",
+          "feedback": {
+            "ko": "확인하지 않은 사실을 추측해서 말하는 표현이에요. 언어 연습에서는 추측하지 않고 되묻는 방법도 익혀 보세요.",
+            "en": "This guesses at a reason you do not know. Practice asking for clarification instead."
+          },
+          "nextTurnId": "reason",
+          "languageRating": "needs_clarification"
+        }
+      ]
+    },
+    {
+      "id": "repeated",
+      "speaker": "officer",
+      "utterance": "I asked whether you know why I stopped your car.",
+      "translation": {
+        "ko": "왜 차를 세웠는지 알고 계시냐고 물었습니다.",
+        "en": "I am repeating the question about the reason for the stop."
+      },
+      "responses": [
+        {
+          "id": "repeat-understood",
+          "utterance": "Thanks for repeating that. I'm not sure.",
+          "feedback": {
+            "ko": "감사 표현 뒤에 모른다는 사실을 명확히 전달해요.",
+            "en": "Natural acknowledgment followed by a clear statement that you do not know."
+          },
+          "nextTurnId": "reason",
+          "languageRating": "natural"
+        },
+        {
+          "id": "repeat-clarify",
+          "utterance": "Could you explain why you stopped me?",
+          "feedback": {
+            "ko": "질문에 직접 답하지는 않지만 정중하게 이유를 확인하는 표현이에요.",
+            "en": "A polite request for the explanation instead of a direct answer."
+          },
+          "nextTurnId": "reason",
+          "languageRating": "acceptable"
+        }
+      ]
+    },
+    {
+      "id": "reason",
+      "speaker": "officer",
+      "utterance": "One of your brake lights appears to be out.",
+      "translation": {
+        "ko": "브레이크등 중 하나가 작동하지 않는 것 같습니다.",
+        "en": "The officer says a brake light appears not to be working."
+      },
+      "responses": [
+        {
+          "id": "acknowledge",
+          "utterance": "Thank you for letting me know. I didn't realize that.",
+          "feedback": {
+            "ko": "알려준 사실에 대한 감사와 몰랐다는 정보를 자연스럽게 전해요.",
+            "en": "A polite acknowledgment that does not add unsupported details."
+          },
+          "nextTurnId": null,
+          "languageRating": "natural"
+        },
+        {
+          "id": "which-light",
+          "utterance": "Could you clarify which brake light you mean?",
+          "feedback": {
+            "ko": "어느 쪽인지 구체적으로 설명해 달라고 요청하는 정확한 표현이에요.",
+            "en": "A precise and polite clarification request."
+          },
+          "nextTurnId": "clarification",
+          "languageRating": "natural"
+        }
+      ]
+    },
+    {
+      "id": "clarification",
+      "speaker": "officer",
+      "utterance": "The left brake light, at the back of the car.",
+      "translation": {
+        "ko": "차 뒤쪽 왼쪽 브레이크등입니다.",
+        "en": "The rear left brake light."
+      },
+      "responses": [
+        {
+          "id": "thank-you",
+          "utterance": "Thanks for clarifying.",
+          "feedback": {
+            "ko": "짧지만 적절하고 자연스러운 감사 표현이에요.",
+            "en": "Concise and natural acknowledgment of the explanation."
+          },
+          "nextTurnId": null,
+          "languageRating": "natural"
+        },
+        {
+          "id": "got-it",
+          "utterance": "Got it. Thank you.",
+          "feedback": {
+            "ko": "구어체에서 매우 자연스러운 이해 확인 표현이에요.",
+            "en": "Natural conversational acknowledgment."
+          },
+          "nextTurnId": null,
+          "languageRating": "natural"
+        }
+      ]
+    }
+  ]
+};
+
 const draftScenarios: EncounterScenario[] = [
-  planned("traffic-stop", "traffic", "B1-B2",
-    { en: "Traffic Stop", ko: "교통 단속" },
-    { en: "Understand why an officer stopped a vehicle and ask for clarification.", ko: "단속 사유를 듣고 모르는 내용을 정중하게 확인하는 상황." },
-    [{ en: "Recognize common traffic-stop questions.", ko: "교통 단속 중 자주 들리는 질문 이해" }, { en: "Ask for clarification without guessing.", ko: "추측하지 않고 설명을 요청하는 표현 연습" }]),
+  trafficStopPilot,
   planned("street-encounter", "street", "B1-B2",
     { en: "Street Encounter", ko: "길거리에서 경찰을 만났을 때" },
     { en: "Respond clearly when an officer approaches you in public.", ko: "거리에서 경찰이 말을 걸었을 때 질문을 이해하고 응답하는 상황." },
@@ -57,15 +234,20 @@ export function validateEncounterCatalog(items: readonly EncounterScenario[]): r
     if (!validText(s.title) || !validText(s.summary) || !s.learningGoals?.length || !s.learningGoals.every(validText)) {
       throw new Error("Encounter scenario missing localized educational text: " + s.id);
     }
-    if (s.jurisdiction?.country !== "US" || !["planned", "playable"].includes(s.stage)) {
+    if (s.jurisdiction?.country !== "US" || !["planned", "pilot", "playable"].includes(s.stage)) {
       throw new Error("Encounter scenario jurisdiction or stage invalid: " + s.id);
     }
     if (s.stage === "planned") {
       if (s.turns.length !== 0 || s.legalReview !== "pending") throw new Error("Planned scenarios must not include playable dialogue");
       continue;
     }
-    if (s.legalReview !== "reviewed" || !s.sources.length || !s.turns.length) {
-      throw new Error("Playable scenarios require editorial review, sources and dialogue");
+    if (!s.sources.length || !s.turns.length || (s.stage === "playable" && s.legalReview !== "reviewed")
+      || (s.stage === "pilot" && s.legalReview !== "pending")) {
+      throw new Error("Interactive scenarios require appropriate review state, sources and dialogue");
+    }
+    for (const source of s.sources) {
+      if (!source.title.trim() || !source.url.startsWith("https://") || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(source.checkedAt)
+        || !source.jurisdiction.trim()) throw new Error("Invalid encounter source: " + s.id);
     }
     const turns = new Set(s.turns.map(t => t.id));
     if (turns.size !== s.turns.length) throw new Error("Duplicate encounter turn: " + s.id);
@@ -75,7 +257,7 @@ export function validateEncounterCatalog(items: readonly EncounterScenario[]): r
       }
       const responseIds = new Set<string>();
       for (const response of turn.responses) {
-        if (!response.id || responseIds.has(response.id) || !response.utterance.trim() || !validText(response.feedback)
+        if (!response.id || responseIds.has(response.id) || !response.utterance.trim() || !validText(response.feedback) || !["natural", "acceptable", "needs_clarification"].includes(response.languageRating)
           || (response.nextTurnId !== null && !turns.has(response.nextTurnId))) {
           throw new Error("Invalid encounter response or branch target: " + s.id);
         }

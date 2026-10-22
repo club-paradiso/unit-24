@@ -15,7 +15,7 @@ test("ENCOUNTER entry is reachable without touching radio lessons or learner pro
   await trafficCard.locator("summary").click();
   await expect(trafficCard).toHaveAttribute("open", "");
   await expect(trafficCard.getByText("Recognize common traffic-stop questions.")).toBeVisible();
-  await expect(trafficCard.getByText(/These are scenario previews, not playable lessons/)).toBeVisible();
+  await expect(trafficCard.getByRole("link", { name: "Try language practice" })).toBeVisible();
   expect(await page.evaluate(() => window.localStorage.getItem("unit24.progress"))).toBeNull();
   await page.getByRole("link", { name: /Return to radio English/ }).click();
   await expect(page).toHaveURL(/\/chp$/);
