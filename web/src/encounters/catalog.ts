@@ -246,7 +246,7 @@ export function validateEncounterCatalog(items: readonly EncounterScenario[]): r
       throw new Error("Interactive scenarios require appropriate review state, sources and dialogue");
     }
     for (const source of s.sources) {
-      if (!source.title.trim() || !source.url.startsWith("https://") || !/^\\d{4}-\\d{2}-\\d{2}$/.test(source.checkedAt)
+      if (!source.title.trim() || !source.url.startsWith("https://") || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(source.checkedAt)
         || !source.jurisdiction.trim()) throw new Error("Invalid encounter source: " + s.id);
     }
     const turns = new Set(s.turns.map(t => t.id));
