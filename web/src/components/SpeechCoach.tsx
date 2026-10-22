@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heardSimilarity } from "../lib/radioSpeech";
+import { AssessmentPanel } from "./AssessmentPanel";
 import { useI18n } from "../i18n";
 
 type SpeechResult = { 0?: { transcript: string }; isFinal?: boolean };
@@ -65,6 +66,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
   const [busy, setBusy] = useState<"recognizing" | "recording" | null>(null);
   const [heard, setHeard] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
   const recognizer = useRef<BrowserRecognizer | null>(null);
   const recorder = useRef<MediaRecorder | null>(null);
   const mediaStream = useRef<MediaStream | null>(null);
@@ -171,7 +173,9 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
         if (recorder.current === mr) recorder.current = null;
         if (!active.current) return;
         if (audioObjectUrl.current) URL.revokeObjectURL(audioObjectUrl.current);
-        const next = chunks.length ? URL.createObjectURL(new Blob(chunks, { type: mr.mimeType || "audio/webm" })) : null;
+        const blob = chunks.length ? new Blob(chunks, { type: mr.mimeType || "audio/webm" }) : null;
+        const next = blob ? URL.createObjectURL(blob) : null;
+        setRecordedBlob(blob);
         audioObjectUrl.current = next;
         setAudioUrl(next);
         setBusy(null);
@@ -180,6 +184,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
       mr.onerror = () => { if (active.current) setStatus(copy.error); stopRecorder(); };
       if (audioObjectUrl.current) { URL.revokeObjectURL(audioObjectUrl.current); audioObjectUrl.current = null; }
       setAudioUrl(null);
+      setRecordedBlob(null);
       mr.start();
       setBusy("recording");
       setStatus(copy.recording);
@@ -222,6 +227,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
         </div>
       )}
       {audioUrl && <div className="speech-result"><strong>{copy.replay}</strong><audio controls src={audioUrl} preload="metadata" aria-label={copy.replay} /></div>}
+      {recordedBlob && <AssessmentPanel key={phrase} audio={recordedBlob} phrase={phrase} />}
       {!compact && <p className="small muted">{copy.micPrivacy}</p>}
     </section>
   );
