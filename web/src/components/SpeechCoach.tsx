@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heardSimilarity } from "../lib/radioSpeech";
+import { AssessmentPanel } from "./AssessmentPanel";
 import { useI18n } from "../i18n";
 
 type SpeechResult = { 0?: { transcript: string }; isFinal?: boolean };
@@ -37,7 +38,7 @@ const COPY = {
     error: "음성 기능을 시작하지 못했어요. 기기 권한과 인터넷 연결을 확인하세요.",
     ttsMissing: "이 기기에서 음성 합성을 사용할 수 없어요.",
     stopped: "중지했어요. 준비되면 다시 시도할 수 있어요.",
-    privacy: "녹음 저장 없음 · 마이크는 버튼을 눌렀을 때만 작동",
+    privacy: "마이크는 버튼을 누른 뒤에만 작동 · AI 분석을 명시적으로 요청한 경우에만 음성 전송",
   },
   en: {
     hear: "Hear pronunciation", slow: "Hear slowly", talk: "Speak & transcribe", rec: "Record myself",
@@ -54,7 +55,7 @@ const COPY = {
     error: "Voice capture couldn't start. Check browser permissions and your connection.",
     ttsMissing: "Text-to-speech is not available on this device.",
     stopped: "Stopped. You can try again.",
-    privacy: "No recording uploads · microphone starts only when tapped",
+    privacy: "Microphone starts only when tapped · audio is sent only after explicit AI assessment consent",
   },
 } as const;
 
@@ -65,6 +66,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
   const [busy, setBusy] = useState<"recognizing" | "recording" | null>(null);
   const [heard, setHeard] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
   const recognizer = useRef<BrowserRecognizer | null>(null);
   const recorder = useRef<MediaRecorder | null>(null);
   const mediaStream = useRef<MediaStream | null>(null);
@@ -171,7 +173,9 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
         if (recorder.current === mr) recorder.current = null;
         if (!active.current) return;
         if (audioObjectUrl.current) URL.revokeObjectURL(audioObjectUrl.current);
-        const next = chunks.length ? URL.createObjectURL(new Blob(chunks, { type: mr.mimeType || "audio/webm" })) : null;
+        const blob = chunks.length ? new Blob(chunks, { type: mr.mimeType || "audio/webm" }) : null;
+        const next = blob ? URL.createObjectURL(blob) : null;
+        setRecordedBlob(blob);
         audioObjectUrl.current = next;
         setAudioUrl(next);
         setBusy(null);
@@ -180,6 +184,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
       mr.onerror = () => { if (active.current) setStatus(copy.error); stopRecorder(); };
       if (audioObjectUrl.current) { URL.revokeObjectURL(audioObjectUrl.current); audioObjectUrl.current = null; }
       setAudioUrl(null);
+      setRecordedBlob(null);
       mr.start();
       setBusy("recording");
       setStatus(copy.recording);
@@ -222,6 +227,7 @@ export function SpeechCoach({ phrase, compact = false }: { phrase: string; compa
         </div>
       )}
       {audioUrl && <div className="speech-result"><strong>{copy.replay}</strong><audio controls src={audioUrl} preload="metadata" aria-label={copy.replay} /></div>}
+      {recordedBlob && <AssessmentPanel key={phrase} audio={recordedBlob} phrase={phrase} />}
       {!compact && <p className="small muted">{copy.micPrivacy}</p>}
     </section>
   );
