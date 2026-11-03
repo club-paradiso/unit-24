@@ -8,7 +8,9 @@
 import { createHmac } from "node:crypto";
 // This function is self-contained because the Vercel Node ESM runtime does not
 // resolve frontend TS directory imports. Update this allowlist with approved lessons.
-const allowedReferences = [
+// Exported so tests can prove every phrase the app teaches stays assessable
+// (see src/lib/assessmentAllowlist.test.ts); it is not a route export.
+export const allowedReferences = [
   "ten one", "ten two", "ten five", "ten seven", "ten nine",
   "ten thirteen", "ten fourteen", "ten fifteen", "ten seventeen",
   "ten twenty", "ten twenty one", "ten twenty two", "ten twenty three",
