@@ -59,8 +59,8 @@ test("code audio and its meaning are distinct, and the single-item check saves p
   await page.getByRole("button", { name: "Hear the code" }).click();
   await page.getByRole("button", { name: "Hear the English meaning" }).click();
   expect(await page.evaluate(() => (window as Window & { __unit24Spoken?: string[] }).__unit24Spoken)).toEqual(["ten one", "Reception poor"]);
-  await expect(page.locator(".radio-source-summary")).toContainText("Not human-verified");
-  await expect(page.locator(".radio-source-summary")).toContainText("Currentness unknown");
+  await expect(page.locator(".radio-source-summary")).toContainText("Unverified");
+  await expect(page.locator(".radio-source-summary")).toContainText("Current use unknown");
   expect(await page.evaluate(() => localStorage.getItem("unit24.progress"))).toBeNull();
   await page.getByRole("button", { name: "Check this item · 1 question" }).click();
   await expect(page.getByText("Question 1 of 1")).toBeVisible();
