@@ -24,12 +24,6 @@ export function Home() {
 
   return (
     <div className="stack-lg">
-      <section className="voice-home-callout" aria-label={lang === "ko" ? "말하기 학습 바로가기" : "Speaking practice shortcut"}>
-        <div><p className="eyebrow">RADIO LAB / LISTEN · SPEAK</p>
-          <h2>{lang === "ko" ? "코드를 어떻게 읽을지부터 배우세요." : "Start with how the codes sound."}</h2>
-          <p>{lang === "ko" ? "소리 듣기, 천천히 따라 말하기, 직접 녹음까지. 코드만 외우는 학습에서 벗어나요." : "Hear it, say it and record your voice. Training starts with real speech."}</p></div>
-        <Link className="btn btn-primary" to="/chp/speak">{lang === "ko" ? "말하기 연습 시작 →" : "Open Speaking Lab →"}</Link>
-      </section>
       <section className="today card" aria-labelledby="today-h">
         <h1 id="today-h">{isNew ? t("home.welcomeTitle") : t("home.todayTitle")}</h1>
         {isNew ? (
@@ -74,6 +68,12 @@ export function Home() {
         </div>
       </section>
 
+      <section className="voice-home-callout" aria-label={lang === "ko" ? "말하기 학습 바로가기" : "Speaking practice shortcut"}>
+        <div><p className="eyebrow">RADIO LAB / LISTEN · SPEAK</p>
+          <h2>{lang === "ko" ? "코드 발음부터 듣고 따라 말해 보세요." : "Listen to a code, then say it."}</h2>
+          <p>{lang === "ko" ? "소리 듣기, 천천히 따라 말하기, 직접 녹음까지. 레슨을 진행하다가 언제든 말하기 연습으로 넘어갈 수 있어요." : "Hear it, say it and record your voice. Use this speaking lab alongside your lessons."}</p></div>
+        <Link className="btn" to="/chp/speak">{lang === "ko" ? "말하기 연습 열기 →" : "Explore Speaking Lab →"}</Link>
+      </section>
       <nav aria-label={t("home.quick")} className="tiles">
         <Link to="/chp" className="tile">
           <Icon name="book" size={26} />

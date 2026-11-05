@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "../i18n";
 
 /** Device TTS, never described as an official CHP recording. */
-export function ListenButton({ text, slow = false }: { text: string; slow?: boolean }) {
+export function ListenButton({ text, slow = false, label }: { text: string; slow?: boolean; label?: string }) {
   const { lang } = useI18n();
   const [message, setMessage] = useState("");
   useEffect(() => () => window.speechSynthesis?.cancel(), [text]);
@@ -23,7 +23,7 @@ export function ListenButton({ text, slow = false }: { text: string; slow?: bool
         window.speechSynthesis.speak(say);
         setMessage("");
       }}>
-        ▶ {lang === "ko" ? (slow ? "느리게 듣기" : "발음 듣기") : (slow ? "Hear slowly" : "Listen")}
+        ▶ {label ?? (lang === "ko" ? (slow ? "느리게 듣기" : "발음 듣기") : (slow ? "Hear slowly" : "Listen"))}
       </button>
       {message && <span role="status" className="muted small">{message}</span>}
     </span>
