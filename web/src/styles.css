@@ -1527,11 +1527,11 @@ input[type="email"] {
 .encounter-player .player-actions .btn { flex: 1 1 12rem; }
 
 /* Voice-first RADIO LAB: listening and production are primary actions, not hidden in a list. */
-.voice-home-callout { display:grid; gap:1rem; background:linear-gradient(125deg,#10263b,#18435b); color:#fff; border-radius:18px; padding:clamp(1.2rem,4vw,2rem); }
-.voice-home-callout .eyebrow { color:#b6d9eb; }
+.voice-home-callout { display:grid; gap:1rem; background:var(--surface-2); color:var(--text); border:1px solid var(--border); border-radius:18px; padding:clamp(1.1rem,3vw,1.6rem); }
+.voice-home-callout .eyebrow { color:var(--text-muted); }
 .voice-home-callout h2 { font-size:clamp(1.3rem,3vw,1.7rem); line-height:1.25; margin:.4rem 0; }
-.voice-home-callout p { color:#e0edf5; }
-.voice-home-callout .btn { display:flex; align-items:center; justify-content:center; width:fit-content; background:#ffd166; color:#10263b; font-weight:750; border:0; }
+.voice-home-callout p { color:var(--text-muted); }
+.voice-home-callout .btn { display:flex; align-items:center; justify-content:center; width:fit-content; font-weight:700; border-color:var(--border); background:var(--surface); color:var(--text); }
 .radio-lab-cta { display:grid; gap:.85rem; border-left:5px solid var(--brand); }
 .radio-lab-cta .btn { width:fit-content; display:flex; align-items:center; }
 .radio-lab-hero { background:linear-gradient(135deg,#10283e,#1e4d67); color:#fff; padding:clamp(1.35rem,4vw,2.1rem); border:0; border-radius:18px; }
@@ -1550,6 +1550,17 @@ input[type="email"] {
 .radio-reading { font-size:clamp(1.1rem,3vw,1.45rem); line-height:1.35; font-weight:700; color:var(--text); }
 .radio-meaning { display:grid; gap:.7rem; padding:.85rem 0; border-top:1px solid var(--border); }
 .radio-meaning p { font-weight:650; }
+.radio-audio-actions { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:.65rem; margin-top:.35rem; }
+.radio-audio-actions .listen-control,.radio-audio-actions .btn { width:100%; min-width:0; }
+.radio-source-summary { display:grid; gap:.4rem; padding-top:.6rem; border-top:1px solid var(--border); }
+.radio-source-summary .badges { margin:0; }
+.radio-source-summary .btn { justify-self:start; overflow-wrap:anywhere; text-align:left; }
+.radio-practice-path { display:grid; gap:.7rem; border-left:4px solid var(--brand); }
+.radio-practice-path h2 { margin-bottom:.25rem; font-size:1.15rem; }
+.radio-practice-actions { display:flex; flex-wrap:wrap; gap:.6rem; }
+.radio-practice-actions .btn { min-height:48px; white-space:normal; }
+@media(max-width:370px) { .radio-practice-actions { display:grid; grid-template-columns:1fr; } .radio-practice-actions .btn { width:100%; } }
+
 .radio-voice-section { display:grid; gap:.6rem; }
 .speech-coach { display:grid; gap:.8rem; border:2px solid var(--border); border-radius:16px; min-width:0; }
 .speech-coach > * + * { margin-top:0; }
